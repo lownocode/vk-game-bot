@@ -7,7 +7,7 @@ import {
     percentKeyboard
 } from "../../keyboards/index.js"
 import { features } from "../../utils/index.js"
-import { config } from "../../main.js"
+import { config } from "../../../main.js"
 import { formatAmount, formatSum } from "../../utils/index.js"
 
 export const ball = {

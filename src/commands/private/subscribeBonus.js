@@ -1,5 +1,5 @@
 import { privateKeyboard } from "../../keyboards/index.js"
-import { config, vk } from "../../main.js"
+import { config, vk } from "../../../main.js"
 
 export const subscribeBonus = {
     access: "private",

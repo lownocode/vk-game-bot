@@ -1,5 +1,5 @@
 import { depositKeyboard } from "../../../keyboards/index.js"
-import { config } from "../../../main.js"
+import { config } from "../../../../main.js"
 import { features, formatSum } from "../../../utils/index.js"
 import { createNewGame, getCurrentGame } from "../../../games/index.js"
 import { Rate } from "../../../db/models.js"

@@ -4,16 +4,16 @@ import { QuestionManager } from "vk-io-question"
 import YAML from "yaml"
 import fs from "fs"
 
-import "./db/sequelize.js"
-import * as commands from "./commands/index.js"
-import { onRepostMiddleware, onMessageMiddleware, callbackMessageMiddleware } from "./middlewares/index.js"
-import { clearDailyRating, createDailyRewardPost } from "./functions/index.js"
-import { features } from "./utils/index.js"
-import { logger } from "./logger/logger.js"
-import { gamesObserver } from "./games/index.js"
+import "./src/db/sequelize.js"
+import * as commands from "./src/commands/index.js"
+import { onRepostMiddleware, onMessageMiddleware, callbackMessageMiddleware } from "./src/middlewares/index.js"
+import { clearDailyRating, createDailyRewardPost } from "./src/functions/index.js"
+import { features } from "./src/utils/index.js"
+import { logger } from "./src/logger/logger.js"
+import { gamesObserver } from "./src/games/index.js"
 
 export const config = YAML.parse(
-    fs.readFileSync(process.cwd() + "/src/data/config.yaml", "utf-8")
+    fs.readFileSync("./data/config.yaml", "utf-8")
 )
 
 const hearManager = new HearManager()

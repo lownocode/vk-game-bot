@@ -1,6 +1,6 @@
 import { profileKeyboard } from "../../keyboards/index.js"
 import { features } from "../../utils/index.js"
-import { config } from "../../main.js"
+import { config } from "../../../main.js"
 
 export const profile = {
     access: "private",

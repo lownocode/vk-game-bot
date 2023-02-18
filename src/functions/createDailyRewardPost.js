@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import chunk from "lodash.chunk"
 
-import { vk, vkuser, config } from "../main.js"
+import { vk, vkuser, config } from "../../main.js"
 import { features } from "../utils/index.js"
 import { logger } from "../logger/logger.js"
 

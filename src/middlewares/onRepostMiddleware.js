@@ -1,4 +1,4 @@
-import { vk, config } from "../main.js"
+import { vk, config } from "../../main.js"
 import { features } from "../utils/index.js"
 import {User} from "../db/models.js";
 

@@ -2,7 +2,7 @@ import { Op } from "sequelize"
 
 import { Game, Rate, User } from "../db/models.js"
 import { features, sleep } from "../utils/index.js"
-import { config, vk } from "../main.js"
+import { config, vk } from "../../main.js"
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({

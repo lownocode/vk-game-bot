@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 
 import { features } from "../utils/index.js"
-import { config } from "../main.js"
+import { config } from "../../main.js"
 
 export const depositKeyboard = (user) => {
     const keyboard = Keyboard.builder()

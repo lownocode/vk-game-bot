@@ -1,6 +1,6 @@
 import { features } from "../../utils/index.js"
 import { chatMainKeyboard } from "../../keyboards/index.js"
-import { config } from "../../main.js"
+import { config } from "../../../main.js"
 
 export const balance = {
     access: "chat",

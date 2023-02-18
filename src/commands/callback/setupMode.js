@@ -1,4 +1,4 @@
-import { vk } from "../../main.js"
+import { vk } from "../../../main.js"
 import { Chat } from "../../db/models.js"
 import { convertChatMode } from "../../functions/index.js"
 import { chatMainKeyboard } from "../../keyboards/index.js"

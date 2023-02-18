@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start": "node ./src/main.js"
+        "start": "node main.js"
     },
     "dependencies": {
         "@vk-io/hear": "^1.1.0",

@@ -1,4 +1,4 @@
-import { commandsList } from "../main.js"
+import { commandsList } from "../../main.js"
 
 export const callbackMessageMiddleware = async (message) => {
     const callbackCommands = commandsList.filter(cmd => cmd.callbackCommand)

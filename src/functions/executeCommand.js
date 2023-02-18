@@ -1,4 +1,4 @@
-import { commandsList } from "../main.js"
+import { commandsList } from "../../main.js"
 
 export const executeCommand = (command, message, data) => {
     const _command = commandsList.find(cmd => cmd.command === command)

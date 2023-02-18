@@ -2,7 +2,7 @@ import md5 from "md5"
 
 import { depositKeyboard, gamesKeyboard, percentKeyboard } from "../../keyboards/index.js"
 import { features, formatSum } from "../../utils/index.js"
-import { config } from "../../main.js"
+import { config } from "../../../main.js"
 
 export const cube = {
     access: "private",

@@ -1,7 +1,7 @@
 import md5 from "md5"
 
 import { Chat, Game } from "../db/models.js"
-import { config } from "../main.js"
+import { config } from "../../main.js"
 import { features } from "../utils/index.js"
 
 export const createNewGame = async (peerId) => {

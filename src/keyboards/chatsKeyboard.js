@@ -1,5 +1,5 @@
 import { Keyboard } from "vk-io"
-import { config } from "../main.js"
+import { config } from "../../main.js"
 import { chunkArray } from "../utils/index.js"
 
 export const chatsKeyboard = () => {

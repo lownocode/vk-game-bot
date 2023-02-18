@@ -1,7 +1,8 @@
 import { getCurrentGame } from "../../games/index.js"
 import { Rate } from "../../db/models.js"
 import { features } from "../../utils/index.js"
-import { config } from "../../main.js"
+import { config } from "../../../main.js"
+import { modeKeyboard } from "../../keyboards/index.js"
 
 export const bank = {
     access: "chat",
@@ -16,21 +17,33 @@ export const bank = {
         }
 
         const rates = await Rate.findAll({ where: { gameId: currentGame.id } })
-        let text = ""
 
-        if (message.chat.mode === "slots") {
-            text = rates.map((rate) => {
-                return `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]}`
-            }).join("\n")
+        switch (message.chat.mode) {
+            case "slots": {
+                const text = rates.map((rate) => {
+                    return `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]}`
+                })
+
+                return message.send(
+                    `Ставки на текущую игру:\n\n` +
+                    `${text.join("\n")}\n\n` +
+                    `Общая сумма ставок: ${features.split(rates.reduce((acc, cur) => acc + cur.betAmount, 0))}\n` +
+                    `До конца раунда: ${Math.floor((currentGame.endedAt - Date.now()) / 1000)} сек.\n` +
+                    `Хэш игры: ${currentGame.hash}`
+                )
+            }
+            case "cube":
+            case "double":
+            case "basketball":
+            case "wheel": {
+                return message.send("Этот режим находится в разработке")
+            }
+            default: {
+                return message.send("Данного режима не существует, попробуйте выбрать один из существующих", {
+                    keyboard: modeKeyboard
+                })
+            }
         }
-
-        message.send(
-            `Ставки на текущую игру:\n\n` +
-            `${text}\n\n` +
-            `Общая сумма ставок: ${features.split(rates.reduce((acc, cur) => acc + cur.betAmount, 0))}\n` +
-            `До конца раунда: ${Math.floor((currentGame.endedAt - Date.now()) / 1000)} сек.\n` +
-            `Хэш игры: ${currentGame.hash}`
-        )
 
 
 

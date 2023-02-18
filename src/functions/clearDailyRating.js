@@ -1,4 +1,4 @@
-import { config, vk } from "../main.js"
+import { config, vk } from "../../main.js"
 import { features } from "../utils/index.js"
 
 export const clearDailyRating = async () => {
