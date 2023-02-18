@@ -1,0 +1,22 @@
+{
+    "name": "хуетень",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start": "node ./src/main.js"
+    },
+    "dependencies": {
+        "@vk-io/hear": "^1.1.0",
+        "chalk": "^5.2.0",
+        "lodash.chunk": "^4.2.0",
+        "md5": "^2.3.0",
+        "mongoose": "^5.9.0",
+        "node-qiwi-promise-api": "^0.0.2",
+        "node-vkcoinapi": "^1.8.0",
+        "pg": "^8.9.0",
+        "sequelize": "^6.28.0",
+        "vk-io": "^4.8.1",
+        "vk-io-question": "^3.1.1",
+        "yaml": "^2.2.1"
+    }
+}

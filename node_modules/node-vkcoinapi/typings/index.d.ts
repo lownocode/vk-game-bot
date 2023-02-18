@@ -1,0 +1,126 @@
+import * as Responses from './responses';
+import * as Params from './params';
+
+export class Updates {
+  /**
+   * @param key - API-ключ
+   * @param token - Токен пользователя
+   * @param userId - ID пользователя
+   */
+  constructor(key: string, token: string, userId: number);
+  /**
+   * Время переподключения к серверу ws
+   * @default 5000
+   */
+  reconnectTimeout: number;
+  
+  /**
+   * Запустить прослушивание обновлений
+   * @param callback - Callback
+   */
+  async startPolling(callback?: Function);
+
+  /**
+   * Переподключиться к серверу
+   */
+  async reconnect(): true;
+
+  /**
+   * Запустить прослушку событий на свой сервер
+   * @param options - Параметры
+   */
+  async startWebHook(options: Params.WebhookParams);
+
+  /**
+   * Возвращает middleware для Express
+   * @param path Путь для запросов
+   */
+  getExpressMiddleware(path?: string): Function;
+
+  /**
+   * 
+   * @param callback Функция, принимающая данные перевода
+   */
+  onTransfer(event: Function);
+}
+
+export class API {
+  constructor(key: string, userId: number);
+
+  /**
+   * @param method Исполняемый метод
+   * @param params Параметры метода
+   */
+  async call(method: string, params: object): Promise;
+  
+  /**
+   * Получить список транзакций
+   * @param tx - Массив ID транзакций. Подробнее: https://vk.cc/9ka9QS
+   */
+  async getTransactionList(tx?: Array<number>): Promise<Array<Responses.TransactionResponse>>;
+
+  /**
+   * Отправить транзакцию пользователю
+   * @param toId - ID получателя
+   * @param amount - Сумма перевода
+   * @param {Boolean} fromShop - Если true, то платеж отправится от имени магазина
+   * @default fromShop false
+   */
+  async sendPayment(toId: number, amount: number, fromShop: boolean): Promise<Responses.PaymentResponse>;
+
+  /**
+   * Получить баланс пользователя / пользователей
+   * @param userIds - Массив ID пользователей для получения баланса
+   */
+  async getBalance(userIds: Array<number> | number): Promise<Responses.BalanceResponse>;
+
+  /**
+   * Получить баланс текущего пользователя
+   */
+  async getMyBalance(): Promise<number>;
+
+  /**
+   * Изменить название магазина
+   * @param name - Новое название магазина
+   */
+  async setShopName(name: string): Promise<number>;
+
+  /**
+   * Превратить количество коинов в читабельное
+   * @param coins - Количество коинов
+   * @example
+   * let coins = 1234567890;
+   * vkcoin.api.formatCoins(coins); // 1 234 567,890
+   */
+  formatCoins(coins: number): string;
+
+  /**
+   * Получить ссылку на перевод
+   * @param amount - Количество коинов для получения
+   * @param fixation - Фиксированная сумма или нет
+   */
+  getLink(amount: number, fixation: boolean): string;
+
+  /**
+   * Изменяет адрес для получения событий
+   * @param {String} callback Адрес для получения событий
+   */
+  setCallback(callback: string): Promise<string>;
+
+  /**
+   * Удаляет адрес для получения событий
+   */
+  removeCallback(): Promise<string>;
+}
+
+export class VKCoin {
+  /**
+   * @param options Параметры
+   */
+  constructor(options: Params.VKCoinParams);
+
+  api: API;
+  updates: Updates;
+}
+
+export = VKCoin;
