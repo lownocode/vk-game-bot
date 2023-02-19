@@ -223,82 +223,78 @@ export const chatMainKeyboard = (mode) => {
             break
         }
         case "wheel": {
-
+            keyboard
+                .textButton({
+                    label: "Красное",
+                    payload: {
+                        command: "bet-wheel/red"
+                    },
+                })
+                .textButton({
+                    label: "На число",
+                    payload: {
+                        command: "bet-wheel/number"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "Черное",
+                    payload: {
+                        command: "bet-wheel/black"
+                    },
+                })
+                .row()
+                .textButton({
+                    label: "Чётное",
+                    payload: {
+                        command: "bet-wheel/even"
+                    },
+                })
+                .textButton({
+                    label: "Нечётное",
+                    payload: {
+                        command: "bet-wheel/noteven"
+                    },
+                })
+                .row()
+                .textButton({
+                    label: "1-12",
+                    payload: {
+                        command: "bet-wheel/1-12"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "13-24",
+                    payload: {
+                        command: "bet-wheel/13-24"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "25-36",
+                    payload: {
+                        command: "bet-wheel/25-36"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .row()
+                .textButton({
+                    label: "1-18",
+                    payload: {
+                        command: "bet-wheel/1-18"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "19-36",
+                    payload: {
+                        command: "bet-wheel/19-36"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
         }
     }
-
-    // if (mode === 'wheel') {
-    //     keyboard.textButton({
-    //         label: '0',
-    //         payload: {
-    //             command: 'rate_noteven'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: 'Баланс',
-    //         payload: {
-    //             command: 'balance'
-    //         },
-    //         color: Keyboard.SECONDARY_COLOR
-    //     })
-    //
-    //     keyboard.row()
-    //
-    //     keyboard.textButton({
-    //         label: 'Красное',
-    //         payload: {
-    //             command: 'rate_red'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: 'На число',
-    //         payload: {
-    //             command: 'rate_dnumber'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: 'Черное',
-    //         payload: {
-    //             command: 'rate_black'
-    //         },
-    //     })
-    //
-    //     keyboard.row()
-    //
-    //     keyboard.textButton({
-    //         label: '1-12',
-    //         payload: {
-    //             command: 'rate_int112'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: '13-24',
-    //         payload: {
-    //             command: 'rate_int1324'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: '25-36',
-    //         payload: {
-    //             command: 'rate_int2536'
-    //         },
-    //     })
-    //
-    //     keyboard.row()
-    //
-    //     keyboard.textButton({
-    //         label: 'Четное',
-    //         payload: {
-    //             command: 'rate_even'
-    //         },
-    //     })
-    //     keyboard.textButton({
-    //         label: 'Нечетное',
-    //         payload: {
-    //             command: 'rate_noteven'
-    //         },
-    //     })
-    // }
 
     keyboard.row()
 

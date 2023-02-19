@@ -1,8 +1,9 @@
 import { depositKeyboard } from "../../../keyboards/index.js"
 import { config } from "../../../../main.js"
-import { features, formatSum } from "../../../utils/index.js"
-import { getOrCreateGame} from "../../../games/index.js"
+import { features } from "../../../utils/index.js"
+import { getOrCreateGame } from "../../../games/index.js"
 import { Rate } from "../../../db/models.js"
+import {gameBetAmountChecking} from "../../../functions/index.js";
 
 export const slotsBet = {
     command: "bet-slots",
@@ -24,25 +25,9 @@ export const slotsBet = {
             keyboard: depositKeyboard(message.user)
         })
 
-        if (!_betAmount) {
-            return message.send("Ты должен ввести cумму")
-        }
+        const betAmount = await gameBetAmountChecking(_betAmount, message)
 
-        let betAmount = _betAmount.replace(/(вб|вабанк)/ig, Number(message.user.balance))
-
-        betAmount = formatSum(betAmount)
-
-        if (!betAmount || isNaN(betAmount) || betAmount < config.bot.minimumBet) {
-            return message.send(`Минимальная ставка - ${features.split(config.bot.minimumBet)}`)
-        }
-
-        if (betAmount > config.bot.max_bet) {
-            return message.send(`Максимальная ставка - ${features.split(config.bot.max_bet)}`)
-        }
-
-        if (Number(message.user.balance) < betAmount) {
-            return message.send(`На вашем счету недостаточно средств!`)
-        }
+        if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
 
@@ -51,7 +36,7 @@ export const slotsBet = {
         await Rate.create({
             gameId: currentGame.id,
             peerId: message.peerId,
-            userVkId: message.senderId,
+            userVkId: message.user.vkId,
             username: message.user.name,
             betAmount: betAmount,
             mode: "slots",
