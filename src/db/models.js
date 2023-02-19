@@ -20,23 +20,19 @@ export const User = sequelize.define("users", {
         type: DataTypes.STRING,
     },
     balance: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         defaultValue: 1_000_000,
-    },
-    bonusBalance: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
     },
     newsletter: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
     },
     winCoinsToday: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         defaultValue: 0
     },
     winCoins: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         defaultValue: 0
     },
     isBanned: {
@@ -106,7 +102,7 @@ export const Game = sequelize.define("games", {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null
-    }
+    },
 })
 
 export const Rate = sequelize.define("rates", {
@@ -127,7 +123,7 @@ export const Rate = sequelize.define("rates", {
         type: DataTypes.INTEGER,
     },
     betAmount: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
     },
     username: {
         type: DataTypes.STRING,

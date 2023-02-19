@@ -2,7 +2,6 @@ import { getCurrentGame } from "../../games/index.js"
 import { Rate } from "../../db/models.js"
 import { features } from "../../utils/index.js"
 import { config } from "../../../main.js"
-import { modeKeyboard } from "../../keyboards/index.js"
 
 export const bank = {
     access: "chat",
@@ -16,109 +15,48 @@ export const bank = {
             )
         }
 
-        const rates = await Rate.findAll({ where: { gameId: currentGame.id } })
+        const timeToEndRound = Math.floor((currentGame.endedAt - Date.now()) / 1000)
 
-        switch (message.chat.mode) {
-            case "slots": {
-                const text = rates.map((rate) => {
-                    return `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]}`
-                })
-
-                return message.send(
-                    `Ставки на текущую игру:\n\n` +
-                    `${text.join("\n")}\n\n` +
-                    `Общая сумма ставок: ${features.split(rates.reduce((acc, cur) => acc + cur.betAmount, 0))}\n` +
-                    `До конца раунда: ${Math.floor((currentGame.endedAt - Date.now()) / 1000)} сек.\n` +
-                    `Хэш игры: ${currentGame.hash}`
-                )
-            }
-            case "cube":
-            case "double":
-            case "basketball":
-            case "wheel": {
-                return message.send("Этот режим находится в разработке")
-            }
-            default: {
-                return message.send("Данного режима не существует, попробуйте выбрать один из существующих", {
-                    keyboard: modeKeyboard
-                })
-            }
+        if (timeToEndRound <= 0) {
+            return message.send("Генерация результатов, ожидайте...")
         }
 
+        const rates = await Rate.findAll({ where: { gameId: currentGame.id } })
+        const sortedRates = await getGameRates(rates, message.chat.mode)
+        const totalBetsAmount = rates.reduce((acc, cur) => acc + Number(cur.betAmount), 0)
 
+        return message.send(
+            `Ставки на текущую игру:\n\n` +
+            `${sortedRates.join("\n")}\n\n` +
+            `Общая сумма ставок: ${features.split(totalBetsAmount)}\n` +
+            `До конца раунда: ${timeToEndRound} сек.\n` +
+            `Хеш игры: ${currentGame.hash}`
+        )
+    }
+}
 
-//         if(info === 'cube') {
-//
-//             const ratesInGame = thisGameInfo.rates.map((res) => {
-//                 return `${res.isPrefix ? `${res.prefix} [id${res.uid}|${res.name}]` : `[id${res.uid}|${res.name}]` } - ${features.split(res.rate.sum)} на ${ ( res.rate.type == `number` ? `число ${res.rate.number}` : config.games.betName[res.rate.type]) }`;
-//             }).join('<br>');
-//
-//             message.send(`
-// ${thisGameInfo.rates.length === 0 ? `В этом раунде никто еще не поставил` : `Текущий банк: ${features.split(thisGameInfo.sum)}
-//
-// Ставки на текущую игру:
-// ${ratesInGame}`}
-//
-// До конца раунда: ${Math.floor((thisGame.timer - Date.now()) / 1000)} сек.
-// Хэш игры: ${thisGame.info.md5}`, { keyboard: chatMainKeyboard(message.chat.mode) });
-//         }
+const getGameRates = async (rates, mode) => {
+    switch (mode) {
+        case "slots": {
+            return rates.map((rate) => {
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ` +
+                    `x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]}`
+                )
+            })
+        }
+        case "cube": {
+            const betTypes = {
+                even: "чётное",
+                noteven: "нечётное"
+            }
 
-//         if(info == 'double') {
-//             let x2bets = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 2).forEach((item, index) => {
-//                 x2bets += `${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} (Ставка на Х2)`
-//             })
-//             let x3bets = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 3).forEach((item, index) => {
-//                 x3bets += `${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} (Ставка на Х3)`
-//             })
-//             let x5bets = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 5).forEach((item, index) => {
-//                 x5bets += `${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} (Ставка на Х5)`
-//             })
-//             let x50bets = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 50).forEach((item, index) => {
-//                 x50bets += `${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} (Ставка на Х50)`
-//             })
-//
-//             context.send(`
-// ${thisGameInfo.rates.length == 0 ? `В этом раунде никто еще не поставил` : `Текущий банк: ${utils.split(thisGameInfo.sum)}
-//
-// 🤤 До конца игры ${Math.floor((thisGame.timer - Date.now()) / 1000) } сек.
-// ${x2bets || ''}
-// ${x3bets || ''}
-// ${x5bets || ''}
-// ${x50bets || ''}
-// `}
-//
-// Хэш игры: ${thisGame.info.md5}`, { keyboard: chatMainKeyboard(thisChat.mode) });
-//         }
-//
-//         if(info == 'basketball') {
-//             let red = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 'red').forEach((item, index) => {
-//                 red += `\n${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} EC`
-//             })
-//             let zero = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 'zero').forEach((item, index) => {
-//                 zero += `\n${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} EC`
-//             })
-//             let black = ''
-//             thisGameInfo.rates.filter(info => info.rate.type == 'black').forEach((item, index) => {
-//                 black += `\n${item.isPrefix ? `${item.prefix} [id${item.uid}|${item.name}]` : `[id${item.uid}|${item.name}]` } - ${utils.split(item.rate.sum)} EC`
-//             })
-//
-//             context.send(`
-// ${thisGameInfo.rates.length == 0 ? `В этом раунде никто еще не поставил` : `Текущий банк: ${utils.split(thisGameInfo.sum)}
-// Всего ставок: ${thisGameInfo.rates.length}
-//
-// Прогнозы на ${SYMBOL.RED} "Красная": ${red}
-// Прогнозы на ${SYMBOL.ZERO} "Ничья": ${zero}
-// Прогнозы на ${SYMBOL.BLACK} "Чёрная": ${black}
-// `}
-//
-// До конца раунда: ${Math.floor((thisGame.timer - Date.now()) / 1000)} сек.
-// Хэш игры: ${thisGame.info.md5}`, { keyboard: chatMainKeyboard(thisChat.mode) });
-//         }
+            return rates.map((rate) => {
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ` +
+                    `${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]}`
+                )
+            })
+        }
     }
 }

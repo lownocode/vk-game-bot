@@ -4,7 +4,7 @@ export const changeNickname = {
     access: "private",
     pattern: /^сменить ник(нейм)?$/i,
     handler: async message => {
-        if (message.user.winCoins < 10_000_000_000) {
+        if (Number(message.user.winCoins) < 10_000_000_000) {
             return message.send('Для смены ника нужно, выиграть не менее 10 000 000 000 за все время', {
                 keyboard: privateKeyboard(message.user)
             })

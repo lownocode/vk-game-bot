@@ -1,16 +1,13 @@
-import { depositKeyboard } from "../../../keyboards/index.js"
 import { config } from "../../../../main.js"
-import { features, formatSum } from "../../../utils/index.js"
-import { getOrCreateGame} from "../../../games/index.js"
-import { Rate } from "../../../db/models.js"
+import {features, formatSum} from "../../../utils/index.js"
+import { depositKeyboard } from "../../../keyboards/index.js"
+import {Rate} from "../../../db/models.js";
+import {getOrCreateGame} from "../../../games/index.js";
 
-export const slotsBet = {
-    command: "bet-slots",
+export const cubeBet = {
+    command: "bet-cube",
     pattern: /^$/,
     handler: async (message, data) => {
-        const multiplier = data.split("_")[0]
-        const smile = config.bot.smiles[data.split("_")[1] - 1]
-
         if (Number(message.user.balance) < config.bot.minimumBet) {
             return message.send(
                 `Для ставки на вашем балансе должно быть как минимум ` +
@@ -18,11 +15,16 @@ export const slotsBet = {
             )
         }
 
+        const betTypes = {
+            noteven: "нечётное",
+            even: "чётное"
+        }
+        const betType = /[1-6]/.test(data) ? `число ${data}` : betTypes[data]
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на x${multiplier} ${smile}`, {
-            targetUserId: message.senderId,
-            keyboard: depositKeyboard(message.user)
-        })
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betType}`, {
+                targetUserId: message.senderId,
+                keyboard: depositKeyboard(message.user)
+            })
 
         let betAmount = _betAmount.replace(/(вб|вабанк)/ig, Number(message.user.balance))
 
@@ -54,17 +56,16 @@ export const slotsBet = {
             userVkId: message.senderId,
             username: message.user.name,
             betAmount: betAmount,
-            mode: "slots",
+            mode: "cube",
             data: {
-                multiplier: Number(multiplier),
-                smile: config.bot.smiles.findIndex(_smile => _smile === smile),
+                bet: data
             }
         })
         await message.user.save()
 
         message.send(
             `${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} x${multiplier} ${smile} принята!`
+            `${features.split(betAmount)} на ${betType} принята!`
         )
     }
 }

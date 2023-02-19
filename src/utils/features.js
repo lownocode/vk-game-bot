@@ -20,7 +20,7 @@ export const features = {
     },
 
     split: (number) => {
-        return Math.round(number).toLocaleString("en-US").replace(/,/g, " ")
+        return Math.round(Number(number)).toLocaleString("en-US").replace(/,/g, " ")
     },
 
     getSecondsToTomorrow: () => {

@@ -9,7 +9,10 @@ export const dayRating = {
         const users = await User.findAll({
             attributes: ["vkId", "name", "winCoinsToday"],
             order: [["winCoinsToday", "DESC"]],
-            limit: 10
+            limit: 10,
+            where: {
+                isAdmin: false
+            }
         })
 
         const text = "Топ 10 игроков за весь день:\n" + users.map((user, index) => {

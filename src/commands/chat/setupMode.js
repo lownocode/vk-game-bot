@@ -1,12 +1,21 @@
 import { vk } from "../../../main.js"
 import { chatMainKeyboard, modeKeyboard } from "../../keyboards/index.js"
 import { convertChatMode } from "../../functions/index.js"
+import { getCurrentGame } from "../../games/index.js"
 
 export const setupMode = {
     access: "chat",
     pattern: /^(установить режим|сменить режим)\s(.*)$/i,
     handler: async message => {
         const mode = message.$match[2]
+
+        const activeGame = await getCurrentGame(message.peerId)
+
+        if (activeGame) {
+            return message.send(
+                "В этой беседе есть активная игра. Дождитесь итогов, после чего сможете сменить режим"
+            )
+        }
 
         const users = await vk.api.messages.getConversationMembers({ peer_id: message.peerId })
         const user = users.items.find((item) => item.member_id === message.senderId)
@@ -15,6 +24,7 @@ export const setupMode = {
             "Выбрать режим может только создатель или администратор чата\n" +
             "Также, у бота обязательно должны быть права администратора чата"
         )
+
 
         if (/кубик|слоты|дабл|баскетбол|вил/i.test(mode)) {
             message.chat.mode = convertChatMode(mode)

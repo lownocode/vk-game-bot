@@ -17,11 +17,11 @@ export const subscribeBonus = {
         })
 
         if (isSubscribed) {
-            message.user.bonusBalance += 250_000
+            message.user.balance = Number(message.user.balance) + 250_000
             message.user.isSubscribedOnGroup = true
             await message.user.save()
 
-            return await message.send('За подписку на группу вы получили 250 000 на бонусный баланс', {
+            return await message.send('За подписку на группу вы получили 250 000 на свой баланс', {
                 keyboard: privateKeyboard(message.user)
             })
         }

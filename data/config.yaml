@@ -29,8 +29,10 @@ bot:
     currency: LC
     adminID: 338799459
     max_bet: 75000000000000000000000
+    minimumBet: 100000
     roundTime: # time in miliseconds
         slots: 30000
+        cube: 30000
     smiles:
         - 🍓
         - 🍋

@@ -44,7 +44,7 @@ export const onMessageMiddleware = async (message, next) => {
         "Эту команду можно использовать только в ЛС с ботом"
     )
     if (command.access === "chat" && !message.isChat) return message.send(
-        "Эту команду можно использовать только в чате"
+        "Эту команду можно использовать только в чате с ботом"
     )
 
     await next()

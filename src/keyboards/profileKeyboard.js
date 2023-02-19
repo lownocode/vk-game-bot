@@ -7,11 +7,5 @@ export const profileKeyboard = Keyboard.builder()
             command: 'changeOfNickname'
         },
     })
-    .textButton({
-        label: 'Клан',
-        payload: {
-            command: 'clan'
-        },
-    })
     .row()
-    .inline(true);
+    .inline()

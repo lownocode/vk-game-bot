@@ -8,8 +8,8 @@ export const cube = {
     access: "private",
     pattern: /^(cube|кубик)$/i,
     handler: async message => {
-        if (message.user.balance + message.user.bonusBalance < 100000) {
-            return message.send('Минимальный баланс для ставки 100 000', {
+        if (Number(message.user.balance) < 100_000) {
+            return message.send('Минимальный баланс для ставки - 100 000', {
                 keyboard: gamesKeyboard
             })
         }
@@ -45,7 +45,7 @@ export const cube = {
             })
         }
 
-        if (message.user.balance + message.user.bonusBalance < betAmount) {
+        if (Number(message.user.balance) < betAmount) {
             return message.send(`На вашем счету недостаточно средств!`, {
                 keyboard: gamesKeyboard
             })
@@ -71,7 +71,7 @@ export const cube = {
             : (betAmount * 100 / (chance)) - betAmount
 
         if (win) {
-            message.user.balance += amount
+            message.user.balance = Number(message.user.balance) + amount
             await message.user.save()
 
             await message.send(
@@ -83,14 +83,8 @@ export const cube = {
                 keyboard: gamesKeyboard
             })
         } else {
-            if (betAmount >= message.user.balance) {
-                message.user.bonusBalance -= betAmount - message.user.balance
-                message.user.balance = 0
-                message.user.save()
-            } else {
-                message.user.balance -= betAmount
-                message.user.save()
-            }
+            message.user.balance = Number(message.user.balance) - betAmount
+            await message.user.save()
 
             await message.send(
                 `Итог игры:\n`

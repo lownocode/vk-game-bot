@@ -9,9 +9,9 @@ export const bonus = {
             return message.send("Бонус можно получить раз в 30 минут.")
         }
 
-        const reward = features.random.integer(50000, 1000000)
+        const reward = features.random.integer(50_000, 1_000_000)
 
-        message.user.bonusBalance += reward
+        message.user.balance = Number(message.user.balance) + reward
         message.user.bonusReceivedTime = Date.now()
         await message.user.save()
 

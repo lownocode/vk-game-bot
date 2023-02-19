@@ -20,7 +20,9 @@ export * from "./private/admin.js"
 export * from "./chat/setupMode.js"
 export * from "./chat/balance.js"
 export * from "./chat/bank.js"
+export * from "./chat/chat.js"
 
 export * from "./chat/bets/slots.js"
+export * from "./chat/bets/cube.js"
 
 export * from "./callback/setupMode.js"

@@ -6,42 +6,44 @@ import { config } from "../../main.js"
 export const depositKeyboard = (user) => {
     const keyboard = Keyboard.builder()
 
-    if (user.balance + user.bonusBalance < 100000) {
+    if (Number(user.balance) < 100_000) {
         return
     }
 
-    const sum = user.balance + user.bonusBalance
+    const amount = Number(user.balance)
 
-    if (sum < config.bot.max_bet) {
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(sum / 3))}`,
-        })
-        keyboard.row()
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(sum / 2))}`,
-        })
-        keyboard.row()
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(sum))}`,
-        })
-        keyboard.row()
-        keyboard.inline(true);
+    if (amount < config.bot.max_bet) {
+        keyboard
+            .textButton({
+                label: `${features.split(Math.trunc(amount / 3))}`,
+            })
+            .row()
+            .textButton({
+                label: `${features.split(Math.trunc(amount / 2))}`,
+            })
+            .row()
+            .textButton({
+                label: `${features.split(Math.trunc(amount))}`,
+            })
+            .row()
+            .inline()
     }
 
-    if (sum >= config.bot.max_bet) {
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(config.bot.max_bet / 3))}`,
-        })
-        keyboard.row()
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(config.bot.max_bet / 2))}`,
-        })
-        keyboard.row()
-        keyboard.textButton({
-            label: `${features.split(Math.trunc(config.bot.max_bet))}`,
-        })
-        keyboard.row()
-        keyboard.inline(true);
+    if (amount >= config.bot.max_bet) {
+        keyboard
+            .textButton({
+                label: `${features.split(Math.trunc(config.bot.max_bet / 3))}`,
+            })
+            .row()
+            .textButton({
+                label: `${features.split(Math.trunc(config.bot.max_bet / 2))}`,
+            })
+            .row()
+            .textButton({
+                label: `${features.split(Math.trunc(config.bot.max_bet))}`,
+            })
+            .row()
+            .inline()
     }
 
     return keyboard

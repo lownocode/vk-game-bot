@@ -33,27 +33,71 @@ const gameResults = async (game, rates) => {
     for (const rate of rates) {
         const user = await User.findOne({ where: { vkId: rate.userVkId } })
 
-        if (rate.mode === "slots") {
-            const matchedSolutions = game.data.solution.filter(smile => smile === rate.data.smile)
+        switch (rate.mode) {
+            case "slots": {
+                const matchedSolutions = game.data.solution.filter(smile => smile === rate.data.smile)
 
-            if (matchedSolutions.length >= rate.data.multiplier) {
-                const winCoins = rate.betAmount * config.bot.factors[rate.data.multiplier - 1]
+                if (matchedSolutions.length >= rate.data.multiplier) {
+                    const winCoins = Number(rate.betAmount) * config.bot.factors[rate.data.multiplier - 1]
 
-                await addCoinsToUser(user, winCoins)
+                    await addCoinsToUser(user, winCoins)
 
-                results.push(
-                    `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                    `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} выиграла ` +
-                    `(+ ${features.split(rate.betAmount * config.bot.factors[rate.data.multiplier - 1])})`
-                )
-            } else {
-                results.push(
-                    `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                    `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} проиграла`
-                )
+                    results.push(
+                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} выиграла ` +
+                        `(+ ${features.split(winCoins)})`
+                    )
+                } else {
+                    results.push(
+                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} проиграла`
+                    )
+                }
+
+                await rate.destroy()
+
+                break
             }
+            case "cube": {
+                const betTypes = {
+                    even: "чётное",
+                    noteven: "нечётное"
+                }
 
-            await rate.destroy()
+                if (
+                    (rate.data.bet === "even" && game.data.number % 2 === 0) ||
+                    (rate.data.bet === "noteven" && game.data.number % 2 !== 0)
+                ) {
+                    const winCoins = Number(rate.betAmount) * 1.8
+
+                    await addCoinsToUser(user, winCoins)
+
+                    results.push(
+                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на ${betTypes[rate.data.bet]} выиграла (+ ${features.split(winCoins)})`
+                    )
+                }
+
+                else if (game.data.number === Number(rate.data.bet)) {
+                    const winCoins = Number(rate.betAmount) * 5
+
+                    await addCoinsToUser(user, winCoins)
+
+                    results.push(
+                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на число ${rate.data.bet} выиграла (+ ${features.split(winCoins)})`
+                    )
+                } else {
+                    results.push(
+                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на ${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]} проиграла`
+                    )
+                }
+
+                await rate.destroy()
+
+                break
+            }
         }
     }
 
@@ -74,9 +118,9 @@ const gameResults = async (game, rates) => {
 const addCoinsToUser = async (user, coins) => {
     const parsedCoins = Math.round(coins)
 
-    user.balance += parsedCoins
-    user.winCoins += parsedCoins
-    user.winCoinsToday += parsedCoins
+    user.balance = Number(user.balance) + parsedCoins
+    user.winCoins = Number(user.winCoins) + parsedCoins
+    user.winCoinsToday = Number(user.winCoinsToday) + parsedCoins
 
     await user.save()
 }

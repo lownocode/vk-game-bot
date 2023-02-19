@@ -7,9 +7,8 @@ export const balance = {
     pattern: /^(balance|баланс)$/i,
     handler: async message => {
         message.send(
-            `[id${message.user.vkId}|${message.user.name}], твои балансы:\n` +
-            `Основной баланс: ${features.split(message.user.balance)} ${config.bot.currency}\n` +
-            `Бонусный баланс: ${features.split(message.user.bonusBalance)} ${config.bot.currency}`, {
+            `[id${message.user.vkId}|${message.user.name}], твой баланс: ` +
+            `${features.split(message.user.balance)} ${config.bot.currency}\n`, {
             keyboard: chatMainKeyboard(message.chat.mode)
         })
     }

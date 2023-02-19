@@ -2,12 +2,21 @@ import { vk } from "../../../main.js"
 import { Chat } from "../../db/models.js"
 import { convertChatMode } from "../../functions/index.js"
 import { chatMainKeyboard } from "../../keyboards/index.js"
+import { getCurrentGame } from "../../games/index.js"
 
 export const setupModeCallback = {
     callbackCommand: "mode",
     pattern: /^$/,
     handler: async (message, data) => {
         const mode = data[1]
+
+        const activeGame = await getCurrentGame(message.peerId)
+
+        if (activeGame) {
+            return message.send(
+                "В этой беседе есть активная игра. Дождитесь итогов, после чего сможете сменить режим"
+            )
+        }
 
         const users = await vk.api.messages.getConversationMembers({ peer_id: message.peerId })
         const user = users.items.find((user) => user.member_id === message.userId)

@@ -3,27 +3,27 @@ import { Keyboard } from "vk-io"
 export const chatMainKeyboard = (mode) => {
     const keyboard = Keyboard.builder()
 
-    keyboard.textButton({
-        label: "Банк",
-        payload: {
-            command: "bank"
-        },
-        color: Keyboard.SECONDARY_COLOR
-    })
-    keyboard.textButton({
-        label: "Баланс",
-        payload: {
-            command: "balance"
-        },
-        color: Keyboard.SECONDARY_COLOR
-    })
-
-    keyboard.row()
+    keyboard
+        .textButton({
+            label: "Банк",
+            payload: {
+                command: "bank"
+            },
+            color: Keyboard.SECONDARY_COLOR
+        })
+        .textButton({
+            label: "Баланс",
+            payload: {
+                command: "balance"
+            },
+            color: Keyboard.SECONDARY_COLOR
+        })
+        .row()
 
     if (mode === "slots") {
         keyboard
             .textButton({
-            label: '🍓',
+                label: '🍓',
                 payload: {
                     command: "bet-slots/1_1"
                 },
@@ -50,10 +50,7 @@ export const chatMainKeyboard = (mode) => {
                 },
                 color: Keyboard.POSITIVE_COLOR
             })
-
-        keyboard.row()
-
-        keyboard
+            .row()
             .textButton({
                 label: '🍓',
                 payload: {
@@ -82,10 +79,7 @@ export const chatMainKeyboard = (mode) => {
                 },
                 color: Keyboard.SECONDARY_COLOR
             })
-
-        keyboard.row()
-
-        keyboard
+            .row()
             .textButton({
                 label: '🍓',
                 payload: {
@@ -114,67 +108,62 @@ export const chatMainKeyboard = (mode) => {
                 },
                 color: Keyboard.NEGATIVE_COLOR
             })
-
-        keyboard.row()
+            .row()
     }
 
     if (mode === "cube") {
-        keyboard.textButton({
-            label: 'Четное',
-            payload: {
-                command: 'rate_even'
-            },
-        })
-        keyboard.textButton({
-            label: 'Нечетное',
-            payload: {
-                command: 'rate_noteven'
-            },
-        })
-
-        keyboard.row()
-
-        keyboard.textButton({
-            label: '1',
-            payload: {
-                command: 'rate_number_1'
-            },
-        })
-        keyboard.textButton({
-            label: '2',
-            payload: {
-                command: 'rate_number_2'
-            },
-        })
-        keyboard.textButton({
-            label: '3',
-            payload: {
-                command: 'rate_number_3'
-            },
-        })
-
-        keyboard.row()
-
-        keyboard.textButton({
-            label: '4',
-            payload: {
-                command: 'rate_number_4'
-            },
-        })
-        keyboard.textButton({
-            label: '5',
-            payload: {
-                command: 'rate_number_5'
-            },
-        })
-        keyboard.textButton({
-            label: '6',
-            payload: {
-                command: 'rate_number_6'
-            },
-        })
-
-        keyboard.row()
+        keyboard
+            .textButton({
+                label: 'Четное',
+                payload: {
+                    command: "bet-cube/even"
+                },
+            })
+            .textButton({
+                label: 'Нечетное',
+                payload: {
+                    command: "bet-cube/noteven"
+                },
+            })
+            .row()
+            .textButton({
+                label: '1',
+                payload: {
+                    command: "bet-cube/1"
+                },
+            })
+            .textButton({
+                label: '2',
+                payload: {
+                    command: "bet-cube/2"
+                },
+            })
+            .textButton({
+                label: '3',
+                payload: {
+                    command: "bet-cube/3"
+                },
+            })
+            .row()
+            .textButton({
+                label: '4',
+                payload: {
+                    command: "bet-cube/4"
+                },
+            })
+            .textButton({
+                label: '5',
+                payload: {
+                    command: "bet-cube/5"
+                },
+            })
+            .textButton({
+                label: '6',
+                payload: {
+                    command: "bet-cube/6"
+                },
+            })
+            .row()
     }
 
     if (mode === 'wheel') {

@@ -42,7 +42,7 @@ export const ball = {
             })
         }
 
-        if (message.user.balance + message.user.bonusBalance < betAmount) {
+        if (Number(message.user.balance) < betAmount) {
             return message.send(`На вашем счету недостаточно средств!`, {
                 keyboard: gamesKeyboard
             })
@@ -97,19 +97,11 @@ export const ball = {
             })
         }
 
-        if (betAmount >= message.user.balance) {
-            message.user.bonusBalance -= betAmount - message.user.balance
-            message.user.balance = 0
-
-            await message.user.save()
-        } else {
-            message.user.balance -= betAmount
-
-            await message.user.save()
-        }
+        message.user.balance = Number(message.user.balance) + betAmount
+        await message.user.save()
 
         if (percent >= randomPercent) {
-            message.user.balance += win
+            message.user.balance = Number(message.user.balance) + win
 
             await message.user.save()
             await message.send(

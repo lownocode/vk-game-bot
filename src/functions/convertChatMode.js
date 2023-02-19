@@ -15,6 +15,7 @@ export const convertChatMode = (mode, idFormat = true) => {
                 case "double": return "double"
                 case "basketball": return "баскетбол"
                 case "wheel": return "wheel"
+                default: return "не выбран"
             }
     }
 }

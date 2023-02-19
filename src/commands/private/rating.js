@@ -9,7 +9,10 @@ export const rating = {
         const users = await User.findAll({
             attributes: ["vkId", "name", "winCoins"],
             order: [["winCoins", "DESC"]],
-            limit: 10
+            limit: 10,
+            where: {
+                isAdmin: false
+            }
         })
 
         const text = "Топ 10 игроков за все время:\n" + users.map((user, index) => {
