@@ -1,30 +1,22 @@
 import md5 from "md5"
 
 import { Chat, Game } from "../db/models.js"
-import { config, vk } from "../../main.js"
+import { config } from "../../main.js"
 import { features } from "../utils/index.js"
-import { modeKeyboard } from "../keyboards/index.js"
-import {getRealDoubleMultiply} from "../functions/index.js";
+import { getRealDoubleMultiply } from "../functions/index.js"
 
 export const createNewGame = async (peerId) => {
     const chat = await Chat.findOne({ where: { peerId: peerId } })
 
     switch (chat.mode) {
-        case "slots" :
-        case "cube"  :
-        case "double": {
+        case "slots"      :
+        case "cube"       :
+        case "double"     :
+        case "basketball" : {
             return await Game.create({
                 peerId: peerId,
                 endedAt: Date.now() + config.bot.roundTime[chat.mode],
                 ...generateGameInfo(chat.mode)
-            })
-        }
-        default: {
-            return await vk.api.messages.send({
-                random_id: 0,
-                peer_id: peerId,
-                message: "К сожалению, режима, кторый привязан к вашей беседе не существует, попробуйте выбрать другой",
-                keyboard: modeKeyboard
             })
         }
     }
@@ -83,6 +75,25 @@ const generateGameInfo = (mode) => {
                     number: number
                 },
                 image: config.bot.images[number],
+                hash: md5(salt)
+            }
+        }
+        case "basketball": {
+            const teamNames = {
+                red: "Красные",
+                nobody: "Ничья",
+                black: "Чёрные"
+            }
+            const teamWinners = ["red", "nobody", "black"][Math.ceil(features.random.integer(0, 199) / 100)]
+            const salt = `${teamNames[teamWinners]}|${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    winners: teamWinners
+                },
+                image: config.bot.infoImage["basketball_" + teamWinners],
                 hash: md5(salt)
             }
         }

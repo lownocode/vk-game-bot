@@ -127,6 +127,41 @@ const gameResults = async (game, rates) => {
 
                 break
             }
+            case "basketball": {
+                const teamWinName = {
+                    red: "победу красных",
+                    nobody: "ничью",
+                    black: "победу чёрных"
+                }[rate.data.team]
+
+                if ((rate.data.team === game.data.winners) && game.data.winners === "nobody") {
+                    const winCoins = Number(rate.betAmount) * 14
+
+                    await addCoinsToUser(user, winCoins)
+
+                    results.push(
+                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
+                    )
+                }
+                else if (rate.data.team === game.data.winners) {
+                    const winCoins = Number(rate.betAmount) * 2
+
+                    await addCoinsToUser(user, winCoins)
+
+                    results.push(
+                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
+                    )
+                } else {
+                    results.push(
+                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                        `на ${teamWinName} проиграла`
+                    )
+                }
+
+                await rate.destroy()
+            }
         }
     }
 

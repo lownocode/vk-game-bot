@@ -25,5 +25,6 @@ export * from "./chat/chat.js"
 export * from "./chat/bets/slots.js"
 export * from "./chat/bets/cube.js"
 export * from "./chat/bets/double.js"
+export * from "./chat/bets/basketball.js"
 
 export * from "./callback/setupMode.js"

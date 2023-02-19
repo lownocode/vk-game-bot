@@ -72,5 +72,18 @@ const getGameRates = async (rates, mode) => {
                 )
             })
         }
+        case "basketball": {
+            const teamWinName = {
+                red: "победу красных",
+                nobody: "ничью",
+                black: "победу чёрных"
+            }
+
+            return rates.map((rate) => {
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ${teamWinName[rate.data.team]}`
+                )
+            })
+        }
     }
 }
