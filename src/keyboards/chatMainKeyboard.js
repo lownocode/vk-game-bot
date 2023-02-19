@@ -6,16 +6,10 @@ export const chatMainKeyboard = (mode) => {
     keyboard
         .textButton({
             label: "Банк",
-            payload: {
-                command: "bank"
-            },
             color: Keyboard.SECONDARY_COLOR
         })
         .textButton({
             label: "Баланс",
-            payload: {
-                command: "balance"
-            },
             color: Keyboard.SECONDARY_COLOR
         })
         .row()
@@ -166,6 +160,63 @@ export const chatMainKeyboard = (mode) => {
             .row()
     }
 
+    if (mode === "double") {
+        keyboard
+            .textButton({
+                label: "Black x2",
+                payload: {
+                    command: "bet-double/2"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+            .textButton({
+                label: "Red x3",
+                payload: {
+                    command: "bet-double/3"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+            .textButton({
+                label: "Blue x5",
+                payload: {
+                    command: "bet-double/5"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+            .textButton({
+                label: "Green x50",
+                payload: {
+                    command: "bet-double/50"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+    }
+
+    if (mode === "basketball") {
+        keyboard
+            .textButton({
+                label: "🔴 Красная",
+                payload: {
+                    command: "bet-basketball/red"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+            .textButton({
+                label: "🏀 Ничья",
+                payload: {
+                    command: "bet-basketball/green"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+            .textButton({
+                label: "⚫ Чёрная",
+                payload: {
+                    command: "bet-basketball/black"
+                },
+                color: Keyboard.PRIMARY_COLOR,
+            })
+    }
+
     if (mode === 'wheel') {
         keyboard.textButton({
             label: '0',
@@ -236,61 +287,6 @@ export const chatMainKeyboard = (mode) => {
             payload: {
                 command: 'rate_noteven'
             },
-        })
-    }
-
-    if (mode === 'double') {
-        keyboard.textButton({
-            label: 'Black',
-            payload: {
-                command: 'rate_2'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-        keyboard.textButton({
-            label: 'Red',
-            payload: {
-                command: 'rate_3'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-        keyboard.textButton({
-            label: 'Blue',
-            payload: {
-                command: 'rate_5'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-        keyboard.textButton({
-            label: 'Green',
-            payload: {
-                command: 'rate_50'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-    }
-
-    if (mode === 'basketball') {
-        keyboard.textButton({
-            label: `${SYMBOL.RED} Красная`,
-            payload: {
-                command: 'rate_red'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-        keyboard.textButton({
-            label: `${SYMBOL.ZERO} Ничья`,
-            payload: {
-                command: 'rate_zero'
-            },
-            color: Keyboard.PRIMARY_COLOR,
-        })
-        keyboard.textButton({
-            label: `${SYMBOL.BLACK} чёрная`,
-            payload: {
-                command: 'rate_black'
-            },
-            color: Keyboard.PRIMARY_COLOR,
         })
     }
 

@@ -4,13 +4,15 @@ import { Chat, Game } from "../db/models.js"
 import { config, vk } from "../../main.js"
 import { features } from "../utils/index.js"
 import { modeKeyboard } from "../keyboards/index.js"
+import {getRealDoubleMultiply} from "../functions/index.js";
 
 export const createNewGame = async (peerId) => {
     const chat = await Chat.findOne({ where: { peerId: peerId } })
 
     switch (chat.mode) {
-        case "slots":
-        case "cube": {
+        case "slots" :
+        case "cube"  :
+        case "double": {
             return await Game.create({
                 peerId: peerId,
                 endedAt: Date.now() + config.bot.roundTime[chat.mode],
@@ -61,6 +63,26 @@ const generateGameInfo = (mode) => {
                     number: number
                 },
                 image: config.bot.infoImage[`w` + number],
+                hash: md5(salt)
+            }
+        }
+        case "double": {
+            const betNames = {
+                2: "Black x2",
+                3: "Red x3",
+                5: "Blue x5",
+                50: "Green x50",
+            }
+            const number = features.random.integer(0, 53)
+            const salt = `${number}|${betNames[getRealDoubleMultiply(number)]}|${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    number: number
+                },
+                image: config.bot.images[number],
                 hash: md5(salt)
             }
         }

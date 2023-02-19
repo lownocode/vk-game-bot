@@ -33,6 +33,9 @@ bot:
     roundTime: # time in miliseconds
         slots: 30000
         cube: 30000
+        double: 30000
+        basketball: 30000
+        wheel: 30000
     smiles:
         - 🍓
         - 🍋

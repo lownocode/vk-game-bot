@@ -3,7 +3,7 @@ const numbers = {
     5: ['1', '9'],
 }
 
-export const getRealMultiply = (number) => {
+export const getRealDoubleMultiply = (number) => {
     let doSwitch = false
 
     if (number > 27) {

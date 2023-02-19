@@ -1,8 +1,8 @@
 import { config } from "../../../../main.js"
-import {features, formatSum} from "../../../utils/index.js"
+import { features, formatSum } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
-import {Rate} from "../../../db/models.js";
-import {getOrCreateGame} from "../../../games/index.js";
+import { Rate } from "../../../db/models.js"
+import { getOrCreateGame } from "../../../games/index.js"
 
 export const cubeBet = {
     command: "bet-cube",
@@ -26,11 +26,11 @@ export const cubeBet = {
                 keyboard: depositKeyboard(message.user)
             })
 
-        let betAmount = _betAmount.replace(/(вб|вабанк)/ig, Number(message.user.balance))
-
-        if (!betAmount) {
+        if (!_betAmount) {
             return message.send("Ты должен ввести cумму")
         }
+
+        let betAmount = _betAmount.replace(/(вб|вабанк)/ig, Number(message.user.balance))
 
         betAmount = formatSum(betAmount)
 
@@ -50,6 +50,7 @@ export const cubeBet = {
 
         message.user.balance = Number(message.user.balance) - betAmount
 
+        await message.user.save()
         await Rate.create({
             gameId: currentGame.id,
             peerId: message.peerId,
@@ -61,7 +62,6 @@ export const cubeBet = {
                 bet: data
             }
         })
-        await message.user.save()
 
         message.send(
             `${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
