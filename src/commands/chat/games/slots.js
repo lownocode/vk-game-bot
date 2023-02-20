@@ -20,7 +20,8 @@ export const slotsBet = {
         }
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на x${multiplier} ${smile}`, {
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
+            `x${multiplier} ${smile} (x${config.games.multipliers.slots[multiplier - 1]})`, {
             targetUserId: message.senderId,
             keyboard: depositKeyboard(message.user)
         })

@@ -8,7 +8,7 @@ import { gameBetAmountChecking } from "../../../functions/index.js"
 export const basketballBet = {
     command: "bet-basketball",
     pattern: /^$/,
-    handler: async (message, color) => {
+    handler: async (message, team) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
             return message.send(
                 `Для ставки на вашем балансе должно быть как минимум ` +
@@ -20,10 +20,11 @@ export const basketballBet = {
             red: "победу красных",
             nobody: "ничью",
             black: "победу чёрных",
-        }[color]
+        }[team]
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betTeam}`, {
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку ` +
+            `на ${betTeam} (x${config.games.multipliers.basketball[team]})`, {
                 targetUserId: message.senderId,
                 keyboard: depositKeyboard(message.user)
             })
@@ -45,7 +46,7 @@ export const basketballBet = {
             betAmount: betAmount,
             mode: "basketball",
             data: {
-                team: color
+                team: team
             }
         })
 

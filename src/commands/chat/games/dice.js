@@ -17,10 +17,10 @@ export const diceBet = {
         }
 
         const betTypes = {
-            noteven: "нечётное",
-            even: "чётное"
+            noteven: `нечётное (x${config.games.multipliers.dice.parity})`,
+            even: `чётное (x${config.games.multipliers.dice.parity})`
         }
-        const betType = /[1-6]/.test(data) ? `число ${data}` : betTypes[data]
+        const betType = /[1-6]/.test(data) ? `число ${data} (x${config.games.multipliers.dice.number})` : betTypes[data]
         const { text: _betAmount } = await message.question(
             `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betType}`, {
                 targetUserId: message.senderId,

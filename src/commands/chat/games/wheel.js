@@ -29,9 +29,18 @@ export const wheelBet = {
         }
 
         const betText = () => {
-            if (["even", "noteven"].includes(data)) return evenNotevenTitles[data]
-            if (["red", "black"].includes(data)) return colorTitle[data]
-            if (["1-12", "13-24", "25-36", "1-18", "19-36"].includes(data)) return `промежуток ${data}`
+            if (["even", "noteven"].includes(data)) {
+                return `${evenNotevenTitles[data]} (x${config.games.multipliers.wheel.parity})`
+            }
+            if (["red", "black"].includes(data)) {
+                return `${colorTitle[data]} (x${config.games.multipliers.wheel.parity})`
+            }
+            if (["1-18", "19-36"].includes(data)) {
+                return `промежуток ${data} (x${config.games.multipliers.wheel.parity})`
+            }
+            if (["1-12", "13-24", "25-36"].includes(data)) {
+                return `промежуток ${data} (x${config.games.multipliers.wheel.interval})`
+            }
         }
 
         if (data === "number") {
@@ -54,7 +63,7 @@ export const wheelBet = {
 
         const { text: _betAmount } = await message.question(
             `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
-            `${data === "number" ? `число ${number}` : betText()}`, {
+            `${data === "number" ? `число ${number} (x${config.games.multipliers.wheel.number})` : betText()}`, {
                 targetUserId: message.senderId,
                 keyboard: depositKeyboard(message.user)
             })

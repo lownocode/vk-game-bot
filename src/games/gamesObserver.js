@@ -39,7 +39,7 @@ const gameResults = async (game, rates) => {
                 const matchedSolutions = game.data.solution.filter(smile => smile === rate.data.smile)
 
                 if (matchedSolutions.length >= rate.data.multiplier) {
-                    const winCoins = Number(rate.betAmount) * config.games.slotsFactors[rate.data.multiplier - 1]
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.slots[rate.data.multiplier - 1]
 
                     await addCoinsToUser(user, winCoins)
 
@@ -69,7 +69,7 @@ const gameResults = async (game, rates) => {
                     (rate.data.bet === "even" && game.data.number % 2 === 0) ||
                     (rate.data.bet === "noteven" && game.data.number % 2 !== 0)
                 ) {
-                    const winCoins = Number(rate.betAmount) * 1.8
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.dice.parity
 
                     await addCoinsToUser(user, winCoins)
 
@@ -80,7 +80,7 @@ const gameResults = async (game, rates) => {
                 }
 
                 else if (game.data.number === Number(rate.data.bet)) {
-                    const winCoins = Number(rate.betAmount) * 5
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.dice.number
 
                     await addCoinsToUser(user, winCoins)
 
@@ -135,7 +135,7 @@ const gameResults = async (game, rates) => {
                 }[rate.data.team]
 
                 if ((rate.data.team === game.data.winners) && game.data.winners === "nobody") {
-                    const winCoins = Number(rate.betAmount) * 14
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.basketball.nobody
 
                     await addCoinsToUser(user, winCoins)
 
@@ -145,7 +145,7 @@ const gameResults = async (game, rates) => {
                     )
                 }
                 else if (rate.data.team === game.data.winners) {
-                    const winCoins = Number(rate.betAmount) * 2
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.basketball.red // or balck
 
                     await addCoinsToUser(user, winCoins)
 
@@ -182,7 +182,7 @@ const gameResults = async (game, rates) => {
                 }
 
                 if (rate.data.number >= 0 && game.data.number === rate.data.number) {
-                    const winCoins = Number(rate.betAmount) * 36
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.number
 
                     await addCoinsToUser(user, winCoins)
 
@@ -199,7 +199,7 @@ const gameResults = async (game, rates) => {
                     (rate.data.bet === "1-18" && (game.data.number <= 18 && game.data.number >= 1)) ||
                     (rate.data.bet === "19-36" && (game.data.number <= 36 && game.data.number >= 19))
                 ) {
-                    const winCoins = Number(rate.betAmount) * 2
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.parity
 
                     await addCoinsToUser(user, winCoins)
 
@@ -212,7 +212,7 @@ const gameResults = async (game, rates) => {
                     (rate.data.bet === "13-24" && (game.data.number <= 24 && game.data.number >= 13)) ||
                     (rate.data.bet === "25-36" && (game.data.number <= 36 && game.data.number >= 25))
                 ) {
-                    const winCoins = Number(rate.betAmount) * 3
+                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.interval
 
                     await addCoinsToUser(user, winCoins)
 

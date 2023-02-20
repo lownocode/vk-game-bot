@@ -18,15 +18,28 @@ bot:
     minimumBet: 100
 
 games:
+    multipliers:
+        dice:
+            number: 5
+            parity: 1.8
+        slots:
+            - 1.6
+            - 5.5
+            - 30
+        basketball:
+            red: 2
+            black: 2
+            nobody: 14
+        wheel:
+            number: 36
+            parity: 2
+            interval: 3
+
     slotsSmiles:
         - 🍓
         - 🍋
         - 🍏
         - 🍑
-    slotsFactors:
-        - 1.6
-        - 5.5
-        - 30
     doubleImages:
         - photo456255829_457239182
         - photo456255829_457239183

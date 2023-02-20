@@ -12,11 +12,11 @@ export const gameBetAmountChecking = (betAmount, message) => {
     _betAmount = formatSum(betAmount)
 
     if (!_betAmount || isNaN(_betAmount) || _betAmount < config.bot.minimumBet) {
-        return message.send(`Минимальная ставка - ${features.split(config.bot.minimumBet)}`)
+        return message.send(`Минимальная ставка - ${features.split(config.bot.minimumBet)} ${config.bot.currency}`)
     }
 
     if (_betAmount > config.bot.maximumBet) {
-        return message.send(`Максимальная ставка - ${features.split(config.bot.max_bet)}`)
+        return message.send(`Максимальная ставка - ${features.split(config.bot.max_bet)} ${config.bot.currency}`)
     }
 
     if (Number(message.user.balance) < _betAmount) {
