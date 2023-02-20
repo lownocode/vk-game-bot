@@ -20,7 +20,7 @@ export * from "./chat/bank.js"
 export * from "./chat/chat.js"
 
 export * from "./chat/games/slots.js"
-export * from "./chat/games/cube.js"
+export * from "./chat/games/dice.js"
 export * from "./chat/games/double.js"
 export * from "./chat/games/basketball.js"
 export * from "./chat/games/wheel.js"

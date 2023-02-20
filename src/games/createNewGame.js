@@ -11,7 +11,7 @@ export const createNewGame = async (peerId) => {
 
     switch (chat.mode) {
         case "slots"      :
-        case "cube"       :
+        case "dice"       :
         case "double"     :
         case "basketball" :
         case "wheel"      : {
@@ -35,8 +35,8 @@ const generateGameInfo = (mode) => {
                 features.random.integer(0, 3)
             ]
             const salt =
-                `${config.games.slotsSmiles[randomEmoji[0]]}, ` +
-                `${config.games.slotsSmiles[randomEmoji[1]]}, ` +
+                `${config.games.slotsSmiles[randomEmoji[0]]}` +
+                `${config.games.slotsSmiles[randomEmoji[1]]}` +
                 `${config.games.slotsSmiles[randomEmoji[2]]}@${secretString}`
 
             return {
@@ -49,7 +49,7 @@ const generateGameInfo = (mode) => {
                 hash: md5(salt)
             }
         }
-        case "cube": {
+        case "dice": {
             const number = features.random.integer(1, 6)
             const salt = `${number}@${secretString}`
 

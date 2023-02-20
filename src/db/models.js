@@ -76,7 +76,7 @@ export const Chat = sequelize.define("chats", {
         type: DataTypes.JSONB,
         defaultValue: {
             slots: 30,
-            cube: 30,
+            dice: 30,
             double: 30,
             basketball: 30,
             wheel: 30,

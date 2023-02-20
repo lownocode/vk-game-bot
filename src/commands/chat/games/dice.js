@@ -5,8 +5,8 @@ import { Rate } from "../../../db/models.js"
 import { getOrCreateGame } from "../../../games/index.js"
 import { gameBetAmountChecking } from "../../../functions/index.js"
 
-export const cubeBet = {
-    command: "bet-cube",
+export const diceBet = {
+    command: "bet-dice",
     pattern: /^$/,
     handler: async (message, data) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
@@ -42,7 +42,7 @@ export const cubeBet = {
             userVkId: message.senderId,
             username: message.user.name,
             betAmount: betAmount,
-            mode: "cube",
+            mode: "dice",
             data: {
                 bet: data
             }

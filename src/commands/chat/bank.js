@@ -28,7 +28,7 @@ export const bank = {
         return message.send(
             `Ставки на текущую игру:\n\n` +
             `${sortedRates.join("\n")}\n\n` +
-            `Общая сумма ставок: ${features.split(totalBetsAmount)}\n` +
+            `Общая сумма ставок: ${features.split(totalBetsAmount)} ${config.bot.currency}\n` +
             `До конца раунда: ${timeToEndRound} сек.\n` +
             `Хеш игры: ${currentGame.hash}`
         )
@@ -45,7 +45,7 @@ const getGameRates = async (rates, mode) => {
                 )
             })
         }
-        case "cube": {
+        case "dice": {
             const betTypes = {
                 even: "чётное",
                 noteven: "нечётное"

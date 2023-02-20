@@ -59,7 +59,7 @@ const gameResults = async (game, rates) => {
 
                 break
             }
-            case "cube": {
+            case "dice": {
                 const betTypes = {
                     even: "чётное",
                     noteven: "нечётное"

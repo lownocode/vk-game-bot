@@ -18,28 +18,28 @@ export const chatMainKeyboard = (mode) => {
         case "slots": {
             keyboard
                 .textButton({
-                    label: "🍓",
+                    label: "🍓 x1",
                     payload: {
                         command: "bet-slots/1_1"
                     },
                     color: Keyboard.POSITIVE_COLOR
                 })
                 .textButton({
-                    label: "🍋",
+                    label: "🍋 x1",
                     payload: {
                         command: "bet-slots/1_2"
                     },
                     color: Keyboard.POSITIVE_COLOR
                 })
                 .textButton({
-                    label: "🍏",
+                    label: "🍏 x1",
                     payload: {
                         command: "bet-slots/1_3"
                     },
                     color: Keyboard.POSITIVE_COLOR
                 })
                 .textButton({
-                    label: "🍑",
+                    label: "🍑 x1",
                     payload: {
                         command: "bet-slots/1_4"
                     },
@@ -47,57 +47,57 @@ export const chatMainKeyboard = (mode) => {
                 })
                 .row()
                 .textButton({
-                    label: "🍓",
+                    label: "🍓 x2",
                     payload: {
                         command: "bet-slots/2_1"
                     },
-                    color: Keyboard.SECONDARY_COLOR
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
-                    label: "🍋",
+                    label: "🍋 x2",
                     payload: {
                         command: "bet-slots/2_2"
                     },
-                    color: Keyboard.SECONDARY_COLOR
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
-                    label: "🍏",
+                    label: "🍏 x2",
                     payload: {
                         command: "bet-slots/2_3"
                     },
-                    color: Keyboard.SECONDARY_COLOR
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
-                    label: "🍑",
+                    label: "🍑 x2",
                     payload: {
                         command: "bet-slots/2_4"
                     },
-                    color: Keyboard.SECONDARY_COLOR
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .row()
                 .textButton({
-                    label: "🍓",
+                    label: "🍓 x3",
                     payload: {
                         command: "bet-slots/3_1"
                     },
                     color: Keyboard.NEGATIVE_COLOR
                 })
                 .textButton({
-                    label: "🍋",
+                    label: "🍋 x3",
                     payload: {
                         command: "bet-slots/3_2"
                     },
                     color: Keyboard.NEGATIVE_COLOR
                 })
                 .textButton({
-                    label: "🍏",
+                    label: "🍏 x3",
                     payload: {
                         command: "bet-slots/3_3"
                     },
                     color: Keyboard.NEGATIVE_COLOR
                 })
                 .textButton({
-                    label: "🍑",
+                    label: "🍑 x3",
                     payload: {
                         command: "bet-slots/3_4"
                     },
@@ -107,39 +107,39 @@ export const chatMainKeyboard = (mode) => {
 
             break
         }
-        case "cube": {
+        case "dice": {
             keyboard
                 .textButton({
                     label: "Четное",
                     payload: {
-                        command: "bet-cube/even"
+                        command: "bet-dice/even"
                     },
                 })
                 .textButton({
                     label: "Нечетное",
                     payload: {
-                        command: "bet-cube/noteven"
+                        command: "bet-dice/noteven"
                     },
                 })
                 .row()
                 .textButton({
                     label: "1",
                     payload: {
-                        command: "bet-cube/1"
+                        command: "bet-dice/1"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "2",
                     payload: {
-                        command: "bet-cube/2"
+                        command: "bet-dice/2"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "3",
                     payload: {
-                        command: "bet-cube/3"
+                        command: "bet-dice/3"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
@@ -147,21 +147,21 @@ export const chatMainKeyboard = (mode) => {
                 .textButton({
                     label: "4",
                     payload: {
-                        command: "bet-cube/4"
+                        command: "bet-dice/4"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "5",
                     payload: {
-                        command: "bet-cube/5"
+                        command: "bet-dice/5"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "6",
                     payload: {
-                        command: "bet-cube/6"
+                        command: "bet-dice/6"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
