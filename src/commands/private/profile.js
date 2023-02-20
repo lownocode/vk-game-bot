@@ -1,4 +1,3 @@
-import { profileKeyboard } from "../../keyboards/index.js"
 import { features } from "../../utils/index.js"
 import { config } from "../../../main.js"
 
@@ -13,10 +12,7 @@ export const profile = {
             `🤪 Выиграно за сегодня: ${features.split(message.user.winCoinsToday)} ${config.bot.currency}\n` +
             `⏰ Выиграно за всё время: ${features.split(message.user.winCoins)} ${config.bot.currency}\n\n` +
             `⛔ Бан: ${message.user.isBanned ? "да" : "нет"}\n` +
-            `®️ Дата регистрации: ${message.user.createdAt}`,
-            {
-                keyboard: profileKeyboard
-            }
+            `®️ Дата регистрации: ${message.user.createdAt}`
         )
     }
 }

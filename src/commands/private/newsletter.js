@@ -1,8 +1,8 @@
-import { privateKeyboard } from "../../keyboards/index.js"
+import { privateSettingsKeyboard } from "../../keyboards/index.js"
 
 export const newsletter = {
     access: "private",
-    pattern: /^(newsletter|рассылка\s\((?:вкл|выкл)\)?)$/i,
+    pattern: /^(newsletter|рассылка)$/i,
     handler: async message => {
         const isHappy = !message.user.newsletter
 
@@ -10,7 +10,7 @@ export const newsletter = {
         await message.user.save()
 
         await message.send(`${isHappy ? 'Теперь вы подписаны на рассылку' : 'Вы успешно отписались от рассылки.'}`, {
-            keyboard: privateKeyboard(message.user)
+            keyboard: privateSettingsKeyboard(message.user)
         })
     }
 }

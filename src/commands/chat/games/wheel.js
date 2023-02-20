@@ -1,6 +1,6 @@
-import {config} from "../../../../main.js";
-import {features} from "../../../utils/index.js";
-import {depositKeyboard} from "../../../keyboards/index.js";
+import { config } from "../../../../main.js"
+import { features } from "../../../utils/index.js"
+import { depositKeyboard } from "../../../keyboards/index.js"
 
 export const wheelBet = {
     command: "bet-wheel",

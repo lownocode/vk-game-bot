@@ -1,33 +1,32 @@
-import { privateKeyboard } from "../../keyboards/index.js"
+import stringLength from "string-length"
+
+import { config } from "../../../main.js"
 
 export const changeNickname = {
     access: "private",
-    pattern: /^сменить ник(нейм)?$/i,
+    pattern: /^(сменить ник(нейм)?|никнейм)$/i,
     handler: async message => {
-        if (Number(message.user.winCoins) < 10_000_000_000) {
-            return message.send('Для смены ника нужно, выиграть не менее 10 000 000 000 за все время', {
-                keyboard: privateKeyboard(message.user)
-            })
+        if (Number(message.user.balance) < 5_000) {
+            return message.send(
+                "Стоимость смены никнейма - 5 000. На вашем балансе не хватает " + config.bot.currency
+            )
         }
 
-        const { text: _nickname } = await message.question(
-            `Введи новое имя (старое будет удалено). Пробелы разрешены (до 3). Максимальная длина 10.`, {
+        const { text: nickname } = await message.question(
+            `Стоимость смены никнейма - 5 000 ${config.bot.currency}, они будут списаны с вашего баланса.\n` +
+            `Введите новый никнейм:`, {
                 targetUserId: message.senderId
             })
 
-        const nickname = _nickname.replace(/[^ -\u2122]+ +| *[^ -\u2122]+/ug, '')
-
-        if (nickname.match(/[^\s]/g).length > 11 || nickname.length < 3) {
-            return message.send(`Максимальная длина 10 символа в нике ${nickname}, ${nickname.match(/[^\s]/g).length} символов.`, {
-                keyboard: privateKeyboard(message.user)
-            })
+        if (!nickname || stringLength(nickname) >= 16) {
+            return message.send(
+                "Максимальная длина никнейма с учётом пробелов, символов и эмодзи - 16 символов"
+            )
         }
 
         message.user.name = nickname
         await message.user.save()
 
-        await message.send(`Ты успешно установил ник ${nickname}`, {
-            keyboard: privateKeyboard(message.user)
-        })
+        await message.send(`Ты успешно установил никнейм «${nickname}»`)
     }
 }

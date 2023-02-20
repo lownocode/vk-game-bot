@@ -31,10 +31,8 @@ export const onMessageMiddleware = async (message, next) => {
         !message.session &&
         !command
     ) {
-        const user = await getUser(message)
-
         return message.send("Я не знаю такой команды", {
-            keyboard: privateKeyboard(user)
+            keyboard: privateKeyboard
         })
     }
 

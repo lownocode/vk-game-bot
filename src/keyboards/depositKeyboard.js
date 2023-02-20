@@ -6,7 +6,7 @@ import { config } from "../../main.js"
 export const depositKeyboard = (user) => {
     const keyboard = Keyboard.builder()
 
-    if (Number(user.balance) < 100_000) {
+    if (Number(user.balance) < config.bot.minimumBet) {
         return
     }
 
@@ -24,23 +24,7 @@ export const depositKeyboard = (user) => {
             .row()
             .textButton({
                 label: `${features.split(Math.trunc(amount))}`,
-            })
-            .row()
-            .inline()
-    }
-
-    if (amount >= config.bot.max_bet) {
-        keyboard
-            .textButton({
-                label: `${features.split(Math.trunc(config.bot.max_bet / 3))}`,
-            })
-            .row()
-            .textButton({
-                label: `${features.split(Math.trunc(config.bot.max_bet / 2))}`,
-            })
-            .row()
-            .textButton({
-                label: `${features.split(Math.trunc(config.bot.max_bet))}`,
+                color: Keyboard.NEGATIVE_COLOR
             })
             .row()
             .inline()

@@ -175,11 +175,28 @@ bot:
         w4_4_3: photo-199640307_457239228
         w4_4_4: photo-199640307_457239229
 
-bonus:
-    reward: 1200000000
+repostBonus:
+    reward: 1500
     picture: photo-199640307_457241884
 
 chats:
     Слоты: https://vk.me/join/AJQ1d/mCUxmVhw0qsLLLN4v6
     Кубик: https://vk.me/join/AJQ1d6ofPxmqqdkHY7XUHYcv
     Double: https://vk.me/join/AJQ1d3ky5RfL_jrgo_vJDZSo
+
+dailyRatingRewards:
+    - 100000
+    - 75000
+    - 50000
+    - 30000
+    - 20000
+
+shopPricePerThousand: 1 # цена за 1000 LC в рублях
+shopDiscounts:
+    499: 0 # нужно для правильного определения скидки
+    500: 5 # при покупке LC на сумму от 500 руб. скидка 5%
+    1000: 10
+    5000: 15
+    10000: 20
+
+aboutRatingLink: vk.cc/example
