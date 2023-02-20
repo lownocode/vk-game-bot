@@ -15,7 +15,6 @@ export const privateSettingsKeyboard = (user) => {
         .row()
         .textButton({
             label: "Меню",
-            color: Keyboard.POSITIVE_COLOR
         })
 
     return keyboard

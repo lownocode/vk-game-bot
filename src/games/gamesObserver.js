@@ -39,19 +39,19 @@ const gameResults = async (game, rates) => {
                 const matchedSolutions = game.data.solution.filter(smile => smile === rate.data.smile)
 
                 if (matchedSolutions.length >= rate.data.multiplier) {
-                    const winCoins = Number(rate.betAmount) * config.bot.factors[rate.data.multiplier - 1]
+                    const winCoins = Number(rate.betAmount) * config.games.slotsFactors[rate.data.multiplier - 1]
 
                     await addCoinsToUser(user, winCoins)
 
                     results.push(
                         `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} выиграла ` +
+                        `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} выиграла ` +
                         `(+ ${features.split(winCoins)})`
                     )
                 } else {
                     results.push(
                         `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]} проиграла`
+                        `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла`
                     )
                 }
 

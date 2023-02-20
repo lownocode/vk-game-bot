@@ -3,14 +3,14 @@ import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
 import { getOrCreateGame } from "../../../games/index.js"
 import { Rate } from "../../../db/models.js"
-import {gameBetAmountChecking} from "../../../functions/index.js";
+import { gameBetAmountChecking } from "../../../functions/index.js"
 
 export const slotsBet = {
     command: "bet-slots",
     pattern: /^$/,
     handler: async (message, data) => {
         const multiplier = data.split("_")[0]
-        const smile = config.bot.smiles[data.split("_")[1] - 1]
+        const smile = config.games.slotsSmiles[data.split("_")[1] - 1]
 
         if (Number(message.user.balance) < config.bot.minimumBet) {
             return message.send(
@@ -42,7 +42,7 @@ export const slotsBet = {
             mode: "slots",
             data: {
                 multiplier: Number(multiplier),
-                smile: config.bot.smiles.findIndex(_smile => _smile === smile),
+                smile: config.games.slotsSmiles.findIndex(_smile => _smile === smile),
             }
         })
         await message.user.save()

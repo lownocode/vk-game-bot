@@ -7,7 +7,8 @@ export const chat = {
         return message.send(
             `Информация о данной беседе:\n\n` +
             `ID беседы: ${message.chat.id}\n` +
-            `Режим беседы: ${convertChatMode(message.chat.mode, false)}`
+            `Режим беседы: ${convertChatMode(message.chat.mode, false)}\n` +
+            `Время раунда выбранного режима: ${message.chat.modeRoundTime[message.chat.mode]} сек.`
         )
     }
 }

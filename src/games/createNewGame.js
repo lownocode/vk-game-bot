@@ -15,7 +15,7 @@ export const createNewGame = async (peerId) => {
         case "basketball" : {
             return await Game.create({
                 peerId: peerId,
-                endedAt: Date.now() + config.bot.roundTime[chat.mode],
+                endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
                 ...generateGameInfo(chat.mode)
             })
         }
@@ -32,7 +32,10 @@ const generateGameInfo = (mode) => {
                 features.random.integer(0, 3),
                 features.random.integer(0, 3)
             ]
-            const salt = `${config.bot.smiles[randomEmoji[0]]}, ${config.bot.smiles[randomEmoji[1]]}, ${config.bot.smiles[randomEmoji[2]]}|${secretString}`
+            const salt =
+                `${config.games.slotsSmiles[randomEmoji[0]]}, ` +
+                `${config.games.slotsSmiles[randomEmoji[1]]}, ` +
+                `${config.games.slotsSmiles[randomEmoji[2]]}@${secretString}`
 
             return {
                 salt: salt,
@@ -40,13 +43,13 @@ const generateGameInfo = (mode) => {
                 data: {
                     solution: randomEmoji
                 },
-                image: config.bot.infoImage[`w${randomEmoji[0] + 1}_${randomEmoji[1] + 1}_${randomEmoji[2] + 1}`],
+                image: config.games.slotsImages[`${randomEmoji[0] + 1}_${randomEmoji[1] + 1}_${randomEmoji[2] + 1}`],
                 hash: md5(salt)
             }
         }
         case "cube": {
             const number = features.random.integer(1, 6)
-            const salt = `${number}|${secretString}`
+            const salt = `${number}@${secretString}`
 
             return {
                 salt: salt,
@@ -54,7 +57,7 @@ const generateGameInfo = (mode) => {
                 data: {
                     number: number
                 },
-                image: config.bot.infoImage[`w` + number],
+                image: config.games.cubeImages[number],
                 hash: md5(salt)
             }
         }
@@ -66,7 +69,7 @@ const generateGameInfo = (mode) => {
                 50: "Green x50",
             }
             const number = features.random.integer(0, 53)
-            const salt = `${number}|${betNames[getRealDoubleMultiply(number)]}|${secretString}`
+            const salt = `${number}@${betNames[getRealDoubleMultiply(number)]}@${secretString}`
 
             return {
                 salt: salt,
@@ -74,7 +77,7 @@ const generateGameInfo = (mode) => {
                 data: {
                     number: number
                 },
-                image: config.bot.images[number],
+                image: config.games.doubleImages[number],
                 hash: md5(salt)
             }
         }
@@ -85,7 +88,7 @@ const generateGameInfo = (mode) => {
                 black: "Чёрные"
             }
             const teamWinners = ["red", "nobody", "black"][Math.ceil(features.random.integer(0, 199) / 100)]
-            const salt = `${teamNames[teamWinners]}|${secretString}`
+            const salt = `${teamNames[teamWinners]}@${secretString}`
 
             return {
                 salt: salt,
@@ -93,7 +96,7 @@ const generateGameInfo = (mode) => {
                 data: {
                     winners: teamWinners
                 },
-                image: config.bot.infoImage["basketball_" + teamWinners],
+                image: config.games.basketballImages[teamWinners],
                 hash: md5(salt)
             }
         }

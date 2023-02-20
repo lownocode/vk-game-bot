@@ -4,15 +4,12 @@ import { features } from "../utils/index.js"
 import { config } from "../../main.js"
 
 export const depositKeyboard = (user) => {
+    if (Number(user.balance) === 0 || Number(user.balance) < config.bot.minimumBet) return
+
     const keyboard = Keyboard.builder()
-
-    if (Number(user.balance) < config.bot.minimumBet) {
-        return
-    }
-
     const amount = Number(user.balance)
 
-    if (amount < config.bot.max_bet) {
+    if (amount < config.bot.maximumBet) {
         keyboard
             .textButton({
                 label: `${features.split(Math.trunc(amount / 3))}`,

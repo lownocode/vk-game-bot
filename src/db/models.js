@@ -21,7 +21,7 @@ export const User = sequelize.define("users", {
     },
     balance: {
         type: DataTypes.BIGINT,
-        defaultValue: 1_000_000,
+        defaultValue: 1_500,
     },
     newsletter: {
         type: DataTypes.BOOLEAN,
@@ -50,6 +50,10 @@ export const User = sequelize.define("users", {
     bonusReceivedTime: {
         type: DataTypes.BIGINT
     },
+    reposts: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
+    }
 })
 
 export const Chat = sequelize.define("chats", {
@@ -68,6 +72,16 @@ export const Chat = sequelize.define("chats", {
         type: DataTypes.STRING,
         default: "",
     },
+    modeRoundTime: {
+        type: DataTypes.JSONB,
+        defaultValue: {
+            slots: 30,
+            cube: 30,
+            double: 30,
+            basketball: 30,
+            wheel: 30,
+        }
+    }
 })
 
 export const Game = sequelize.define("games", {

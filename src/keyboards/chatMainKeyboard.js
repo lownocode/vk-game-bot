@@ -127,18 +127,21 @@ export const chatMainKeyboard = (mode) => {
                     payload: {
                         command: "bet-cube/1"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "2",
                     payload: {
                         command: "bet-cube/2"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "3",
                     payload: {
                         command: "bet-cube/3"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .row()
                 .textButton({
@@ -146,18 +149,21 @@ export const chatMainKeyboard = (mode) => {
                     payload: {
                         command: "bet-cube/4"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "5",
                     payload: {
                         command: "bet-cube/5"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
                     label: "6",
                     payload: {
                         command: "bet-cube/6"
                     },
+                    color: Keyboard.PRIMARY_COLOR
                 })
                 .row()
 

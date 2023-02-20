@@ -6,7 +6,6 @@ export const gameBetAmountChecking = (betAmount, message) => {
         return message.send("Ты должен ввести cумму")
     }
 
-
     let _betAmount = betAmount
 
     _betAmount.replace(/(вб|вабанк)/ig, Number(message.user.balance))
@@ -16,7 +15,7 @@ export const gameBetAmountChecking = (betAmount, message) => {
         return message.send(`Минимальная ставка - ${features.split(config.bot.minimumBet)}`)
     }
 
-    if (_betAmount > config.bot.max_bet) {
+    if (_betAmount > config.bot.maximumBet) {
         return message.send(`Максимальная ставка - ${features.split(config.bot.max_bet)}`)
     }
 

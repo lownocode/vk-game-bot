@@ -40,8 +40,8 @@ const getGameRates = async (rates, mode) => {
         case "slots": {
             return rates.map((rate) => {
                 return (
-                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ` +
-                    `x${rate.data.multiplier} ${config.bot.smiles[rate.data.smile]}`
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]}`
                 )
             })
         }
@@ -53,8 +53,8 @@ const getGameRates = async (rates, mode) => {
 
             return rates.map((rate) => {
                 return (
-                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ` +
-                    `${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]}`
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]}`
                 )
             })
         }
@@ -68,7 +68,8 @@ const getGameRates = async (rates, mode) => {
 
             return rates.map((rate) => {
                 return (
-                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ${betNames[rate.data.multiplier]}`
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${betNames[rate.data.multiplier]}`
                 )
             })
         }
@@ -81,7 +82,8 @@ const getGameRates = async (rates, mode) => {
 
             return rates.map((rate) => {
                 return (
-                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} на ${teamWinName[rate.data.team]}`
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${teamWinName[rate.data.team]}`
                 )
             })
         }
