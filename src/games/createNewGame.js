@@ -1,4 +1,5 @@
 import md5 from "md5"
+import crypto from "crypto"
 
 import { Chat, Game } from "../db/models.js"
 import { config } from "../../main.js"
@@ -12,7 +13,8 @@ export const createNewGame = async (peerId) => {
         case "slots"      :
         case "cube"       :
         case "double"     :
-        case "basketball" : {
+        case "basketball" :
+        case "wheel"      : {
             return await Game.create({
                 peerId: peerId,
                 endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
@@ -23,7 +25,7 @@ export const createNewGame = async (peerId) => {
 }
 
 const generateGameInfo = (mode) => {
-    const secretString = features.random.string(16)
+    const secretString = crypto.randomBytes(12).toString("hex")
 
     switch (mode) {
         case "slots": {
@@ -97,6 +99,20 @@ const generateGameInfo = (mode) => {
                     winners: teamWinners
                 },
                 image: config.games.basketballImages[teamWinners],
+                hash: md5(salt)
+            }
+        }
+        case "wheel": {
+            const number = Math.ceil(features.random.integer(0, 35_999) / 1000)
+            const salt = `${number}@${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    number: number
+                },
+                image: config.games.wheelImages[number],
                 hash: md5(salt)
             }
         }

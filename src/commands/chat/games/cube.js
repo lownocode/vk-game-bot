@@ -49,8 +49,8 @@ export const cubeBet = {
         })
 
         message.send(
-            `${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} на ${betType} принята!`
+            `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
+            `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!`
         )
     }
 }

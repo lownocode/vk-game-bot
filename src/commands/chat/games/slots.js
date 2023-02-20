@@ -33,6 +33,7 @@ export const slotsBet = {
 
         message.user.balance = Number(message.user.balance) - betAmount
 
+        await message.user.save()
         await Rate.create({
             gameId: currentGame.id,
             peerId: message.peerId,
@@ -45,11 +46,10 @@ export const slotsBet = {
                 smile: config.games.slotsSmiles.findIndex(_smile => _smile === smile),
             }
         })
-        await message.user.save()
 
         message.send(
-            `${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} x${multiplier} ${smile} принята!`
+            `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
+            `${features.split(betAmount)} ${config.bot.currency} x${multiplier} ${smile} принята!`
         )
     }
 }

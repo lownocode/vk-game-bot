@@ -50,8 +50,8 @@ export const basketballBet = {
         })
 
         message.send(
-            `${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} на ${betTeam} принята!`
+            `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
+            `${features.split(betAmount)} ${config.bot.currency} на ${betTeam} принята!`
         )
     }
 }

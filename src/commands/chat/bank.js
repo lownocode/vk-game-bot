@@ -87,5 +87,29 @@ const getGameRates = async (rates, mode) => {
                 )
             })
         }
+        case "wheel": {
+            const colorTitle = {
+                red: "красное",
+                black: "чёрное"
+            }
+
+            const evenNotevenTitles = {
+                even: "чётное",
+                noteven: "нечётное"
+            }
+
+            return rates.map((rate) => {
+                const betText = () => {
+                    if (["even", "noteven"].includes(rate.data.bet)) return evenNotevenTitles[rate.data.bet]
+                    if (["red", "black"].includes(rate.data.bet)) return colorTitle[rate.data.bet]
+                    if (["1-12", "13-24", "25-36", "1-18", "19-36"].includes(rate.data.bet)) return `промежуток ${rate.data.bet}`
+                }
+
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${rate.data.number >= 0 ? `число ${rate.data.number}` : betText()}`
+                )
+            })
+        }
     }
 }
