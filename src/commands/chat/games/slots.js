@@ -1,7 +1,7 @@
 import { depositKeyboard } from "../../../keyboards/index.js"
 import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
-import { getOrCreateGame } from "../../../games/index.js"
+import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 
 export const slotsBet = {
@@ -18,6 +18,8 @@ export const slotsBet = {
             )
         }
 
+        message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
+
         const { text: _betAmount } = await message.question(
             `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
             `x${multiplier} ${smile} (x${config.games.multipliers.slots[multiplier - 1]})`, {
@@ -30,6 +32,10 @@ export const slotsBet = {
         if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
+
+        if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
+            return message.send("Игры, на кторую вы ставили закончилась")
+        }
 
         message.user.balance = Number(message.user.balance) - betAmount
 

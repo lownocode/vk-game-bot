@@ -6,7 +6,12 @@ import fs from "fs"
 
 import "./src/db/sequelize.js"
 import * as commands from "./src/commands/index.js"
-import { onRepostMiddleware, onMessageMiddleware, callbackMessageMiddleware } from "./src/middlewares/index.js"
+import {
+    onRepostMiddleware,
+    onMessageMiddleware,
+    callbackMessageMiddleware,
+    onChatInviteMiddleware
+} from "./src/middlewares/index.js"
 import { clearDailyRating, createDailyRewardPost } from "./src/functions/index.js"
 import { features } from "./src/utils/index.js"
 import { logger } from "./src/logger/logger.js"
@@ -27,6 +32,7 @@ vk.updates.on("message_new", onMessageMiddleware)
 vk.updates.on("message_new", hearManager.middleware)
 vk.updates.on("message_event", callbackMessageMiddleware)
 vk.updates.on("wall_post", onRepostMiddleware)
+vk.updates.on("chat_invite_user", onChatInviteMiddleware)
 
 export const commandsList = Object.values(commands)
 

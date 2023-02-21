@@ -4,7 +4,7 @@ import { config } from "../../../../main.js"
 import { features, formatSum } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
-import { getOrCreateGame } from "../../../games/index.js"
+import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { Rate } from "../../../db/models.js"
 
 export const under7overBet = {
@@ -18,21 +18,26 @@ export const under7overBet = {
             )
         }
 
+        message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
+
         const rates = (await Rate.findAll({
             where: {
+                peerId: message.peerId,
                 userVkId: message.senderId,
                 mode: "under7over"
             },
             attributes: ["data"]
-        })).map((item) => item.data.bet)
+        })).map((item) => item.data)
 
         if (
-            ["under", "7", "over"].includes(data) &&
-            rates.find(rate => ["under", "7", "over"].includes(rate))
+            data === "under" && rates.find(r => ["7", "over"].includes(r.bet)) ||
+            data === "over" && rates.find(r => ["under", "7"].includes(r.bet)) ||
+            data === "7" && rates.find(r => ["under", "over"].includes(r.bet)) ||
+            data === "under" && rates.find(r => r.number > 7) ||
+            data === "over" && rates.find(r => r.number < 7) ||
+            data === "number" && rates.find(r => r.bet === "7")
         ) {
-            return message.send(
-                "Вы уже делали ставку на больше, меньше или ровно 7, дождитесь следующей игры"
-            )
+            return message.send("Вы уже поставили на противоположное значение")
         }
 
         let number = -1
@@ -77,6 +82,10 @@ export const under7overBet = {
         if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
+
+        if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
+            return message.send("Игры, на кторую вы ставили закончилась")
+        }
 
         message.user.balance = Number(message.user.balance) - betAmount
 

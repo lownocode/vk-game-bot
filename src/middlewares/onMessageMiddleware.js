@@ -13,7 +13,16 @@ export const onMessageMiddleware = async (message, next) => {
         message.messagePayload?.command
     ) {
         if (message.isChat) {
-            message.chat = await getChat(message)
+            const chat = await Chat.findOne({ where: { peerId: message.peerId } })
+
+            if (!chat) {
+                return message.send(
+                    "⚠ Ошибка! Ваша беседа не зарегистрирована.\n" +
+                    "🌟 Решить эту проблему можно путём добавления бота в беседу повторно."
+                )
+            }
+
+            message.chat = chat
         }
         message.user = await getUser(message)
     }
@@ -54,15 +63,6 @@ const getUser = async message => {
         defaults: {
             vkId: message.senderId,
             name: (await vk.api.users.get({ user_ids: message.senderId }))[0]["first_name"]
-        }
-    }))[0]
-}
-
-const getChat = async message => {
-    return (await Chat.findOrCreate({
-        where: { peerId: message.peerId },
-        defaults: {
-            peerId: message.peerId,
         }
     }))[0]
 }

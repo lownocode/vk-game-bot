@@ -1,14 +1,11 @@
 import { vk } from "../../../main.js"
-import { chatMainKeyboard, modeKeyboard } from "../../keyboards/index.js"
-import { convertChatMode } from "../../functions/index.js"
+import { modeKeyboard } from "../../keyboards/index.js"
 import { getCurrentGame } from "../../games/index.js"
 
 export const setupMode = {
     access: "chat",
-    pattern: /^(установить режим|сменить режим)\s(.*)$/i,
+    pattern: /^(установить режим|сменить режим)$/i,
     handler: async message => {
-        const mode = message.$match[2]
-
         const activeGame = await getCurrentGame(message.peerId)
 
         if (activeGame) {
@@ -25,17 +22,7 @@ export const setupMode = {
             "Также, у бота обязательно должны быть права администратора чата"
         )
 
-
-        if (/кубик|слоты|double|баскетбол|wheel|под 7 над/i.test(mode)) {
-            message.chat.mode = convertChatMode(mode)
-            await message.chat.save()
-
-            return message.send(`Режим игры в беседе изменён на ${mode}`, {
-                keyboard: chatMainKeyboard(convertChatMode(mode))
-            })
-        }
-
-        message.send("Такого режима не существует. Выберите одну из кнопок", {
+        message.send("Выберите одну из кнопок", {
             keyboard: modeKeyboard()
         })
     }

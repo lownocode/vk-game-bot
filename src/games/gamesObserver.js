@@ -28,7 +28,11 @@ export const gamesObserver = async () => {
             }
         })
 
-        await gameResults(game, rates)
+        if (rates.length >= 1) {
+            await gameResults(game, rates)
+        } else {
+            await game.destroy()
+        }
     }
 
     await sleep(1_000)
@@ -88,8 +92,8 @@ const gameResults = async (game, rates) => {
         message: (
             `Итоги раунда:\n\n` +
             `${results.join("\n")}\n\n` +
-            `Хеш игры: ${game.hash}\n` +
-            `Проверка честности: ${game.salt}`
+            `Хеш: ${game.hash}\n` +
+            `Проверка: ${game.salt}`
         ),
         peer_id: game.peerId,
         [game.image && "attachment"]: game.image

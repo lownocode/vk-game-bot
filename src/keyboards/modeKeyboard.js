@@ -7,11 +7,10 @@ export const modeKeyboard = () => {
 
     for (const modes of chunkArray(Object.keys(config.games.available), 3)) {
         for (const mode of modes) {
-            keyboard
-                .callbackButton({
+            keyboard.textButton({
                     label: config.games.available[mode],
                     payload: {
-                        command: "setMode/" + mode
+                        command: "chooseChatMode/" + mode
                     }
                 })
         }

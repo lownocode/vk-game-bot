@@ -70,7 +70,7 @@ export const Chat = sequelize.define("chats", {
     },
     mode: {
         type: DataTypes.STRING,
-        default: "",
+        defaultValue: null,
     },
     modeRoundTime: {
         type: DataTypes.JSONB,
@@ -82,6 +82,10 @@ export const Chat = sequelize.define("chats", {
             wheel: 30,
             under7over: 30
         }
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: null
     }
 })
 

@@ -1,7 +1,7 @@
 import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
-import { getOrCreateGame } from "../../../games/index.js"
+import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 
 export const doubleBet = {
@@ -14,6 +14,8 @@ export const doubleBet = {
                 `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
             )
         }
+
+        message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
         const betType = {
             2: "Black x2",
@@ -33,6 +35,10 @@ export const doubleBet = {
         if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
+
+        if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
+            return message.send("Игры, на кторую вы ставили закончилась")
+        }
 
         message.user.balance = Number(message.user.balance) - betAmount
 
