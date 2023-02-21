@@ -299,6 +299,39 @@ export const chatMainKeyboard = (mode) => {
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
+
+            break
+        }
+        case "under7over": {
+            keyboard
+                .textButton({
+                    label: "< 7",
+                    payload: {
+                        command: "bet-under7over/under"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "= 7",
+                    payload: {
+                        command: "bet-under7over/7"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "> 7",
+                    payload: {
+                        command: "bet-under7over/over"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .row()
+                .textButton({
+                    label: "На число",
+                    payload: {
+                        command: "bet-under7over/number"
+                    },
+                })
         }
     }
 

@@ -26,7 +26,7 @@ export const setupMode = {
         )
 
 
-        if (/кубик|слоты|дабл|баскетбол|вил/i.test(mode)) {
+        if (/кубик|слоты|double|баскетбол|wheel|под 7 над/i.test(mode)) {
             message.chat.mode = convertChatMode(mode)
             await message.chat.save()
 
@@ -36,7 +36,7 @@ export const setupMode = {
         }
 
         message.send("Такого режима не существует. Выберите одну из кнопок", {
-            keyboard: modeKeyboard
+            keyboard: modeKeyboard()
         })
     }
 }

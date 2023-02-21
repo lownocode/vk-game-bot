@@ -1,9 +1,16 @@
 import { Op } from "sequelize"
 
 import { Game, Rate, User } from "../db/models.js"
-import { features, sleep } from "../utils/index.js"
-import { config, vk } from "../../main.js"
-import { getRealDoubleMultiply } from "../functions/index.js"
+import { sleep } from "../utils/index.js"
+import { vk } from "../../main.js"
+import {
+    basketball,
+    dice,
+    double,
+    slots,
+    under7over,
+    wheel
+} from "./resultsGenerator/index.js"
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -33,199 +40,44 @@ const gameResults = async (game, rates) => {
 
     for (const rate of rates) {
         const user = await User.findOne({ where: { vkId: rate.userVkId } })
+        const params = [user, game, rate, results]
 
         switch (rate.mode) {
             case "slots": {
-                const matchedSolutions = game.data.solution.filter(smile => smile === rate.data.smile)
-
-                if (matchedSolutions.length >= rate.data.multiplier) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.slots[rate.data.multiplier - 1]
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} выиграла ` +
-                        `(+ ${features.split(winCoins)})`
-                    )
-                } else {
-                    results.push(
-                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла :(`
-                    )
-                }
-
+                await slots(...params)
                 await rate.destroy()
 
                 break
             }
             case "dice": {
-                const betTypes = {
-                    even: "чётное",
-                    noteven: "нечётное"
-                }
-
-                if (
-                    (rate.data.bet === "even" && game.data.number % 2 === 0) ||
-                    (rate.data.bet === "noteven" && game.data.number % 2 !== 0)
-                ) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.dice.parity
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${betTypes[rate.data.bet]} выиграла (+ ${features.split(winCoins)})`
-                    )
-                }
-
-                else if (game.data.number === Number(rate.data.bet)) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.dice.number
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на число ${rate.data.bet} выиграла (+ ${features.split(winCoins)})`
-                    )
-                } else {
-                    results.push(
-                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]} проиграла :(`
-                    )
-                }
-
+                await dice(...params)
                 await rate.destroy()
 
                 break
             }
             case "double": {
-                const betNames = {
-                    2: "Black x2",
-                    3: "Red x3",
-                    5: "Blue x5",
-                    50: "Green x50",
-                }
-
-                if (Number(rate.data.multiplier) === getRealDoubleMultiply(game.data.number)) {
-                    const winCoins = Number(rate.betAmount) * Number(rate.data.multiplier)
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${betNames[rate.data.multiplier]} выиграла (+ ${features.split(winCoins)})`
-                    )
-                } else {
-                    results.push(
-                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${betNames[rate.data.multiplier]} проиграла :(`
-                    )
-                }
-
+                await double(...params)
                 await rate.destroy()
 
                 break
             }
             case "basketball": {
-                const teamWinName = {
-                    red: "победу красных",
-                    nobody: "ничью",
-                    black: "победу чёрных"
-                }[rate.data.team]
-
-                if ((rate.data.team === game.data.winners) && game.data.winners === "nobody") {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.basketball.nobody
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
-                    )
-                }
-                else if (rate.data.team === game.data.winners) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.basketball.red // or balck
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
-                    )
-                } else {
-                    results.push(
-                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${teamWinName} проиграла :(`
-                    )
-                }
-
+                await basketball(...params)
                 await rate.destroy()
 
                 break
             }
             case "wheel": {
-                const colorTitle = {
-                    red: "красное",
-                    black: "чёрное"
-                }
+                await wheel(...params)
+                await rate.destroy()
 
-                const evenNotevenTitles = {
-                    even: "чётное",
-                    noteven: "нечётное"
-                }
+                break
+            }
+            case "under7over": {
+                await under7over(...params)
+                await rate.destroy()
 
-                const betText = () => {
-                    if (["even", "noteven"].includes(rate.data.bet)) return evenNotevenTitles[rate.data.bet]
-                    if (["red", "black"].includes(rate.data.bet)) return colorTitle[rate.data.bet]
-                    if (["1-12", "13-24", "25-36", "1-18", "19-36"].includes(rate.data.bet)) return `промежуток ${rate.data.bet}`
-                }
-
-                if (rate.data.number >= 0 && game.data.number === rate.data.number) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.number
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на число ${rate.data.number} выиграла! (+ ${features.split(winCoins)})`
-                    )
-                }
-                else if (
-                    (rate.data.bet === "even" && game.data.number % 2 === 0) ||
-                    (rate.data.bet === "noteven" && game.data.number % 2 !== 0) ||
-                    (rate.data.bet === "red" && game.data.number % 2 === 0) ||
-                    (rate.data.bet === "black" && game.data.number % 2 !== 0) ||
-                    (rate.data.bet === "1-18" && (game.data.number <= 18 && game.data.number >= 1)) ||
-                    (rate.data.bet === "19-36" && (game.data.number <= 36 && game.data.number >= 19))
-                ) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.parity
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${betText()} выиграла! (+ ${features.split(winCoins)})`
-                    )
-                } else if (
-                    (rate.data.bet === "1-12" && (game.data.number <= 12 && game.data.number >= 1)) ||
-                    (rate.data.bet === "13-24" && (game.data.number <= 24 && game.data.number >= 13)) ||
-                    (rate.data.bet === "25-36" && (game.data.number <= 36 && game.data.number >= 25))
-                ) {
-                    const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.interval
-
-                    await addCoinsToUser(user, winCoins)
-
-                    results.push(
-                        `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${betText()} выиграла! (+ ${features.split(winCoins)})`
-                    )
-                } else {
-                    results.push(
-                        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                        `на ${rate.data.number >= 0 ? `число ${rate.data.number}` : betText()} проиграла!`
-                    )
-                }
+                break
             }
         }
     }
@@ -242,14 +94,4 @@ const gameResults = async (game, rates) => {
         peer_id: game.peerId,
         [game.image && "attachment"]: game.image
     })
-}
-
-const addCoinsToUser = async (user, coins) => {
-    const parsedCoins = Math.round(coins)
-
-    user.balance = Number(user.balance) + parsedCoins
-    user.winCoins = Number(user.winCoins) + parsedCoins
-    user.winCoinsToday = Number(user.winCoinsToday) + parsedCoins
-
-    await user.save()
 }

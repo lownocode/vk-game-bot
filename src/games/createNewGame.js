@@ -14,7 +14,8 @@ export const createNewGame = async (peerId) => {
         case "dice"       :
         case "double"     :
         case "basketball" :
-        case "wheel"      : {
+        case "wheel"      :
+        case "under7over" : {
             return await Game.create({
                 peerId: peerId,
                 endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
@@ -113,6 +114,20 @@ const generateGameInfo = (mode) => {
                     number: number
                 },
                 image: config.games.wheelImages[number],
+                hash: md5(salt)
+            }
+        }
+        case "under7over": {
+            const number = features.random.integer(2, 12)
+            const salt = `${number}@${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    number: number
+                },
+                image: config.games.under7overImages[number],
                 hash: md5(salt)
             }
         }

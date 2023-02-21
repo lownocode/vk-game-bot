@@ -24,5 +24,6 @@ export * from "./chat/games/dice.js"
 export * from "./chat/games/double.js"
 export * from "./chat/games/basketball.js"
 export * from "./chat/games/wheel.js"
+export * from "./chat/games/under7over.js"
 
 export * from "./callback/setupMode.js"

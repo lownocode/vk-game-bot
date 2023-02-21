@@ -58,7 +58,7 @@ export const wheelBet = {
                 return message.send("Можно поставить только на число от 0 до 36")
             }
 
-            number = _number
+            number = Number(_number)
         }
 
         const { text: _betAmount } = await message.question(
@@ -86,7 +86,7 @@ export const wheelBet = {
             mode: "wheel",
             data: {
                 bet: data,
-                number: Number(number)
+                number: number
             }
         })
 

@@ -18,6 +18,13 @@ bot:
     minimumBet: 100
 
 games:
+    available:
+        dice: Кубик
+        basketball: Баскетбол
+        wheel: Wheel
+        slots: Слоты
+        double: Double
+        under7over: Под 7 над
     multipliers:
         dice:
             number: 5
@@ -34,6 +41,10 @@ games:
             number: 36
             parity: 2
             interval: 3
+        under7over:
+            underOver: 2.3
+            7: 5.8
+            number: 17
 
     slotsSmiles:
         - 🍓
@@ -209,6 +220,18 @@ games:
         34: photo-195663511_457239093
         35: photo-195663511_457239094
         36: photo-195663511_457239095
+    under7overImages:
+        2: photo-195663511_457239061
+        3: photo-195663511_457239062
+        4: photo-195663511_457239063
+        5: photo-195663511_457239064
+        6: photo-195663511_457239065
+        7: photo-195663511_457239066
+        8: photo-195663511_457239067
+        9: photo-195663511_457239068
+        10: photo-195663511_457239069
+        11: photo-195663511_457239070
+        12: photo-195663511_457239071
 
 repostBonus:
     reward: 1500

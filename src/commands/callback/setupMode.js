@@ -5,7 +5,7 @@ import { chatMainKeyboard } from "../../keyboards/index.js"
 import { getCurrentGame } from "../../games/index.js"
 
 export const setupModeCallback = {
-    callbackCommand: "mode",
+    callbackCommand: "setMode",
     pattern: /^$/,
     handler: async (message, data) => {
         const mode = data[1]

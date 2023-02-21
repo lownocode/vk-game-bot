@@ -1,23 +1,15 @@
-export const convertChatMode = (mode, idFormat = true) => {
-    switch (idFormat) {
-        case true:
-            switch (mode) {
-                case "кубик": return "dice"
-                case "слоты": return "slots"
-                case "дабл": return "double"
-                case "баскетбол": return "basketball"
-                case "вил": return "wheel"
-            }
+import { config } from "../../main.js"
 
-            break
-        case false:
-            switch (mode) {
-                case "dice": return "кубик"
-                case "slots": return "слоты"
-                case "double": return "double"
-                case "basketball": return "баскетбол"
-                case "wheel": return "wheel"
-                default: return "не выбран"
-            }
-    }
+export const convertChatMode = (mode, idFormat = true) => {
+    return String(idFormat
+        ? getKeyByValue(config.games.available, capitalizeFirstLetter(mode))
+        : config.games.available[mode.toLowerCase()])
+}
+
+const getKeyByValue = (object, value) => {
+    return Object.keys(object).find(key => object[key] === value)
+}
+
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
 }

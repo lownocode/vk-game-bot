@@ -111,5 +111,20 @@ const getGameRates = async (rates, mode) => {
                 )
             })
         }
+        case "under7over": {
+            return rates.map((rate) => {
+                const betName = {
+                    under: "меньше 7",
+                    over: "больше 7",
+                    7: "ровно 7",
+                    number: `число ${rate.data.number}`
+                }[rate.data.bet]
+
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${betName}`
+                )
+            })
+        }
     }
 }

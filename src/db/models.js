@@ -80,6 +80,7 @@ export const Chat = sequelize.define("chats", {
             double: 30,
             basketball: 30,
             wheel: 30,
+            under7over: 30
         }
     }
 })
