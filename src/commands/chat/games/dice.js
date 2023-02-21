@@ -1,9 +1,8 @@
 import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
-import { Rate } from "../../../db/models.js"
 import { getOrCreateGame } from "../../../games/index.js"
-import { gameBetAmountChecking } from "../../../functions/index.js"
+import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 
 export const diceBet = {
     command: "bet-dice",
@@ -36,15 +35,12 @@ export const diceBet = {
         message.user.balance = Number(message.user.balance) - betAmount
 
         await message.user.save()
-        await Rate.create({
-            gameId: currentGame.id,
-            peerId: message.peerId,
-            userVkId: message.senderId,
-            username: message.user.name,
+        await createGameRate({
+            game: currentGame,
+            message: message,
             betAmount: betAmount,
-            mode: "dice",
             data: {
-                bet: data
+                bet: data,
             }
         })
 

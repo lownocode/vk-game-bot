@@ -2,8 +2,7 @@ import { depositKeyboard } from "../../../keyboards/index.js"
 import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
 import { getOrCreateGame } from "../../../games/index.js"
-import { Rate } from "../../../db/models.js"
-import { gameBetAmountChecking } from "../../../functions/index.js"
+import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 
 export const slotsBet = {
     command: "bet-slots",
@@ -35,13 +34,10 @@ export const slotsBet = {
         message.user.balance = Number(message.user.balance) - betAmount
 
         await message.user.save()
-        await Rate.create({
-            gameId: currentGame.id,
-            peerId: message.peerId,
-            userVkId: message.user.vkId,
-            username: message.user.name,
+        await createGameRate({
+            game: currentGame,
+            message: message,
             betAmount: betAmount,
-            mode: "slots",
             data: {
                 multiplier: Number(multiplier),
                 smile: config.games.slotsSmiles.findIndex(_smile => _smile === smile),
