@@ -86,7 +86,37 @@ export const Chat = sequelize.define("chats", {
     status: {
         type: DataTypes.STRING,
         defaultValue: null
+    },
+    payer: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    payedFor: {
+        type: DataTypes.BIGINT
+    },
+    profitCoins: {
+        type: DataTypes.BIGINT,
+        defaultValue: 0
     }
+})
+
+export const ChatRate = sequelize.define("chat_rates", {
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        unique: true
+    },
+    peerId: {
+        type: DataTypes.INTEGER
+    },
+    userId: {
+        type: DataTypes.INTEGER
+    },
+    amount: {
+        type: DataTypes.BIGINT
+    },
 })
 
 export const Game = sequelize.define("games", {
@@ -98,7 +128,7 @@ export const Game = sequelize.define("games", {
         unique: true
     },
     peerId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
     },
     endedAt: {
         type: DataTypes.BIGINT
@@ -136,7 +166,7 @@ export const Rate = sequelize.define("rates", {
         type: DataTypes.INTEGER,
     },
     peerId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
     },
     userVkId: {
         type: DataTypes.INTEGER,

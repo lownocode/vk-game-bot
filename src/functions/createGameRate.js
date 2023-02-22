@@ -1,4 +1,4 @@
-import { Rate } from "../db/models.js"
+import { ChatRate, Rate } from "../db/models.js"
 
 export const createGameRate = async ({ game, message, betAmount, data }) => {
     const similarRate = await Rate.findOne({
@@ -19,6 +19,12 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
             }
         })
     }
+
+    await ChatRate.create({
+        peerId: message.peerId,
+        userId: message.user.id,
+        amount: betAmount,
+    })
 
     await Rate.create({
         gameId: game.id,

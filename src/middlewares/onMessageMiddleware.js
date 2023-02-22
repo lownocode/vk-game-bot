@@ -1,17 +1,18 @@
 import { commandsList, vk } from "../../main.js"
-import { privateKeyboard } from "../keyboards/index.js"
+import { chooseChatStatusKeyboard, privateKeyboard } from "../keyboards/index.js"
 import { executeCommand } from "../functions/index.js"
 import { Chat, User } from "../db/models.js"
 
 export const onMessageMiddleware = async (message, next) => {
+    if (message.text) {
+        message.text = message.text.replace(/^\[club(\d+)\|(.*)]/i, "").trim()
+    }
+
     if (message.isGroup || !message.text || message.senderType !== "user") return
 
-    message.text = message.text.replace(/^\[club(\d+)\|(.*)\]/i, '').trim()
+    const command = commandsList.find(cmd => cmd.pattern.test(message.text))
 
-    if (
-        commandsList.find(cmd => cmd.pattern.test(message.text)) ||
-        message.messagePayload?.command
-    ) {
+    if (command || message.messagePayload?.command) {
         if (message.isChat) {
             const chat = await Chat.findOne({ where: { peerId: message.peerId } })
 
@@ -22,8 +23,20 @@ export const onMessageMiddleware = async (message, next) => {
                 )
             }
 
+            if (
+                (!chat.status || chat.status === "expired") &&
+                !["chooseChatStatus"].includes(command?.command || message.messagePayload?.command?.split("/")[0])
+            ) {
+                return message.send(
+                    "Команды станут доступны только после оплаты статуса беседы", {
+                        keyboard: chooseChatStatusKeyboard()
+                    }
+                )
+            }
+
             message.chat = chat
         }
+
         message.user = await getUser(message)
     }
 
@@ -32,8 +45,6 @@ export const onMessageMiddleware = async (message, next) => {
 
         executeCommand(command[0], message, command[1])
     }
-
-    const command = commandsList.find(cmd => cmd.pattern.test(message.text))
 
     if (
         !message.isChat &&
@@ -46,13 +57,8 @@ export const onMessageMiddleware = async (message, next) => {
     }
 
     if (message.isChat && !command) return
-
-    if (command.access === "private" && message.isChat) return message.send(
-        "Эту команду можно использовать только в ЛС с ботом"
-    )
-    if (command.access === "chat" && !message.isChat) return message.send(
-        "Эту команду можно использовать только в чате с ботом"
-    )
+    if (command.access === "private" && message.isChat) return
+    if (command.access === "chat" && !message.isChat) return
 
     await next()
 }

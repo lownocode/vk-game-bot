@@ -13,7 +13,7 @@ vk-user:
     token: vk1.a.nqTcgWPHEE0t2yCaI6K4SvJyALfVjMGuCqvBarFt4tnC0QYYAhUJi_ev6N5IA481ddxIER9NbmADMeNgcdvr4J0KcneoWkSLWGfZ219gkHkS2FNY-ck0nbbMMyD0N76jW-6bjFydsQHN6lgrcpfIZ0GD3jmAz2RpI59Op95dHFes3qH2hnw72sxZ-29QthZEk4G0xT5kwXApdpgC2J0bFw
 
 bot:
-    currency: LC
+    currency: SC
     maximumBet: 1000000000006666666666666666666666666
     minimumBet: 100
 
@@ -258,3 +258,14 @@ shopDiscounts:
     10000: 20
 
 aboutRatingLink: vk.cc/example
+
+payedChatsStatuses:
+    -
+        percent: 1 # процент получаемый со ставок
+        cost: 7500 # цена в LC за беседу в день
+    -
+        percent: 3
+        cost: 12500
+    -
+        percent: 5
+        cost: 20000

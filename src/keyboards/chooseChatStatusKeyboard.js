@@ -1,26 +1,25 @@
 import { Keyboard } from "vk-io"
 
-export const chooseChatStatusKeyboard = Keyboard.builder()
-    .textButton({
-        label: "Бесплатная",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: {
-            command: "chooseChatStatus/free"
-        }
-    })
-    .row()
-    .textButton({
-        label: "Платная 1%",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: {
-            command: "chooseChatStatus/payed_1"
-        }
-    })
-    .row()
-    .textButton({
-        label: "Платная 5%",
-        color: Keyboard.PRIMARY_COLOR,
-        payload: {
-            command: "chooseChatStatus/payed_5"
-        }
-    })
+import { config } from "../../main.js"
+import { features } from "../utils/index.js"
+
+export const chooseChatStatusKeyboard = () => {
+    const keyboard = Keyboard.builder()
+
+    for (const status of config.payedChatsStatuses) {
+        keyboard.textButton({
+            label: (
+                `${status.percent}% со ставок - ` +
+                `${features.split(status.cost)} ${config.bot.currency} в день`
+            ),
+            color: Keyboard.PRIMARY_COLOR,
+            payload: {
+                command: "chooseChatStatus/" + status.percent
+            }
+        })
+
+        keyboard.row()
+    }
+
+    return keyboard
+}

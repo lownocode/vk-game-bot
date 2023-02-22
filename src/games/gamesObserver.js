@@ -1,6 +1,7 @@
-import { Op } from "sequelize"
+import { Keyboard } from "vk-io"
+import Sequelize, { Op } from "sequelize"
 
-import { Game, Rate, User } from "../db/models.js"
+import { Game, Rate, User, Chat } from "../db/models.js"
 import { sleep } from "../utils/index.js"
 import { vk } from "../../main.js"
 import {
@@ -44,46 +45,37 @@ const gameResults = async (game, rates) => {
 
     for (const rate of rates) {
         const user = await User.findOne({ where: { vkId: rate.userVkId } })
+        const chat = await Chat.findOne({ where: { peerId: game.peerId } })
+
         const params = [user, game, rate, results]
 
         switch (rate.mode) {
-            case "slots": {
-                await slots(...params)
-                await rate.destroy()
-
-                break
-            }
-            case "dice": {
-                await dice(...params)
-                await rate.destroy()
-
-                break
-            }
-            case "double": {
-                await double(...params)
-                await rate.destroy()
-
-                break
-            }
-            case "basketball": {
-                await basketball(...params)
-                await rate.destroy()
-
-                break
-            }
-            case "wheel": {
-                await wheel(...params)
-                await rate.destroy()
-
-                break
-            }
-            case "under7over": {
-                await under7over(...params)
-                await rate.destroy()
-
-                break
-            }
+            case "slots"     : await slots(...params);      break
+            case "dice"      : await dice(...params);       break
+            case "double"    : await double(...params);     break
+            case "basketball": await basketball(...params); break
+            case "wheel"     : await wheel(...params);      break
+            case "under7over": await under7over(...params); break
         }
+
+        const profitCoins = Number(chat.profitCoins) + rate.betAmount * Number(chat.status) / 100
+
+        chat.profitCoins = profitCoins
+
+        if (user.vkId !== chat.payer) {
+            await User.update({
+                balance: Sequelize.literal(
+                    `balance + ${profitCoins}`
+                )
+            }, {
+                where: {
+                    vkId: chat.payer
+                }
+            })
+        }
+
+        await chat.save()
+        await rate.destroy()
     }
 
     await game.destroy()
@@ -96,6 +88,12 @@ const gameResults = async (game, rates) => {
             `Проверка: ${game.salt}`
         ),
         peer_id: game.peerId,
-        [game.image && "attachment"]: game.image
+        [game.image && "attachment"]: game.image,
+        keyboard: Keyboard.builder()
+            .applicationButton({
+                label: "Проверка честности",
+                appId: 7433551,
+                hash: game.salt
+            }).inline()
     })
 }

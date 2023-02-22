@@ -9,7 +9,6 @@ import * as commands from "./src/commands/index.js"
 import {
     onRepostMiddleware,
     onMessageMiddleware,
-    callbackMessageMiddleware,
     onChatInviteMiddleware
 } from "./src/middlewares/index.js"
 import { clearDailyRating, createDailyRewardPost } from "./src/functions/index.js"
@@ -30,7 +29,6 @@ export const vkuser = new VK({ token: config["vk-user"].token })
 vk.updates.on("message_new", questionManager.middleware)
 vk.updates.on("message_new", onMessageMiddleware)
 vk.updates.on("message_new", hearManager.middleware)
-vk.updates.on("message_event", callbackMessageMiddleware)
 vk.updates.on("wall_post", onRepostMiddleware)
 vk.updates.on("chat_invite_user", onChatInviteMiddleware)
 

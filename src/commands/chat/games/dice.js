@@ -52,7 +52,7 @@ export const diceBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игры, на кторую вы ставили закончилась")
+            return message.send("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount

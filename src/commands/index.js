@@ -20,6 +20,7 @@ export * from "./chat/bank.js"
 export * from "./chat/chat.js"
 export * from "./chat/chooseChatStatus.js"
 export * from "./chat/chooseChatMode.js"
+export * from "./chat/statistics.js"
 
 export * from "./chat/games/slots.js"
 export * from "./chat/games/dice.js"

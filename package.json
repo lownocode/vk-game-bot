@@ -1,18 +1,16 @@
 {
-    "name": "хуетень",
+    "name": "game-bot",
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start": "node main.js"
+        "start": "node main.js",
+        "pm2": "pm2 start main.js --name game-bot"
     },
     "dependencies": {
         "@vk-io/hear": "^1.1.0",
         "chalk": "^5.2.0",
         "lodash.chunk": "^4.2.0",
         "md5": "^2.3.0",
-        "mongoose": "^5.9.0",
-        "node-qiwi-promise-api": "^0.0.2",
-        "node-vkcoinapi": "^1.8.0",
         "pg": "^8.9.0",
         "sequelize": "^6.28.0",
         "string-length": "^5.0.1",
