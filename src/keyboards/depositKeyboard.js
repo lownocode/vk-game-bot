@@ -9,23 +9,21 @@ export const depositKeyboard = (user) => {
     const keyboard = Keyboard.builder()
     const amount = Number(user.balance)
 
-    if (amount < config.bot.maximumBet) {
-        keyboard
-            .textButton({
-                label: `${features.split(Math.trunc(amount / 3))}`,
-            })
-            .row()
-            .textButton({
-                label: `${features.split(Math.trunc(amount / 2))}`,
-            })
-            .row()
-            .textButton({
-                label: `${features.split(Math.trunc(amount))}`,
-                color: Keyboard.NEGATIVE_COLOR
-            })
-            .row()
-            .inline()
-    }
+    keyboard
+        .textButton({
+            label: `${features.split(Math.trunc(amount / 3))}`,
+        })
+        .row()
+        .textButton({
+            label: `${features.split(Math.trunc(amount / 2))}`,
+        })
+        .row()
+        .textButton({
+            label: `${features.split(Math.trunc(amount))}`,
+            color: Keyboard.NEGATIVE_COLOR
+        })
+        .row()
+        .inline()
 
     return keyboard
 }

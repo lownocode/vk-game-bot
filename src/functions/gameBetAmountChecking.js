@@ -16,7 +16,7 @@ export const gameBetAmountChecking = (betAmount, message) => {
     }
 
     if (_betAmount > config.bot.maximumBet) {
-        return message.send(`Максимальная ставка - ${features.split(config.bot.max_bet)} ${config.bot.currency}`)
+        return message.send(`Максимальная ставка - ${features.split(config.bot.maximumBet)} ${config.bot.currency}`)
     }
 
     if (Number(message.user.balance) < _betAmount) {
