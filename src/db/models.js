@@ -75,12 +75,12 @@ export const Chat = sequelize.define("chats", {
     modeRoundTime: {
         type: DataTypes.JSONB,
         defaultValue: {
-            slots: 30,
-            dice: 30,
-            double: 30,
-            basketball: 30,
-            wheel: 30,
-            under7over: 30
+            slots: 15,
+            dice: 15,
+            double: 15,
+            basketball: 15,
+            wheel: 15,
+            under7over: 15
         }
     },
     status: {

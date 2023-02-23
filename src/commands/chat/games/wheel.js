@@ -1,9 +1,9 @@
-import { config } from "../../../../main.js"
-import { features } from "../../../utils/index.js"
-import { depositKeyboard } from "../../../keyboards/index.js"
-import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
-import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
-import { Rate } from "../../../db/models.js"
+import {config} from "../../../../main.js"
+import {features, formatSum} from "../../../utils/index.js"
+import {depositKeyboard} from "../../../keyboards/index.js"
+import {createGameRate, gameBetAmountChecking} from "../../../functions/index.js"
+import {getCurrentGame, getOrCreateGame} from "../../../games/index.js"
+import {Rate} from "../../../db/models.js"
 
 export const wheelBet = {
     command: "bet-wheel",
@@ -74,15 +74,68 @@ export const wheelBet = {
                 })
 
             if (
-                !_number ||
-                isNaN(Number(_number)) ||
-                Number(_number) < 0 ||
-                Number(_number) > 36
+                _number.split(" ").map(n => Number(n)).length >= 2 &&
+                !_number.split(" ").map(n => isNaN(Number(n))).find(n => n) &&
+                _number.split(" ").map(n => Number(n) >= 0 && Number(n) <= 36).find(n => !n) === undefined
             ) {
-                return message.send("Можно поставить только на число от 0 до 36")
+                number = Array(...new Set(_number.split(" ").map(n => Number(n))))
             }
 
-            number = Number(_number)
+            if (typeof number === "object") {
+                const { text: _betAmount } = await message.question(
+                    `[id${message.user.vkId}|${message.user.name}], Введите ставку на каждое из чисел: ` +
+                    `${number.join(", ")}`, {
+                        targetUserId: message.senderId,
+                        keyboard: depositKeyboard(message.user, number.length)
+                    })
+
+                const betAmount = formatSum(_betAmount)
+
+                if (betAmount * number.length > message.user.balance) {
+                    return message.send("У вас недостаточно средств на балансе")
+                }
+
+                const __betAmount = await gameBetAmountChecking(betAmount.toString(), message)
+
+                if (typeof __betAmount !== "number") return
+
+                const currentGame = await getOrCreateGame(message.peerId)
+
+                if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
+                    return message.send("Игра, на которую вы ставили закончилась")
+                }
+
+                message.user.balance = Number(message.user.balance) - betAmount * number.length
+                await message.user.save()
+
+                for (const num of number) {
+                    await createGameRate({
+                        game: currentGame,
+                        message: message,
+                        betAmount: betAmount,
+                        data: {
+                            bet: data,
+                            number: num
+                        }
+                    })
+                }
+
+                return await message.send(
+                    `Успешная ${features.split(betAmount * number.length)} ${config.bot.currency} ставка на ` +
+                    `${number.join(", ")}`
+                )
+            } else {
+                if (
+                    !_number ||
+                    isNaN(Number(_number)) ||
+                    Number(_number) < 0 ||
+                    Number(_number) > 36
+                ) {
+                    return message.send("Можно поставить только на число от 0 до 36")
+                }
+
+                number = Number(_number)
+            }
         }
 
         const { text: _betAmount } = await message.question(

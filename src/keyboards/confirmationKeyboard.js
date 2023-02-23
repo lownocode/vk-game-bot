@@ -2,18 +2,17 @@ import { Keyboard } from "vk-io"
 
 export const confirmationKeyboard = Keyboard.builder()
     .textButton({
-        label: 'Да',
+        label: "Да",
         payload: {
-            command: 'true'
+            confirm: "yes"
         },
         color: Keyboard.POSITIVE_COLOR
     })
-    .row()
     .textButton({
-        label: 'Нет',
+        label: "Нет",
         payload: {
-            command: 'false'
+            confirm: "no"
         },
         color: Keyboard.NEGATIVE_COLOR
     })
-    .oneTime()
+    .inline()

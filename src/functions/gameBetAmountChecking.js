@@ -3,7 +3,7 @@ import { config } from "../../main.js"
 
 export const gameBetAmountChecking = (betAmount, message) => {
     if (!betAmount) {
-        return message.send("Ты должен ввести cумму")
+        return message.send("Это не похоже на сумму ставки")
     }
 
     let _betAmount = betAmount

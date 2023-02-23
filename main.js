@@ -39,7 +39,7 @@ commandsList.forEach(({ pattern, handler }) => hearManager.hear(pattern, handler
 const setupIntervals = () => {
     const setupClearDailyRatingInterval = () => {
         setInterval(() => {
-            clearDailyRating().then(() => setupClearDailyRatingInterval())
+            clearDailyRating()
         }, features.getSecondsToTomorrow())
 
         logger.success(`ClearDailyRatingInterval was setup [${features.getSecondsToTomorrow()}]`)
@@ -47,7 +47,7 @@ const setupIntervals = () => {
 
     const setupCreateDailyRewardPostInterval = () => {
         setInterval(() => {
-            createDailyRewardPost().then(() => setupCreateDailyRewardPostInterval())
+            createDailyRewardPost()
         }, features.getSecondsToTomorrow())
 
         logger.success(`CreateDailyRewardPostInterval was setup [${features.getSecondsToTomorrow()}]`)

@@ -18,7 +18,7 @@ export const wheelImage = async (number) => {
 
     const textWidth = ctx.measureText(text).width
 
-    ctx.fillText(text, (width - textWidth) / 2, (height + fontSize) / 2)
+    ctx.fillText(text, (width - textWidth) / 2, (height + fontSize) / 2.04)
 
     return canvas.toBuffer("image/jpeg")
 }

@@ -1,5 +1,6 @@
 export * from "./anyway/help.js"
 export * from "./anyway/eval.js"
+export * from "./anyway/transfer.js"
 
 export * from "./private/profile.js"
 export * from "./private/searchChat.js"
