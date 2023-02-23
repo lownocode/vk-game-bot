@@ -9,20 +9,12 @@ import { getRealDoubleMultiply } from "../functions/index.js"
 export const createNewGame = async (peerId) => {
     const chat = await Chat.findOne({ where: { peerId: peerId } })
 
-    switch (chat.mode) {
-        case "slots"      :
-        case "dice"       :
-        case "double"     :
-        case "basketball" :
-        case "wheel"      :
-        case "under7over" : {
-            return await Game.create({
-                peerId: peerId,
-                endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
-                ...generateGameInfo(chat.mode)
-            })
-        }
-    }
+    return await Game.create({
+        peerId: peerId,
+        mode: chat.mode,
+        endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
+        ...generateGameInfo(chat.mode)
+    })
 }
 
 const generateGameInfo = (mode) => {
@@ -113,7 +105,7 @@ const generateGameInfo = (mode) => {
                 data: {
                     number: number
                 },
-                image: config.games.wheelImages[number],
+                image: null,
                 hash: md5(salt)
             }
         }

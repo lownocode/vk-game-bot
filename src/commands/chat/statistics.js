@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 import Sequelize from "sequelize"
 
-import { ChatRate, User } from "../../db/models.js"
+import { User, ChatRate } from "../../db/models.js"
 import { config } from "../../../main.js"
 import { features } from "../../utils/index.js"
 
@@ -10,10 +10,16 @@ export const statistics = {
     pattern: /^$/i,
     handler: async (message, data) => {
         if (!data) {
-            const ratesAmount = await ChatRate.sum("amount", {
+            const ratesAmount = await ChatRate.sum("betAmount", {
                 where: {
                     peerId: message.peerId
                 },
+            })
+
+            const percentOfBetAmount = await ChatRate.sum("percentOfBetAmount", {
+                where: {
+                    peerId: message.peerId
+                }
             })
 
             const activeUsers = await ChatRate.count({
@@ -25,13 +31,13 @@ export const statistics = {
             })
 
             const usersInRating = await ChatRate.findAll({
-                attributes: ["userId", [Sequelize.fn("SUM", Sequelize.col("amount")), "totalAmount"]],
+                attributes: ["userId", [Sequelize.fn("SUM", Sequelize.col("betAmount")), "totalBetAmount"]],
                 where: {
                     peerId: message.peerId
                 },
                 group: ["userId"],
-                order: [[Sequelize.col("totalAmount"), "DESC"]],
-                limit: 5
+                order: [[Sequelize.col("totalBetAmount"), "DESC"]],
+                limit: 10
             })
 
             const users = (await User.findAll({
@@ -40,126 +46,23 @@ export const statistics = {
                     id: usersInRating.map(rate => rate.userId)
                 }
             })).map((user, index) => {
-                const amount = usersInRating.find(u => u.userId === user.id).dataValues.totalAmount
+                const amount = usersInRating.find(u => u.userId === user.id).dataValues.totalBetAmount
 
                 return (
                     `${index + 1}) [id${user.vkId}|${user.name}] - ${features.split(amount)} ${config.bot.currency}`
                 )
-            })
+            }).join("\n")
 
             return message.send(
                 "📋 Статистика беседы за всё время\n\n" +
 
                 `💷 Поставлено: ${features.split(ratesAmount)} ${config.bot.currency}\n` +
                 `👥 Активных игроков: ${features.split(activeUsers)}\n` +
-                `💰 Доход беседы: ${features.split(message.chat.profitCoins)} ${config.bot.currency}\n\n` +
+                `💰 Доход беседы: ${features.split(percentOfBetAmount)} ${config.bot.currency}\n\n` +
 
-                `👑 Топ поставленных коинов:\n${users}`, {
-                    keyboard: ratingsKeyboard
-                }
-            )
-        }
-
-        if (data === "today") {
-            const ratesAmount = await ChatRate.sum("amount", {
-                where: {
-                    peerId: message.peerId
-                },
-            })
-
-            const activeUsers = await ChatRate.count({
-                col: "userId",
-                where: {
-                    peerId: message.peerId
-                },
-                distinct: true
-            })
-
-            const usersInRating = await ChatRate.findAll({
-                attributes: ["userId", [Sequelize.fn("SUM", Sequelize.col("amount")), "totalAmount"]],
-                where: {
-                    peerId: message.peerId
-                },
-                group: ["userId"],
-                order: [[Sequelize.col("totalAmount"), "DESC"]],
-                limit: 5
-            })
-
-            const users = (await User.findAll({
-                attributes: ["id", "vkId", "name"],
-                where: {
-                    id: usersInRating.map(rate => rate.userId)
-                }
-            })).map((user, index) => {
-                const amount = usersInRating.find(u => u.userId === user.id).dataValues.totalAmount
-
-                return (
-                    `${index + 1}) [id${user.vkId}|${user.name}] - ${features.split(amount)} ${config.bot.currency}`
-                )
-            })
-
-            return message.send(
-                "📋 Статистика беседы за этот день\n\n" +
-
-                `💷 Поставлено: ${features.split(ratesAmount)} ${config.bot.currency}\n` +
-                `👥 Активных игроков: ${features.split(activeUsers)}\n` +
-                `💰 Доход беседы: ${features.split(message.chat.profitCoins)} ${config.bot.currency}\n\n` +
-
-                "👑 Топ поставленных коинов:\n" +
-                `${users}`, {
-                    keyboard: ratingsKeyboard
-                }
-            )
-        }
-
-        if (data === "week") {
-            const ratesAmount = await ChatRate.sum("amount", {
-                where: {
-                    peerId: message.peerId
-                },
-            })
-
-            const activeUsers = await ChatRate.count({
-                col: "userId",
-                where: {
-                    peerId: message.peerId
-                },
-                distinct: true
-            })
-
-            const usersInRating = await ChatRate.findAll({
-                attributes: ["userId", [Sequelize.fn("SUM", Sequelize.col("amount")), "totalAmount"]],
-                where: {
-                    peerId: message.peerId
-                },
-                group: ["userId"],
-                order: [[Sequelize.col("totalAmount"), "DESC"]],
-                limit: 5
-            })
-
-            const users = (await User.findAll({
-                attributes: ["id", "vkId", "name"],
-                where: {
-                    id: usersInRating.map(rate => rate.userId)
-                }
-            })).map((user, index) => {
-                const amount = usersInRating.find(u => u.userId === user.id).dataValues.totalAmount
-
-                return (
-                    `${index + 1}) [id${user.vkId}|${user.name}] - ${features.split(amount)} ${config.bot.currency}`
-                )
-            })
-
-            return message.send(
-                "📋 Статистика беседы за неделю\n\n" +
-
-                `💷 Поставлено: ${features.split(ratesAmount)} ${config.bot.currency}\n` +
-                `👥 Активных игроков: ${features.split(activeUsers)}\n` +
-                `💰 Доход беседы: ${features.split(message.chat.profitCoins)} ${config.bot.currency}\n\n` +
-
-                "👑 Топ поставленных коинов:\n" +
-                `${users}`, {
-                    keyboard: ratingsKeyboard
+                `${activeUsers >= 1 ? `👑 Топ поставленных коинов:\n${users}` : ""}`, {
+                    keyboard: ratingsKeyboard,
+                    disable_mentions: true
                 }
             )
         }

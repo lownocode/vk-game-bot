@@ -1,7 +1,10 @@
-export const formatSum = (number) => {
-    number = number.replace(/^\[club(\d+)\|(.*)\]/i, '').trim();
-    number = number.replace(/к|k/ig, '000');
-    number = Number(Number.parseFloat(number.replace(/\s/g, '')).toFixed(0))
+export const formatSum = (string) => {
+    const multiplier = string.replace(/[^kк]+/i, "").length * 3
+    const number = parseFloat(
+        string
+            .replace(/^\[club(\d+)\|(.*)]/i, "")
+            .replace(/[^\d.]/g, "")
+    )
 
-    return number
+    return number * Math.pow(10, multiplier)
 }

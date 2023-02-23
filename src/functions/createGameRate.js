@@ -20,12 +20,16 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
         })
     }
 
+    const percentOfBetAmount = Math.trunc(betAmount * Number(message.chat.status) / 100)
+
     await ChatRate.create({
         peerId: message.peerId,
         userId: message.user.id,
-        amount: betAmount,
+        betAmount: betAmount,
+        mode: message.chat.mode,
+        data: data,
+        percentOfBetAmount: percentOfBetAmount
     })
-
     await Rate.create({
         gameId: game.id,
         peerId: message.peerId,

@@ -3,7 +3,7 @@ import Sequelize, { Op } from "sequelize"
 
 import { Game, Rate, User, Chat } from "../db/models.js"
 import { sleep } from "../utils/index.js"
-import { vk } from "../../main.js"
+import {vk, vkuser} from "../../main.js"
 import {
     basketball,
     dice,
@@ -12,6 +12,7 @@ import {
     under7over,
     wheel
 } from "./resultsGenerator/index.js"
+import {wheelImage} from "./imagesGenerator/index.js";
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -58,14 +59,10 @@ const gameResults = async (game, rates) => {
             case "under7over": await under7over(...params); break
         }
 
-        const profitCoins = Number(chat.profitCoins) + rate.betAmount * Number(chat.status) / 100
-
-        chat.profitCoins = profitCoins
-
         if (user.vkId !== chat.payer) {
             await User.update({
                 balance: Sequelize.literal(
-                    `balance + ${profitCoins}`
+                    `balance + ${Number(rate.percentOfBetAmount)}`
                 )
             }, {
                 where: {
@@ -74,11 +71,25 @@ const gameResults = async (game, rates) => {
             })
         }
 
-        await chat.save()
         await rate.destroy()
+        await chat.save()
     }
 
-    await game.destroy()
+    await vk.api.messages.send({
+        peer_id: game.peerId,
+        random_id: 0,
+        message: "Итак, итоги раунда..."
+    })
+
+    const image = await getGameImage(game.mode, game.data)
+
+    const attachment =
+        image ? await vk.upload.messagePhoto({
+            source: {
+                value: image
+            }
+        }) : game.image
+
     await vk.api.messages.send({
         random_id: 0,
         message: (
@@ -88,7 +99,7 @@ const gameResults = async (game, rates) => {
             `Проверка: ${game.salt}`
         ),
         peer_id: game.peerId,
-        [game.image && "attachment"]: game.image,
+        [(image || game.image) && "attachment"]: attachment,
         keyboard: Keyboard.builder()
             .applicationButton({
                 label: "Проверка честности",
@@ -96,4 +107,12 @@ const gameResults = async (game, rates) => {
                 hash: game.salt
             }).inline()
     })
+    await game.destroy()
+}
+
+const getGameImage = async (mode, data) => {
+    switch (mode) {
+        case "wheel": return await wheelImage(data.number)
+        default: return null
+    }
 }

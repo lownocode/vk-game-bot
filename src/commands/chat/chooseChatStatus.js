@@ -89,4 +89,8 @@ const daysKeyboard = Keyboard.builder()
         label: "30",
         color: Keyboard.PRIMARY_COLOR
     })
+    .textButton({
+        label: "60",
+        color: Keyboard.PRIMARY_COLOR
+    })
     .inline()

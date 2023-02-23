@@ -1,4 +1,4 @@
-import { User, Rate, Game, Chat, ChatRate } from "../../db/models.js"
+import { User, Rate, Game, Chat } from "../../db/models.js"
 
 export const evalCommand = {
     pattern: /^eval\s(.*)$/i,

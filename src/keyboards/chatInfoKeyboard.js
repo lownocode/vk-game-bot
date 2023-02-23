@@ -9,10 +9,18 @@ export const chatInfoKeyboard = Keyboard.builder()
         }
     })
     .textButton({
-        label: "Настройки",
+        label: "Режим",
         color: Keyboard.PRIMARY_COLOR,
         payload: {
-            command: "chatSettings"
+            command: "chatSettings/mode"
+        }
+    })
+    .row()
+    .textButton({
+        label: "Таймер",
+        color: Keyboard.PRIMARY_COLOR,
+        payload: {
+            command: "chatSettings/timer"
         }
     })
     .inline()

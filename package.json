@@ -8,12 +8,14 @@
     },
     "dependencies": {
         "@vk-io/hear": "^1.1.0",
+        "canvas": "^2.11.0",
         "chalk": "^5.2.0",
         "lodash.chunk": "^4.2.0",
         "md5": "^2.3.0",
         "pg": "^8.9.0",
         "sequelize": "^6.28.0",
         "string-length": "^5.0.1",
+        "util": "^0.12.5",
         "vk-io": "^4.8.1",
         "vk-io-question": "^3.1.1",
         "yaml": "^2.2.1"
