@@ -1,6 +1,10 @@
+import YAML from "yaml"
+import fs from "fs"
+import axios from "axios"
+
 import { features, formatSum } from "../../utils/index.js"
-import YAML from "yaml";
-import fs from "fs";
+import { logger } from "../../logger/logger.js"
+import { detectDiscount } from "../../functions/index.js"
 
 const config = YAML.parse(
     fs.readFileSync(process.cwd() + "/data/config.yaml", "utf-8")
@@ -38,32 +42,25 @@ export const buyCoins = {
 
         const sum = (rubles * 1000) + ((rubles * 1000) * (detectDiscount(rubles) / 100))
 
-        return message.send(
-            `💡 Вы отдаёте: ${features.split(rubles)} ₽\n` +
-            `💰 Вы получите: ${features.split(sum)} ${config.bot.currency}\n\n` +
-            `📎 Ссылка для оплаты: <link>`
-        )
+        await axios.post("https://wdonate.ru/api/getLink", {
+            token: config.wdonate.token,
+            userId: message.senderId,
+            botId: config["vk-group"].id,
+            sum: rubles
+        })
+            .then(({ data: { response: { link } } }) => {
+                return message.send(
+                    `💡 Вы отдаёте: ${features.split(rubles)} ₽\n` +
+                    `💰 Вы получите: ${features.split(sum)} ${config.bot.currency}\n\n` +
+                    `📎 Ссылка для оплаты: ${link}`
+                )
+            })
+            .catch((e) => {
+                logger.failure(
+                    `Неудачное формирование ссылки для оплаты\n\n${e}`
+                )
+
+                return message.send("Не удалось сгенерировать ссылку для оплаты, попробуйте позже")
+            })
     }
-}
-
-const detectDiscount = (num) => {
-    const discounts = config.shopDiscounts
-    const keys = Object.keys(discounts).sort((a, b) => a - b)
-    let closest = keys[0]
-
-    for (let i = 1; i < keys.length; i++) {
-        const prevKey = keys[i - 1]
-        const currKey = keys[i]
-
-        if (num >= prevKey && num < currKey) {
-            closest = num - prevKey < currKey - num ? prevKey : currKey
-            break
-        }
-
-        else if (num >= currKey) {
-            closest = currKey
-        }
-    }
-
-    return discounts[closest]
 }

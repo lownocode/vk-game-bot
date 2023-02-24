@@ -8,17 +8,21 @@ export const checkChatUserIsAdmin = async (peerId, userId) => {
         .then(async ({ items: users }) => {
             const user = users.find((user) => user.member_id === userId)
 
-            if (!user?.is_owner || !user?.is_admin) {
-                const chat = await Chat.findOne({ where: { peerId: peerId }, attributes: ["payer"] })
-
-                if (chat.payer === userId) return { isAdmin: true }
-
-                return { isAdmin: false }
+            if (user.is_admin) return {
+                isAdmin: true
             }
 
-            return { isAdmin: true }
+            const chat = await Chat.findOne({ where: { peerId: peerId }, attributes: ["payer"] })
+
+            if (chat.payer === userId) return {
+                isAdmin: true
+            }
+
+            return {
+                isAdmin: false
+            }
         })
-        .catch((e) => {
+        .catch(() => {
             return {
                 isAdmin: false,
                 isError: true

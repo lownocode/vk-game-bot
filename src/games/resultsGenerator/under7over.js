@@ -11,7 +11,7 @@ export const under7over = async (user, game, rate, results) => {
     }[rate.data.bet]
 
     if (rate.data.bet === "number" && rate.data.number === game.data.number) {
-        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over.number
+        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over[game.data.number]
 
         await addCoinsToUser(user, winCoins)
 

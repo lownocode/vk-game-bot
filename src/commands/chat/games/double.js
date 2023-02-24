@@ -17,15 +17,8 @@ export const doubleBet = {
 
         message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
-        const betType = {
-            2: "Black x2",
-            3: "Red x3",
-            5: "Blue x5",
-            50: "Green x50",
-        }[multiplier]
-
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betType}`, {
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку на x${multiplier}`, {
                 targetUserId: message.senderId,
                 keyboard: depositKeyboard(message.user)
             })
@@ -54,7 +47,7 @@ export const doubleBet = {
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!`
+            `${features.split(betAmount)} ${config.bot.currency} на x${multiplier} принята!`
         )
     }
 }

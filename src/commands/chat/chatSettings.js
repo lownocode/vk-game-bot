@@ -28,11 +28,11 @@ export const chatSettings = {
                 )
             }
             case "timer": {
-                const currentModeTime = message.chat.modeRoundTime[message.chat.mode]
+                const currentModeTime = message.chat.modeGameTime
 
                 const { text: time, payload } = await message.question(
-                    `Время раунда режима ${convertChatMode(message.chat.mode, false).toLowerCase()} - ${currentModeTime} сек.\n\n` +
-                    "Напишите новое время для этого режима:", {
+                    `Текущее время ондой игры: ${currentModeTime} сек.\n\n` +
+                    "Напишите новое время в секундах, если хотите изменить его:", {
                         keyboard: cancelButton
                     }
                 )
@@ -45,15 +45,11 @@ export const chatSettings = {
                     return message.send("Минимально возможное время - 1 секунда, а максимальное - 300 секунд")
                 }
 
-                message.chat.modeRoundTime = {
-                    ...message.chat.modeRoundTime,
-                    [message.chat.mode]: Number(time)
-                }
+                message.chat.modeGameTime = Number(time)
                 await message.chat.save()
 
                 return message.send(
-                    `Теперь время раунда для режима ${convertChatMode(message.chat.mode, false).toLowerCase()} ` +
-                    `составляет ${Number(time)} сек.`
+                    `Теперь время одной игры составляет ${Number(time)} сек.`
                 )
             }
         }

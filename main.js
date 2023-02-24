@@ -4,6 +4,7 @@ import { QuestionManager } from "vk-io-question"
 import YAML from "yaml"
 import fs from "fs"
 
+import "./api/main.js"
 import "./src/db/sequelize.js"
 import * as commands from "./src/commands/index.js"
 import {

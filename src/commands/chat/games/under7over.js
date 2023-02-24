@@ -40,6 +40,10 @@ export const under7overBet = {
             return message.send("Вы уже поставили на противоположное значение")
         }
 
+        if (rates.filter(r => r.bet === "number")?.length >= 4) {
+            return message.send("Максимальное количесво ставок на числа в одной игре - 4")
+        }
+
         let number = -1
 
         const betName = {
@@ -72,7 +76,7 @@ export const under7overBet = {
 
         const { text: _betAmount } = await message.question(
             `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
-            `${data === "number" ? `число ${number} (x${config.games.multipliers.under7over.number})` : betName}`, {
+            `${data === "number" ? `число ${number} (x${config.games.multipliers.under7over[number]})` : betName}`, {
                 targetUserId: message.senderId,
                 keyboard: depositKeyboard(message.user)
             })

@@ -6,7 +6,7 @@ export const basketball = async (user, game, rate, results) => {
     const teamWinName = {
         red: "победу красных",
         nobody: "ничью",
-        black: "победу чёрных"
+        blue: "победу синих"
     }[rate.data.team]
 
     if ((rate.data.team === game.data.winners) && game.data.winners === "nobody") {

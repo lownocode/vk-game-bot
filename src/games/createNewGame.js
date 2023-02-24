@@ -12,7 +12,7 @@ export const createNewGame = async (peerId) => {
     return await Game.create({
         peerId: peerId,
         mode: chat.mode,
-        endedAt: Date.now() + (chat.modeRoundTime[chat.mode] * 1000),
+        endedAt: Date.now() + (chat.modeGameTime * 1000),
         ...generateGameInfo(chat.mode)
     })
 }
@@ -38,7 +38,6 @@ const generateGameInfo = (mode) => {
                 data: {
                     solution: randomEmoji
                 },
-                image: config.games.slotsImages[`${randomEmoji[0] + 1}_${randomEmoji[1] + 1}_${randomEmoji[2] + 1}`],
                 hash: md5(salt)
             }
         }
@@ -52,46 +51,34 @@ const generateGameInfo = (mode) => {
                 data: {
                     number: number
                 },
-                image: config.games.cubeImages[number],
                 hash: md5(salt)
             }
         }
         case "double": {
-            const betNames = {
-                2: "Black x2",
-                3: "Red x3",
-                5: "Blue x5",
-                50: "Green x50",
-            }
-            const number = features.random.integer(0, 53)
-            const salt = `${number}@${betNames[getRealDoubleMultiply(number)]}@${secretString}`
+            const multiplier = getRealDoubleMultiply(features.random.integer(0, 53))
+            const salt = `x${multiplier}@${secretString}`
 
             return {
                 salt: salt,
                 secretString: secretString,
                 data: {
-                    number: number
+                    multiplier: multiplier
                 },
-                image: config.games.doubleImages[number],
                 hash: md5(salt)
             }
         }
         case "basketball": {
-            const teamNames = {
-                red: "Красные",
-                nobody: "Ничья",
-                black: "Чёрные"
-            }
-            const teamWinners = ["red", "nobody", "black"][Math.ceil(features.random.integer(0, 199) / 100)]
-            const salt = `${teamNames[teamWinners]}@${secretString}`
+            const teamWinners = ["nobody", "red", "blue"][Math.ceil(features.random.integer(0, 199) / 100)]
+            const score = features.random.integer(1, 3)
+            const salt = `${teamWinners}@${secretString}`
 
             return {
                 salt: salt,
                 secretString: secretString,
                 data: {
-                    winners: teamWinners
+                    winners: teamWinners,
+                    score: teamWinners === "nobody" ? 0 : score
                 },
-                image: config.games.basketballImages[teamWinners],
                 hash: md5(salt)
             }
         }
@@ -105,21 +92,22 @@ const generateGameInfo = (mode) => {
                 data: {
                     number: number
                 },
-                image: null,
                 hash: md5(salt)
             }
         }
         case "under7over": {
-            const number = features.random.integer(2, 12)
-            const salt = `${number}@${secretString}`
+            const left = features.random.integer(1, 6)
+            const right = features.random.integer(1, 6)
+            const salt = `${left},${right}@${secretString}`
 
             return {
                 salt: salt,
                 secretString: secretString,
                 data: {
-                    number: number
+                    number: left + right,
+                    leftDiceSum: left,
+                    rightDiceSum: right,
                 },
-                image: config.games.under7overImages[number],
                 hash: md5(salt)
             }
         }

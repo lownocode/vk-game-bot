@@ -1,1 +1,5 @@
 export * from "./wheel.js"
+export * from "./slots.js"
+export * from "./under7over.js"
+export * from "./dice.js"
+export * from "./double.js"

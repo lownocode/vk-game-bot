@@ -3,7 +3,7 @@ import { features } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
 import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
-import {Rate} from "../../../db/models.js";
+import { Rate } from "../../../db/models.js"
 
 export const basketballBet = {
     command: "bet-basketball",
@@ -28,9 +28,9 @@ export const basketballBet = {
         })).map((item) => item.data)
 
         const oppositeTeams = {
-            black: ["red", "nobody"],
-            red: ["black", "nobody"],
-            nobody: ["red", "black"]
+            blue: ["red", "nobody"],
+            red: ["blue", "nobody"],
+            nobody: ["red", "blue"]
         }
 
         if (rates.find(r => oppositeTeams[team].includes(r.team))) {
@@ -40,7 +40,7 @@ export const basketballBet = {
         const betTeam = {
             red: "победу красных",
             nobody: "ничью",
-            black: "победу чёрных",
+            blue: "победу синих",
         }[team]
 
         const { text: _betAmount } = await message.question(

@@ -3,7 +3,7 @@ import Sequelize, { Op } from "sequelize"
 
 import { Game, Rate, User, Chat } from "../db/models.js"
 import { sleep } from "../utils/index.js"
-import {vk, vkuser} from "../../main.js"
+import { config, vk } from "../../main.js"
 import {
     basketball,
     dice,
@@ -12,7 +12,13 @@ import {
     under7over,
     wheel
 } from "./resultsGenerator/index.js"
-import {wheelImage} from "./imagesGenerator/index.js";
+import {
+    diceImage,
+    doubleImage,
+    slotsImage,
+    under7overImage,
+    wheelImage
+} from "./imagesGenerator/index.js"
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -60,9 +66,11 @@ const gameResults = async (game, rates) => {
         }
 
         if (user.vkId !== chat.payer) {
+            const percentOfBetAmount = Math.trunc(rate.betAmount * Number(chat.status) / 100)
+
             await User.update({
                 balance: Sequelize.literal(
-                    `balance + ${Number(rate.percentOfBetAmount)}`
+                    `balance + ${percentOfBetAmount}`
                 )
             }, {
                 where: {
@@ -78,7 +86,7 @@ const gameResults = async (game, rates) => {
     await vk.api.messages.send({
         peer_id: game.peerId,
         random_id: 0,
-        message: "Итак, итоги раунда..."
+        message: "Итак, итоги игры..."
     })
 
     const image = await getGameImage(game.mode, game.data)
@@ -93,7 +101,7 @@ const gameResults = async (game, rates) => {
     await vk.api.messages.send({
         random_id: 0,
         message: (
-            `Итоги раунда:\n\n` +
+            `${getGameResultText(game)}\n\n` +
             `${results.join("\n")}\n\n` +
             `Хеш: ${game.hash}\n` +
             `Проверка: ${game.salt}`
@@ -112,7 +120,35 @@ const gameResults = async (game, rates) => {
 
 const getGameImage = async (mode, data) => {
     switch (mode) {
-        case "wheel": return await wheelImage(data.number)
-        default: return null
+        case "wheel": return await wheelImage(data)
+        case "slots": return await slotsImage(data)
+        case "under7over": return await under7overImage(data)
+        case "dice": return await diceImage(data)
+        case "double": return await doubleImage(data)
+    }
+}
+
+const getGameResultText = (game) => {
+    switch (game.mode) {
+        case "wheel": return (
+            `Выпало число ${game.data.number}, ` +
+            `${game.data.number === 0 ? "зелёное" : game.data.number % 2 === 0 ? "красное" : "чёрное"}!`
+        )
+        case "slots": return (
+            `Выпало ${config.games.slotsSmiles[game.data.solution[0]]}` +
+            `${config.games.slotsSmiles[game.data.solution[1]]}` +
+            `${config.games.slotsSmiles[game.data.solution[2]]}!`
+        )
+        case "under7over": return (
+            `Выпало ${game.data.number} (Кубики ${game.data.leftDiceSum} и ${game.data.rightDiceSum})!`
+        )
+        case "basketball": return (
+            game.data.winners === "nobody" ? "Победила дружба - ничья!" :
+            game.data.winners === "red"
+                ? `Победили красные, со счётом ${game.data.score} : 0!`
+                : `Победили синие, со счётом ${game.data.score} : 0!`
+        )
+        case "double": return `Выпало x${game.data.multiplier}!`
+        case "dice": return `Выпало число ${game.data.number}!`
     }
 }

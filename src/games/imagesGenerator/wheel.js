@@ -1,33 +1,37 @@
-import { Canvas, loadImage } from "canvas"
+import { createCanvas, loadImage } from "canvas"
 
-export const wheelImage = async (number) => {
-    const width = 1500
-    const height = 1500
-    const canvas = new Canvas(width, height)
+const PATH_TO_IMAGES = process.cwd() + "/assets/wheel/"
+const BACKGROUND_WIDTH = 1500
+const BACKGROUND_HEIGHT = 1500
+const NUMBER_FONT_SIZE = 190
+
+export const wheelImage = async (data) => {
+    const canvas = createCanvas(BACKGROUND_WIDTH, BACKGROUND_HEIGHT)
     const ctx = canvas.getContext("2d")
 
-    const backgroud = await loadImage(getBackground(Number(number)))
+    const backgroud = await loadImage(getBackground(Number(data.number)))
 
     ctx.drawImage(backgroud, 0, 0)
 
-    const text = number.toString()
-    const fontSize = 190
+    const text = data.number.toString()
 
-    ctx.font = `bold ${fontSize}px sans-serif`
+    ctx.font = `bold ${NUMBER_FONT_SIZE}px sans-serif`
     ctx.fillStyle = "white"
 
     const textWidth = ctx.measureText(text).width
 
-    ctx.fillText(text, (width - textWidth) / 2, (height + fontSize) / 2.04)
+    ctx.fillText(
+        text,
+        (BACKGROUND_WIDTH - textWidth) / 2,
+        (BACKGROUND_HEIGHT + NUMBER_FONT_SIZE) / 2.04
+    )
 
     return canvas.toBuffer("image/jpeg")
 }
 
 const getBackground = (number) => {
-    const path = process.cwd() + "/assets/wheel/"
+    if (number === 0) return PATH_TO_IMAGES + "zero.png"
+    if (number % 2 === 0) return PATH_TO_IMAGES + "red.png"
 
-    if (number === 0) return path + "zero.png"
-    if (number % 2 === 0) return path + "red.png"
-
-    return path + "black.png"
+    return PATH_TO_IMAGES + "black.png"
 }

@@ -172,28 +172,28 @@ export const chatMainKeyboard = (mode) => {
         case "double": {
             keyboard
                 .textButton({
-                    label: "Black x2",
+                    label: "x2",
                     payload: {
                         command: "bet-double/2"
                     },
                     color: Keyboard.PRIMARY_COLOR,
                 })
                 .textButton({
-                    label: "Red x3",
+                    label: "x3",
                     payload: {
                         command: "bet-double/3"
                     },
                     color: Keyboard.PRIMARY_COLOR,
                 })
                 .textButton({
-                    label: "Blue x5",
+                    label: "x5",
                     payload: {
                         command: "bet-double/5"
                     },
                     color: Keyboard.PRIMARY_COLOR,
                 })
                 .textButton({
-                    label: "Green x50",
+                    label: "x50",
                     payload: {
                         command: "bet-double/50"
                     },
@@ -205,7 +205,7 @@ export const chatMainKeyboard = (mode) => {
         case "basketball": {
             keyboard
                 .textButton({
-                    label: "🔴 Красная",
+                    label: "Красные",
                     payload: {
                         command: "bet-basketball/red"
                     },
@@ -219,9 +219,9 @@ export const chatMainKeyboard = (mode) => {
                     color: Keyboard.PRIMARY_COLOR,
                 })
                 .textButton({
-                    label: "⚫ Чёрная",
+                    label: "Синие",
                     payload: {
-                        command: "bet-basketball/black"
+                        command: "bet-basketball/blue"
                     },
                     color: Keyboard.PRIMARY_COLOR,
                 })
@@ -305,21 +305,21 @@ export const chatMainKeyboard = (mode) => {
         case "under7over": {
             keyboard
                 .textButton({
-                    label: "< 7",
+                    label: "Меньше 7",
                     payload: {
                         command: "bet-under7over/under"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
-                    label: "= 7",
+                    label: "Ровно 7",
                     payload: {
                         command: "bet-under7over/7"
                     },
                     color: Keyboard.PRIMARY_COLOR
                 })
                 .textButton({
-                    label: "> 7",
+                    label: "Больше 7",
                     payload: {
                         command: "bet-under7over/over"
                     },

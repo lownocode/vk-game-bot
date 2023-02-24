@@ -121,7 +121,7 @@ export const wheelBet = {
                 }
 
                 return await message.send(
-                    `Успешная ${features.split(betAmount * number.length)} ${config.bot.currency} ставка на ` +
+                    `Успешная ставка ${features.split(betAmount * number.length)} ${config.bot.currency} на ` +
                     `${number.join(", ")}`
                 )
             } else {

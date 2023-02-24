@@ -1,6 +1,6 @@
 const numbers = {
-    3: ['3', '5', '7'],
-    5: ['1', '9'],
+    3: ["3", "5", "7"],
+    5: ["1", "9"],
 }
 
 export const getRealDoubleMultiply = (number) => {

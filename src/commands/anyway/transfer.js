@@ -47,6 +47,8 @@ export const transfer = {
             }
         )
 
+        if (!payload?.confirm) return
+
         if (payload.confirm === "no") {
             return message.send("А жаль")
         }
