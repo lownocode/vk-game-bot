@@ -1,4 +1,4 @@
-import { User } from "../../src/db/models.js"
+import { Transaction, User } from "../../db/models.js"
 import { config, vk } from "../../main.js"
 import { features } from "../../src/utils/index.js"
 
@@ -63,6 +63,12 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
             })
     }
 
+    await Transaction.create({
+        recipient: toUser.vkId,
+        sender: req.user.vkId,
+        amount: Math.trunc(req.body.amount)
+    })
+
     req.user.balance = Number(req.user.balance) - Math.trunc(req.body.amount)
     toUser.balance = Number(toUser.balance) + Math.trunc(req.body.amount)
 
@@ -77,6 +83,9 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
     await vk.api.messages.send({
         peer_id: toUser.vkId,
         random_id: 0,
-        message: `✅ Вам переведено ${features.split(req.body.amount)} ${config.bot.currency} от [id${req.user.vkId}|${req.user.name}]`
+        message: (
+            `Вы получили ${features.split(req.body.amount)} ${config.bot.currency} ` +
+            `от [id${req.user.vkId}|${req.user.name}]`
+        )
     }).catch((err) => console.log("err in sendCoins", err))
 })

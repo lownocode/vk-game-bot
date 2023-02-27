@@ -189,3 +189,22 @@ export const ChatRate = sequelize.define("chat_rates", {
         type: DataTypes.BIGINT,
     }
 })
+
+export const Transaction = sequelize.define("transactions", {
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        unique: true
+    },
+    amount: {
+        type: DataTypes.INTEGER
+    },
+    recipient: {
+        type: DataTypes.INTEGER
+    },
+    sender: {
+        type: DataTypes.INTEGER
+    }
+})

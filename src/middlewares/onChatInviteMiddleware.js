@@ -1,4 +1,4 @@
-import { Chat } from "../db/models.js"
+import { Chat } from "../../db/models.js"
 import { config } from "../../main.js"
 import {
     chatMainKeyboard,

@@ -5,7 +5,7 @@ import { features, formatSum } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
-import { Rate } from "../../../db/models.js"
+import { Rate } from "../../../../db/models.js"
 
 export const under7overBet = {
     command: "bet-under7over",

@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 import Sequelize from "sequelize"
 
-import { User, ChatRate } from "../../db/models.js"
+import { User, ChatRate } from "../../../db/models.js"
 import { config } from "../../../main.js"
 import { features } from "../../utils/index.js"
 

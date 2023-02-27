@@ -1,7 +1,7 @@
 import md5 from "md5"
 import crypto from "crypto"
 
-import { Chat, Game } from "../db/models.js"
+import { Chat, Game } from "../../db/models.js"
 import { config } from "../../main.js"
 import { features } from "../utils/index.js"
 import { getRealDoubleMultiply } from "../functions/index.js"

@@ -2,7 +2,7 @@ import fs from "node:fs"
 
 import { vk, config } from "../../main.js"
 import { features } from "../utils/index.js"
-import { User } from "../db/models.js"
+import { User } from "../../db/models.js"
 import Sequelize from "sequelize";
 
 export const onRepostMiddleware = async (event) => {

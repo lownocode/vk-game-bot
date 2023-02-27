@@ -1,5 +1,5 @@
 import { getCurrentGame } from "../../games/index.js"
-import { Rate } from "../../db/models.js"
+import { Rate } from "../../../db/models.js"
 import { features } from "../../utils/index.js"
 import { config } from "../../../main.js"
 

@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize"
 import YAML from "yaml"
 import fs from "fs"
 
-import { logger } from "../logger/logger.js"
+import { logger } from "../src/logger/logger.js"
 
 const config = YAML.parse(
     fs.readFileSync(process.cwd() + "/data/config.yaml", "utf-8")

@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 import Sequelize, { Op } from "sequelize"
 
-import { Game, Rate, User, Chat } from "../db/models.js"
+import { Game, Rate, User, Chat } from "../../db/models.js"
 import { sleep } from "../utils/index.js"
 import { config, vk } from "../../main.js"
 import {

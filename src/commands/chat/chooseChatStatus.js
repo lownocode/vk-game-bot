@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 
 import { modeKeyboard } from "../../keyboards/index.js"
-import { Chat } from "../../db/models.js"
+import { Chat } from "../../../db/models.js"
 import { config } from "../../../main.js"
 import { declOfNum, features, formatSum } from "../../utils/index.js"
 import { readableDate } from "../../functions/index.js"

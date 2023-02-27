@@ -1,5 +1,5 @@
 import { getCurrentGame } from "../../games/index.js"
-import { Chat } from "../../db/models.js"
+import { Chat } from "../../../db/models.js"
 import { checkChatUserIsAdmin, convertChatMode } from "../../functions/index.js"
 import { chatMainKeyboard } from "../../keyboards/index.js"
 

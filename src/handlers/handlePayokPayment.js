@@ -1,4 +1,4 @@
-import { User } from "../db/models.js"
+import { User } from "../../db/models.js"
 import { detectDiscount } from "../functions/index.js"
 import { logger } from "../logger/logger.js"
 import { features } from "../utils/index.js"

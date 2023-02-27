@@ -1,4 +1,4 @@
-import { User } from "../../src/db/models.js"
+import { User } from "../../db/models.js"
 
 export const onRequestMiddleware = async (req, res) => {
     if (!req.url.startsWith("/api")) return res.status(400).send({

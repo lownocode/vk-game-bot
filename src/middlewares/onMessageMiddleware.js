@@ -1,7 +1,7 @@
 import { commandsList, vk } from "../../main.js"
 import { chatMainKeyboard, chooseChatStatusKeyboard, privateKeyboard } from "../keyboards/index.js"
 import { executeCommand } from "../functions/index.js"
-import { Chat, User } from "../db/models.js"
+import { Chat, User } from "../../db/models.js"
 
 export const onMessageMiddleware = async (message, next) => {
     if (message.text) {

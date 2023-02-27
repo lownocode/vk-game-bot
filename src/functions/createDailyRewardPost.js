@@ -3,7 +3,7 @@ import chunk from "lodash.chunk"
 
 import { vk, vkuser, config } from "../../main.js"
 import { logger } from "../logger/logger.js"
-import { User } from "../db/models.js"
+import { User } from "../../db/models.js"
 
 export const createDailyRewardPost = async () => {
     let postId = fs.readFileSync(`${process.cwd()}/data/bonusPostId`, "utf-8")

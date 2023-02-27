@@ -1,7 +1,7 @@
 import { resolveResource } from "vk-io"
 
 import { config, vk } from "../../../main.js"
-import { User } from "../../db/models.js"
+import { User } from "../../../db/models.js"
 import { features, formatSum } from "../../utils/index.js"
 import { confirmationKeyboard } from "../../keyboards/index.js"
 import { logger } from "../../logger/logger.js"

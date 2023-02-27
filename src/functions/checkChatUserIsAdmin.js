@@ -1,4 +1,4 @@
-import { Chat } from "../db/models.js"
+import { Chat } from "../../db/models.js"
 import { vk } from "../../main.js"
 
 export const checkChatUserIsAdmin = async (peerId, userId) => {

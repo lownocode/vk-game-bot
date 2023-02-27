@@ -1,4 +1,4 @@
-import * as db from "../../db/models.js"
+import * as db from "../../../db/models.js"
 
 export const evalCommand = {
     pattern: /^eval\s(.*)$/i,

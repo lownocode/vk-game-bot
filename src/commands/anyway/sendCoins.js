@@ -1,7 +1,7 @@
 import { resolveResource } from "vk-io"
 
 import { config, vk } from "../../../main.js"
-import { User } from "../../db/models.js"
+import { Transaction, User } from "../../../db/models.js"
 import { features, formatSum } from "../../utils/index.js"
 import { confirmationKeyboard } from "../../keyboards/index.js"
 import { logger } from "../../logger/logger.js"
@@ -57,6 +57,12 @@ export const sendCoins = {
             if (Number(message.user.balance) < amount) {
                 return message.send("У вас недостаточно средств для перевода")
             }
+
+            await Transaction.create({
+                recipient: user.vkId,
+                sender: message.user.vkId,
+                amount: amount
+            })
 
             user.balance = Number(user.balance) + amount
             message.user.balance = Number(message.user.balance) - amount

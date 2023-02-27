@@ -1,6 +1,6 @@
 import { config, vk } from "../../main.js"
 import { features } from "../utils/index.js"
-import { User } from "../db/models.js"
+import { User } from "../../db/models.js"
 
 export const clearDailyRating = async () => {
     const users = await User.findAll({

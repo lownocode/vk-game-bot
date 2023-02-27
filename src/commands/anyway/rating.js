@@ -1,5 +1,5 @@
 import { features } from "../../utils/index.js"
-import { User } from "../../db/models.js"
+import { User } from "../../../db/models.js"
 import { config } from "../../../main.js"
 
 export const rating = {
