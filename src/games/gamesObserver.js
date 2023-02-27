@@ -6,6 +6,7 @@ import { sleep } from "../utils/index.js"
 import { config, vk } from "../../main.js"
 import {
     basketball,
+    cups,
     dice,
     double,
     slots,
@@ -13,12 +14,14 @@ import {
     wheel
 } from "./resultsGenerator/index.js"
 import {
+    basketballImage, cupsImage,
     diceImage,
     doubleImage,
     slotsImage,
     under7overImage,
     wheelImage
 } from "./imagesGenerator/index.js"
+import {chatMainKeyboard} from "../keyboards/index.js";
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -63,6 +66,7 @@ const gameResults = async (game, rates) => {
             case "basketball": await basketball(...params); break
             case "wheel"     : await wheel(...params);      break
             case "under7over": await under7over(...params); break
+            case "cups"      : await cups(...params); break
         }
 
         if (user.vkId !== chat.payer) {
@@ -96,7 +100,7 @@ const gameResults = async (game, rates) => {
             source: {
                 value: image
             }
-        }) : game.image
+        }) : null
 
     await vk.api.messages.send({
         random_id: 0,
@@ -107,7 +111,7 @@ const gameResults = async (game, rates) => {
             `Проверка: ${game.salt}`
         ),
         peer_id: game.peerId,
-        [(image || game.image) && "attachment"]: attachment,
+        [image && "attachment"]: attachment,
         keyboard: Keyboard.builder()
             .applicationButton({
                 label: "Проверка честности",
@@ -125,6 +129,8 @@ const getGameImage = async (mode, data) => {
         case "under7over": return await under7overImage(data)
         case "dice": return await diceImage(data)
         case "double": return await doubleImage(data)
+        case "basketball": return await basketballImage(data)
+        case "cups": return await  cupsImage(data)
     }
 }
 
@@ -132,7 +138,7 @@ const getGameResultText = (game) => {
     switch (game.mode) {
         case "wheel": return (
             `Выпало число ${game.data.number}, ` +
-            `${game.data.number === 0 ? "зелёное" : game.data.number % 2 === 0 ? "красное" : "чёрное"}!`
+            `${game.data.number === 0 ? "зелёное" :  config.games.wheelNumbers.red.includes(game.data.number) ? "красное" : "чёрное"}!`
         )
         case "slots": return (
             `Выпало ${config.games.slotsSmiles[game.data.solution[0]]}` +
@@ -150,5 +156,6 @@ const getGameResultText = (game) => {
         )
         case "double": return `Выпало x${game.data.multiplier}!`
         case "dice": return `Выпало число ${game.data.number}!`
+        case "cups": return `Выпало ${game.data.filled}!`
     }
 }

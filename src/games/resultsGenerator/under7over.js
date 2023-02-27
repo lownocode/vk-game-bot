@@ -46,7 +46,7 @@ export const under7over = async (user, game, rate, results) => {
     } else {
         results.push(
             `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${betName} проиграла :(`
+            `на ${betName} проиграла`
         )
     }
 }

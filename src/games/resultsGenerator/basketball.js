@@ -31,7 +31,7 @@ export const basketball = async (user, game, rate, results) => {
     } else {
         results.push(
             `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${teamWinName} проиграла :(`
+            `на ${teamWinName} проиграла`
         )
     }
 }

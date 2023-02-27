@@ -53,6 +53,10 @@ export const User = sequelize.define("users", {
     reposts: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         defaultValue: []
+    },
+    apiToken: {
+        type: DataTypes.STRING,
+        unique: true
     }
 })
 

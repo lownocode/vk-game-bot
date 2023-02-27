@@ -1,5 +1,5 @@
 import { commandsList, vk } from "../../main.js"
-import { chooseChatStatusKeyboard, privateKeyboard } from "../keyboards/index.js"
+import { chatMainKeyboard, chooseChatStatusKeyboard, privateKeyboard } from "../keyboards/index.js"
 import { executeCommand } from "../functions/index.js"
 import { Chat, User } from "../db/models.js"
 
@@ -43,6 +43,17 @@ export const onMessageMiddleware = async (message, next) => {
     if (message.messagePayload?.command) {
         const command = message.messagePayload?.command?.split("/")
 
+        const cmd = command[0]?.split("bet-")?.[1]
+
+        if (command[0]?.includes("bet") && cmd !== message.chat.mode) {
+            return await vk.api.messages.send({
+                random_id: 0,
+                message: "Клавиатура в вашей беседе установлена неверно, обновляю...",
+                peer_id: message.chat.peerId,
+                keyboard: chatMainKeyboard(message.chat.mode)
+            })
+        }
+
         executeCommand(command[0], message, command[1])
     }
 
@@ -56,9 +67,11 @@ export const onMessageMiddleware = async (message, next) => {
         })
     }
 
-    if (message.isChat && !command) return
-    if (command.access === "private" && message.isChat) return
-    if (command.access === "chat" && !message.isChat) return
+    if (
+        message.isChat && !command ||
+        command.access === "private" && message.isChat ||
+        command.access === "chat" && !message.isChat
+    ) return
 
     await next()
 }

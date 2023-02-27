@@ -18,7 +18,7 @@ export const slots = async (user, game, rate, results) => {
     } else {
         results.push(
             `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла :(`
+            `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла`
         )
     }
 }

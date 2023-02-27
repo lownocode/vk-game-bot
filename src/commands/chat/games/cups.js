@@ -1,14 +1,13 @@
 import { config } from "../../../../main.js"
-import { features } from "../../../utils/index.js"
-import { depositKeyboard } from "../../../keyboards/index.js"
+import { declOfNum, features } from "../../../utils/index.js"
 import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
-import { Rate } from "../../../db/models.js"
+import { depositKeyboard } from "../../../keyboards/index.js"
 
-export const basketballBet = {
-    command: "bet-basketball",
+export const cupsBet = {
+    command: "bet-cups",
     pattern: /^$/,
-    handler: async (message, team) => {
+    handler: async (message, data) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
             return message.send(
                 `Для ставки на вашем балансе должно быть как минимум ` +
@@ -18,37 +17,17 @@ export const basketballBet = {
 
         message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
-        const rates = (await Rate.findAll({
-            where: {
-                peerId: message.peerId,
-                userVkId: message.senderId,
-                mode: "basketball"
-            },
-            attributes: ["data"]
-        })).map((item) => item.data)
-
-        const oppositeTeams = {
-            blue: ["red", "nobody"],
-            red: ["blue", "nobody"],
-            nobody: ["red", "blue"]
-        }
-
-        if (rates.find(r => oppositeTeams[team].includes(r.team))) {
-            return message.send("Вы уже поставили на противоположное значение")
-        }
-
-        const betTeam = {
-            red: "победу красных",
-            nobody: "ничью",
-            blue: "победу синих",
-        }[team]
+        const betText = {
+            "5": "все полные",
+            "0": "все пустые"
+        }[data] || `${data} ${declOfNum(data, ["полный", "полных", "полных"])}`
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку ` +
-            `на ${betTeam} (x${config.games.multipliers.basketball[team]})`, {
-                targetUserId: message.senderId,
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
+            `${betText} (x${config.games.multipliers.cups[data]})`, {
                 keyboard: depositKeyboard(message.user)
-            })
+            }
+        )
 
         const betAmount = await gameBetAmountChecking(_betAmount, message)
 
@@ -72,13 +51,13 @@ export const basketballBet = {
             message: message,
             betAmount: betAmount,
             data: {
-                team: team
+                filled: Number(data)
             }
         })
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} на ${betTeam} принята!`
+            `${features.split(betAmount)} ${config.bot.currency} на ${betText} принята!`
         )
     }
 }

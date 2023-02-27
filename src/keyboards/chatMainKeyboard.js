@@ -332,6 +332,50 @@ export const chatMainKeyboard = (mode) => {
                         command: "bet-under7over/number"
                     },
                 })
+
+            break
+        }
+        case "cups": {
+            keyboard
+                .textButton({
+                    label: "Все пустые",
+                    payload: {
+                        command: "bet-cups/0"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .textButton({
+                    label: "Все полные",
+                    payload: {
+                        command: "bet-cups/5"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .row()
+                .textButton({
+                    label: "1",
+                    payload: {
+                        command: "bet-cups/1"
+                    },
+                })
+                .textButton({
+                    label: "2",
+                    payload: {
+                        command: "bet-cups/2"
+                    },
+                })
+                .textButton({
+                    label: "3",
+                    payload: {
+                        command: "bet-cups/3"
+                    },
+                })
+                .textButton({
+                    label: "4",
+                    payload: {
+                        command: "bet-cups/4"
+                    },
+                })
         }
     }
 

@@ -30,7 +30,7 @@ export const statistics = {
                 distinct: true
             })
 
-            const usersInRating = await ChatRate.findAll({
+            const usersInRate = await ChatRate.findAll({
                 attributes: ["userId", [Sequelize.fn("SUM", Sequelize.col("betAmount")), "totalBetAmount"]],
                 where: {
                     peerId: message.peerId
@@ -43,15 +43,25 @@ export const statistics = {
             const users = (await User.findAll({
                 attributes: ["id", "vkId", "name"],
                 where: {
-                    id: usersInRating.map(rate => rate.userId)
+                    id: usersInRate.map(rate => rate.userId)
                 }
-            })).map((user, index) => {
-                const amount = usersInRating.find(u => u.userId === user.id).dataValues.totalBetAmount
+            }))
 
-                return (
-                    `${index + 1}) [id${user.vkId}|${user.name}] - ${features.split(amount)} ${config.bot.currency}`
-                )
-            }).join("\n")
+            const text = users.map(user => {
+                const totalBetAmount = usersInRate.find(rate => rate.userId === user.dataValues.id).dataValues.totalBetAmount
+
+                return {
+                    ...user.dataValues,
+                    totalBetAmount: totalBetAmount
+                }
+            })
+                .sort((a, b) => Number(b.totalBetAmount) - Number(a.totalBetAmount))
+                .map((user, index) => {
+                    return (
+                        `${index + 1}) [id${user.vkId}|${user.name}] - ` +
+                        `${features.split(user.totalBetAmount)} ${config.bot.currency}`
+                    )
+                }).join("\n")
 
             return message.send(
                 "📋 Статистика беседы за всё время\n\n" +
@@ -60,8 +70,8 @@ export const statistics = {
                 `👥 Активных игроков: ${features.split(activeUsers)}\n` +
                 `💰 Доход беседы: ${features.split(percentOfBetAmount)} ${config.bot.currency}\n\n` +
 
-                `${activeUsers >= 1 ? `👑 Топ поставленных коинов:\n${users}` : ""}`, {
-                    keyboard: ratingsKeyboard,
+                `${activeUsers >= 1 ? `👑 Топ поставленных коинов:\n${text}` : ""}`, {
+                    // keyboard: ratingsKeyboard,
                     disable_mentions: true
                 }
             )

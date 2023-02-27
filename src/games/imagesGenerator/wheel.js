@@ -1,5 +1,7 @@
 import { createCanvas, loadImage } from "canvas"
 
+import { config } from "../../../main.js"
+
 const PATH_TO_IMAGES = process.cwd() + "/assets/wheel/"
 const BACKGROUND_WIDTH = 1500
 const BACKGROUND_HEIGHT = 1500
@@ -31,7 +33,7 @@ export const wheelImage = async (data) => {
 
 const getBackground = (number) => {
     if (number === 0) return PATH_TO_IMAGES + "zero.png"
-    if (number % 2 === 0) return PATH_TO_IMAGES + "red.png"
+    if (config.games.wheelNumbers.red.includes(number)) return PATH_TO_IMAGES + "red.png"
 
     return PATH_TO_IMAGES + "black.png"
 }

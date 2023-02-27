@@ -29,13 +29,13 @@ export const under7overBet = {
             attributes: ["data"]
         })).map((item) => item.data)
 
+
         if (
-            data === "under" && rates.find(r => ["7", "over"].includes(r.bet)) ||
-            data === "over" && rates.find(r => ["under", "7"].includes(r.bet)) ||
-            data === "7" && rates.find(r => ["under", "over"].includes(r.bet)) ||
-            data === "under" && rates.find(r => r.number > 7) ||
-            data === "over" && rates.find(r => r.number < 7) ||
-            data === "number" && rates.find(r => r.bet === "7")
+            data === "over" && rates.find(r => r.bet === "number" && r.number < 7) ||
+            data === "under" && rates.find(r => r.bet === "number" && r.number > 7) ||
+            data === "over" && rates.find(r => ["7", "under"].includes(r.bet)) ||
+            data === "under" && rates.find(r => ["7", "over"].includes(r.bet))  ||
+            data === "7" && rates.find(r => ["under", "over"].includes(r.bet))
         ) {
             return message.send("Вы уже поставили на противоположное значение")
         }
@@ -71,6 +71,15 @@ export const under7overBet = {
                 return message.send("Можно поставить только на число от 2 до 12 не включая 7")
             }
 
+            if (
+                rates.find(r => r.bet === "under" && Number(__number) > 7) ||
+                rates.find(r => r.bet === "over" && Number(__number) < 7) ||
+                Number(__number) < 7 && rates.find(r => r.bet === "number" && r.number > 7) ||
+                Number(__number) > 7 && rates.find(r => r.bet === "number" && r.number < 7)
+            ) {
+                return message.send("Вы уже поставили на противоположное значение")
+            }
+
             number = Number(__number)
         }
 
@@ -86,6 +95,10 @@ export const under7overBet = {
         if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
+
+        if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
+            return message.send("Игра уже кончается, ставки закрыты")
+        }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
             return message.send("Игра, на которую вы ставили закончилась")

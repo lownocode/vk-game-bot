@@ -5,19 +5,24 @@ postgres:
     host: localhost
     password: lol4an
 
-wdonate:
-    token: eb29d7c06a19324c47959f17c2c36252
-
 vk-group:
-    id: 194426159
-    token: vk1.a.H6uBbbw3xCzyzxGw9HNVErDcgRoMmYRLyGN4Zvvxee3acirsZF8U0J1pds_NwexRcD5V-UpPvK9vByyHCSDPEwXnau-7eIECJKhOy1-GY8Hq6VhrPH_Jqvb7OM_5I-O6NTURfI3EKJJ1yFqZ-JyRzpvnWQAqI_YFz6MqLuaJEi1jOU2zj5ZUAFMTlM79ZaPbXP9Q5an8jL_DELxm5pTc1Q
+    id: 195663511
+    #id: 194426159
+    token: vk1.a.DV7py-wvLqO1VItwtrS_-Bm5hk5RbGYdeJOqR2w6jo_KHjBjdO7LozKgND-hyj3ugE4Rb9Umg5Je8oa_joSx__ovqKFKd3ofYJY1vMCYsmpscQtXPKMJq3PcB84i22HMhu8OjLUSNElBSMPpmF-VTmgzYaxrHCytjSH9fHRVP9s--JH-vxfOetN52ontvuP2HXRvTQ82-zLQHoVGRo-bYg
+    #token: vk1.a.H6uBbbw3xCzyzxGw9HNVErDcgRoMmYRLyGN4Zvvxee3acirsZF8U0J1pds_NwexRcD5V-UpPvK9vByyHCSDPEwXnau-7eIECJKhOy1-GY8Hq6VhrPH_Jqvb7OM_5I-O6NTURfI3EKJJ1yFqZ-JyRzpvnWQAqI_YFz6MqLuaJEi1jOU2zj5ZUAFMTlM79ZaPbXP9Q5an8jL_DELxm5pTc1Q
 
 vk-user:
     token: vk1.a.nqTcgWPHEE0t2yCaI6K4SvJyALfVjMGuCqvBarFt4tnC0QYYAhUJi_ev6N5IA481ddxIER9NbmADMeNgcdvr4J0KcneoWkSLWGfZ219gkHkS2FNY-ck0nbbMMyD0N76jW-6bjFydsQHN6lgrcpfIZ0GD3jmAz2RpI59Op95dHFes3qH2hnw72sxZ-29QthZEk4G0xT5kwXApdpgC2J0bFw
 
+payok:
+    apiToken: 702ED32A446F85DFBD8CAF774632637F-5FE2BAA21526138B7644954DE0EA3F86-9FDE1C0BD9DF2A33063578FB8AA82439
+    apiId: 1921
+    shopKey: b996fbfb6dcaa80dcac5ddd7087c92af
+    shopId: 3618
+
 bot:
     currency: SC
-    maximumBet: 1000000000006666666666666666666666666
+    maximumBet: 100000000000
     minimumBet: 100
 
 games:
@@ -28,6 +33,7 @@ games:
         slots: Слоты
         double: Double
         under7over: Под 7 над
+        cups: Стаканчики
     multipliers:
         dice:
             number: 5
@@ -57,6 +63,13 @@ games:
             10: 11
             11: 17
             12: 34
+        cups:
+            0: 30
+            1: 6
+            2: 3
+            3: 3
+            4: 6
+            5: 30
 
     slotsSmiles:
         - 🍓
@@ -64,14 +77,58 @@ games:
         - 🍏
         - 🍑
 
+    wheelNumbers:
+        red:
+            - 32
+            - 19
+            - 21
+            - 25
+            - 34
+            - 27
+            - 36
+            - 30
+            - 23
+            - 5
+            - 16
+            - 1
+            - 14
+            - 9
+            - 18
+            - 7
+            - 12
+            - 3
+        black:
+            - 15
+            - 4
+            - 2
+            - 17
+            - 6
+            - 13
+            - 11
+            - 8
+            - 10
+            - 24
+            - 33
+            - 20
+            - 31
+            - 22
+            - 29
+            - 28
+            - 35
+            - 26
+
 repostBonus:
-    reward: 1500
-    picture: photo-199640307_457241884
+    reward: 1000
+    picture: photo-194426159_457239678
 
 chats:
-    Слоты: https://vk.me/join/AJQ1d/mCUxmVhw0qsLLLN4v6
-    Кубик: https://vk.me/join/AJQ1d6ofPxmqqdkHY7XUHYcv
-    Double: https://vk.me/join/AJQ1d3ky5RfL_jrgo_vJDZSo
+    Wheel: https://vk.me/join/_0N4QFb28w39v4gNccyeiFgwDje6o5ZRMl8=
+    Кубик: https://vk.me/join/XXUvZxrp7XU9vGESBjzGnB5/k69F4XzC0Ds=
+    Double: https://vk.me/join/KdjnLHsUlF_3/BkDHO1hzbaggligL3rOc2o=
+    Слоты: https://vk.me/join/lPfvZC8APGdd1ney_Rz/cHQ5u4LNG3OwFSw=
+    Под 7 над: https://vk.me/join/BcTKGWDBIcjzI8XnnynAla0j9f2u9o071kU=
+    Баскетбол: https://vk.me/join/J_MCAKx3ueVZRciGQZDXts8whJ1xs65DhvQ=
+    Стаканчики: https://vk.me/join/YcedS5yZOCxIbCcx9E9LjKWLWwAgnTtuIzU=
 
 dailyRatingRewards:
     - 100000 # топ 1

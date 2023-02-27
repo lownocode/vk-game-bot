@@ -51,6 +51,10 @@ export const diceBet = {
 
         const currentGame = await getOrCreateGame(message.peerId)
 
+        if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
+            return message.send("Игра уже кончается, ставки закрыты")
+        }
+
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
             return message.send("Игра, на которую вы ставили закончилась")
         }

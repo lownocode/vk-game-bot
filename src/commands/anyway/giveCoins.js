@@ -6,9 +6,11 @@ import { features, formatSum } from "../../utils/index.js"
 import { confirmationKeyboard } from "../../keyboards/index.js"
 import { logger } from "../../logger/logger.js"
 
-export const transfer = {
-    pattern: /^(перевод|передать|перевести)\s(.*)(\s(.*))?$/i,
+export const giveCoins = {
+    pattern: /^(\/give|\/выдать)\s(.*)(\s(.*))?$/i,
     handler: async message => {
+        if (!message.user.isAdmin) return
+
         const toVkUserId = await getUserVkId(message)
 
         if (toVkUserId === 0) {
@@ -16,11 +18,7 @@ export const transfer = {
         }
 
         if (toVkUserId < 1) {
-            return message.send("Переводить группам, это, конечно, круто, но нельзя")
-        }
-
-        if (toVkUserId === message.senderId) {
-            return message.send("Переводить самому себе нельзя")
+            return message.send("Выдавать группам, это, конечно, круто, но нельзя")
         }
 
         const user = await User.findOne({ where: { vkId: toVkUserId } })
@@ -40,7 +38,7 @@ export const transfer = {
         }
 
         const { payload } = await message.question(
-            `Вы уверены, что хотите перевести [id${user.vkId}|${user.name}] ` +
+            `Вы уверены, что хотите выдать [id${user.vkId}|${user.name}] ` +
             `${features.split(amount)} ${config.bot.currency}?`, {
                 targetUserId: message.senderId,
                 keyboard: confirmationKeyboard,
@@ -54,12 +52,7 @@ export const transfer = {
         }
 
         if (payload.confirm === "yes") {
-            if (Number(message.user.balance) < amount) {
-                return message.send("У вас недостаточно средств для перевода")
-            }
-
             user.balance = Number(user.balance) + amount
-            message.user.balance = Number(message.user.balance) - amount
 
             await message.user.save()
             await user.save()
@@ -67,12 +60,11 @@ export const transfer = {
                 peer_id: user.vkId,
                 random_id: 0,
                 message: (
-                    `Вы получили ${features.split(amount)} ${config.bot.currency} от` +
-                    ` [id${message.user.id}|${message.user.name}]`
+                    `Вы получили ${features.split(amount)} ${config.bot.currency} от Администратора`
                 )
-            }).catch(() => logger.failure("ошибка перевода"))
+            }).catch(() => logger.failure("ошибка выдачи"))
 
-            return message.send("Успешно переведено")
+            return message.send("Успешно выдано")
         }
     }
 }

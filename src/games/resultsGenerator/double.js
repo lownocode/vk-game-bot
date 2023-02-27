@@ -15,7 +15,7 @@ export const double = async (user, game, rate, results) => {
     } else {
         results.push(
             `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на x${rate.data.multiplier} проиграла :(`
+            `на x${rate.data.multiplier} проиграла`
         )
     }
 }

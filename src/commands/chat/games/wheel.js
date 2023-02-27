@@ -1,9 +1,9 @@
-import {config} from "../../../../main.js"
-import {features, formatSum} from "../../../utils/index.js"
-import {depositKeyboard} from "../../../keyboards/index.js"
-import {createGameRate, gameBetAmountChecking} from "../../../functions/index.js"
-import {getCurrentGame, getOrCreateGame} from "../../../games/index.js"
-import {Rate} from "../../../db/models.js"
+import { config } from "../../../../main.js"
+import { features, formatSum } from "../../../utils/index.js"
+import { depositKeyboard } from "../../../keyboards/index.js"
+import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
+import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
+import { Rate } from "../../../db/models.js"
 
 export const wheelBet = {
     command: "bet-wheel",
@@ -150,6 +150,10 @@ export const wheelBet = {
         if (typeof betAmount !== "number") return
 
         const currentGame = await getOrCreateGame(message.peerId)
+
+        if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
+            return message.send("Игра уже кончается, ставки закрыты")
+        }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
             return message.send("Игра, на которую вы ставили закончилась")

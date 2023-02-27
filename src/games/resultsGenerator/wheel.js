@@ -29,13 +29,14 @@ export const wheel = async (user, game, rate, results) => {
             `на число ${rate.data.number} выиграла! (+ ${features.split(winCoins)})`
         )
     }
+
     else if (
         (rate.data.bet === "even" && game.data.number % 2 === 0) ||
         (rate.data.bet === "noteven" && game.data.number % 2 !== 0) ||
-        (rate.data.bet === "red" && game.data.number % 2 === 0) ||
-        (rate.data.bet === "black" && game.data.number % 2 !== 0) ||
         (rate.data.bet === "1-18" && (game.data.number <= 18 && game.data.number >= 1)) ||
-        (rate.data.bet === "19-36" && (game.data.number <= 36 && game.data.number >= 19))
+        (rate.data.bet === "19-36" && (game.data.number <= 36 && game.data.number >= 19)) ||
+        (rate.data.bet === "red" && config.games.wheelNumbers.red.includes(game.data.number)) ||
+        (rate.data.bet === "black" && config.games.wheelNumbers.black.includes(game.data.number))
     ) {
         const winCoins = Number(rate.betAmount) * config.games.multipliers.wheel.parity
 
@@ -45,7 +46,9 @@ export const wheel = async (user, game, rate, results) => {
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${betText()} выиграла! (+ ${features.split(winCoins)})`
         )
-    } else if (
+    }
+
+    else if (
         (rate.data.bet === "1-12" && (game.data.number <= 12 && game.data.number >= 1)) ||
         (rate.data.bet === "13-24" && (game.data.number <= 24 && game.data.number >= 13)) ||
         (rate.data.bet === "25-36" && (game.data.number <= 36 && game.data.number >= 25))
@@ -61,7 +64,7 @@ export const wheel = async (user, game, rate, results) => {
     } else {
         results.push(
             `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${rate.data.number >= 0 ? `число ${rate.data.number}` : betText()} проиграла!`
+            `на ${rate.data.number >= 0 ? `число ${rate.data.number}` : betText()} проиграла`
         )
     }
 }

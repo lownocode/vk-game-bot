@@ -111,5 +111,23 @@ const generateGameInfo = (mode) => {
                 hash: md5(salt)
             }
         }
+        case "cups": {
+            const regularCups = features.random.integer(1, 4)
+            const rareCupsChance = features.random.integer(0, 30)
+            const rareCups = rareCupsChance === 0 ? 0 : rareCupsChance === 30 ? 5 : -1
+
+            const cupsFilled = rareCups === -1 ? regularCups : rareCups
+
+            const salt = `${cupsFilled}@${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    filled: cupsFilled
+                },
+                hash: md5(salt)
+            }
+        }
     }
 }

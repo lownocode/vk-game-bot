@@ -27,7 +27,7 @@ export const chat = {
             `Оплачена до ${readableDate(Number(message.chat.payedFor))}\n` +
             `Получает ${message.chat.status}% со ставок - @id${message.chat.payer}`, {
                 keyboard: chatInfoKeyboard,
-                disabled_mentions: true
+                disable_mentions: true
             }
         )
     }
