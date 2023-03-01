@@ -1,10 +1,10 @@
 import { resolveResource } from "vk-io"
 
 import { config, vk } from "../../../main.js"
-import { Transaction, User } from "../../../db/models.js"
+import { User } from "../../../db/models.js"
 import { features, formatSum } from "../../utils/index.js"
 import { confirmationKeyboard } from "../../keyboards/index.js"
-import { logger } from "../../logger/logger.js"
+import { createTransaction } from "../../functions/index.js"
 
 export const sendCoins = {
     pattern: /^(перевод|передать|перевести)\s(.*)(\s(.*))?$/i,
@@ -58,25 +58,11 @@ export const sendCoins = {
                 return message.send("У вас недостаточно средств для перевода")
             }
 
-            await Transaction.create({
+            await createTransaction({
                 recipient: user.vkId,
                 sender: message.user.vkId,
                 amount: amount
             })
-
-            user.balance = Number(user.balance) + amount
-            message.user.balance = Number(message.user.balance) - amount
-
-            await message.user.save()
-            await user.save()
-            await vk.api.messages.send({
-                peer_id: user.vkId,
-                random_id: 0,
-                message: (
-                    `Вы получили ${features.split(amount)} ${config.bot.currency} от` +
-                    ` [id${message.user.id}|${message.user.name}]`
-                )
-            }).catch(() => logger.failure("ошибка перевода"))
 
             return message.send("Успешно переведено")
         }

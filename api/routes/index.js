@@ -1,2 +1,5 @@
 export * from "./sendCoins.js"
 export * from "./getMyBalance.js"
+export * from "./transactions.js"
+export * from "./setCallback.js"
+export * from "./delCallback.js"

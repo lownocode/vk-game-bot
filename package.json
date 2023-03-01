@@ -3,8 +3,7 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start": "node main.js",
-        "pm2": "pm2 start main.js --name game-bot"
+        "start": "node main.js"
     },
     "dependencies": {
         "@vk-io/hear": "^1.1.0",

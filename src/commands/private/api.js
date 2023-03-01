@@ -8,10 +8,11 @@ export const api = {
         if (message.text.includes("new")) {
             const token = md5(
                 message.user.id +
-                crypto.randomBytes(15).toString("hex")
+                crypto.randomBytes(15).toString("hex") +
+                Date.now()
             )
 
-            message.user.apiToken = token
+            message.user.api = { ...message.user.api, token: token }
             await message.user.save()
 
             return await message.send(
@@ -19,13 +20,14 @@ export const api = {
             )
         }
 
-        if (!message.user.apiToken) {
+        if (!message.user.api.token) {
             const token = md5(
                 message.user.id +
-                crypto.randomBytes(15).toString("hex")
+                crypto.randomBytes(15).toString("hex") +
+                Date.now()
             )
 
-            message.user.apiToken = token
+            message.user.api = { ...message.user.api, token: token }
             await message.user.save()
 
             return await message.send(
@@ -34,7 +36,7 @@ export const api = {
         }
 
         return message.send(
-            `Ваш API token: ${message.user.apiToken}`
+            `Ваш API token: ${message.user.api.token}`
         )
     }
 }

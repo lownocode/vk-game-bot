@@ -12,7 +12,7 @@ export const onRequestMiddleware = async (req, res) => {
     })
 
     const user = await User.findOne({
-        where: { apiToken: req.headers.token }
+        where: { "api.token": req.headers.token }
     })
 
     if (!user) return res.status(400).send({

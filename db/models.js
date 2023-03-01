@@ -54,9 +54,12 @@ export const User = sequelize.define("users", {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         defaultValue: []
     },
-    apiToken: {
-        type: DataTypes.STRING,
-        unique: true
+    api: {
+        type: DataTypes.JSONB,
+        defaultValue: {
+            token: null,
+            callbackUrl: null
+        }
     }
 })
 

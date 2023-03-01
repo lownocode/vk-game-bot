@@ -1,6 +1,5 @@
-import { Transaction, User } from "../../db/models.js"
-import { config, vk } from "../../main.js"
-import { features } from "../../src/utils/index.js"
+import { User } from "../../db/models.js"
+import { createTransaction } from "../../src/functions/index.js"
 
 export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async (req, res) => {
     if (
@@ -38,14 +37,14 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
             })
     }
 
-    const toUser = await User.findOne({
+    const recipient = await User.findOne({
         attributes: ["id", "balance", "vkId"],
         where: {
             vkId: req.body.recipient
         }
     })
 
-    if (!toUser) {
+    if (!recipient) {
         return res
             .status(404)
             .send({
@@ -54,7 +53,7 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
             })
     }
 
-    if (req.user.id === toUser.id) {
+    if (req.user.id === recipient.id) {
         return res
             .status(401)
             .send({
@@ -63,29 +62,14 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
             })
     }
 
-    await Transaction.create({
-        recipient: toUser.vkId,
+    await createTransaction({
+        recipient: recipient.vkId,
         sender: req.user.vkId,
         amount: Math.trunc(req.body.amount)
     })
-
-    req.user.balance = Number(req.user.balance) - Math.trunc(req.body.amount)
-    toUser.balance = Number(toUser.balance) + Math.trunc(req.body.amount)
-
-    await req.user.save()
-    await toUser.save()
 
     await res.send({
         code: "SUCCESS",
         message: "успешно переведено"
     })
-
-    await vk.api.messages.send({
-        peer_id: toUser.vkId,
-        random_id: 0,
-        message: (
-            `Вы получили ${features.split(req.body.amount)} ${config.bot.currency} ` +
-            `от [id${req.user.vkId}|${req.user.name}]`
-        )
-    }).catch((err) => console.log("err in sendCoins", err))
 })
