@@ -20,6 +20,9 @@ payok:
     shopKey: b996fbfb6dcaa80dcac5ddd7087c92af
     shopId: 3618
 
+wdonate:
+    token: f1c77b1aa49b5b4aa7c20af0e5bb5cca
+
 bot:
     currency: SC
     maximumBet: 100000000000

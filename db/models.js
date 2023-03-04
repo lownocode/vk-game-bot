@@ -60,6 +60,13 @@ export const User = sequelize.define("users", {
             token: null,
             callbackUrl: null
         }
+    },
+    referrer: {
+        type: DataTypes.INTEGER,
+    },
+    referralsProfit: {
+        type: DataTypes.BIGINT,
+        defaultValue: 0
     }
 })
 

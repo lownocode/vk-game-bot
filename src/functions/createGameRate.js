@@ -1,4 +1,5 @@
-import { ChatRate, Rate } from "../../db/models.js"
+import {ChatRate, Rate, User} from "../../db/models.js"
+import Sequelize from "sequelize";
 
 export const createGameRate = async ({ game, message, betAmount, data }) => {
     const similarRate = await Rate.findOne({
@@ -39,4 +40,17 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
         mode: message.chat.mode,
         data: data
     })
+
+    if (message.user.referrer) {
+        const profit = Math.trunc(betAmount / 100 * 0.15)
+
+        await User.update({
+            balance: Sequelize.literal(`balance + ${profit}`),
+            referralsProfit: Sequelize.literal(`"referralsProfit" + ${profit}`)
+        }, {
+            where: {
+                vkId: message.user.referrer
+            }
+        })
+    }
 }

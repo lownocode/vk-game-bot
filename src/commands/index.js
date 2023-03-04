@@ -16,6 +16,7 @@ export * from "./private/buyCoins.js"
 export * from "./private/ratings.js"
 export * from "./private/settings.js"
 export * from "./private/api.js"
+export * from "./private/referral.js"
 
 export * from "./chat/balance.js"
 export * from "./chat/bank.js"

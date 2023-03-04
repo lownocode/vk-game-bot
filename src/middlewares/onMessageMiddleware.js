@@ -1,4 +1,4 @@
-import { commandsList, vk } from "../../main.js"
+import { commandsList, config, vk } from "../../main.js"
 import { chatMainKeyboard, chooseChatStatusKeyboard, privateKeyboard } from "../keyboards/index.js"
 import { executeCommand } from "../functions/index.js"
 import { Chat, User } from "../../db/models.js"
@@ -9,6 +9,45 @@ export const onMessageMiddleware = async (message, next) => {
     }
 
     if (message.isGroup || !message.text || message.senderType !== "user") return
+
+    if (message.referralValue && !isNaN(Number(message.referralValue))) {
+        const user = await getUser(message)
+        const referrer = await User.findOne({
+            attributes: ["id", "balance", "name", "vkId"],
+            where: { vkId: Number(message.referralValue) }
+        })
+
+        if (
+            !referrer ||
+            user.referrer === referrer.vkId ||
+            user.referrer ||
+            referrer.vkId === message.senderId ||
+            +new Date(user.createdAt) + 1_800_000 < Date.now()
+        ) {
+            return message.send("Что-то пошло не так")
+        }
+
+        referrer.balance = Number(referrer.balance) + 1500
+        user.balance = Number(user.balance) + 1500
+        user.referrer = referrer.vkId
+
+        await referrer.save()
+        await user.save()
+
+        await vk.api.messages.send({
+            random_id: 0,
+            peer_id: referrer.vkId,
+            message: (
+                `[id${user.vkId}|${user.name}] присоединился по вашей реферальной ссылке\n` +
+                `+ 1 000 ${config.bot.currency}`
+            )
+        })
+
+        return message.send(
+            `Вы стали рефералом [id${referrer.vkId}|${referrer.name}]\n` +
+            `На ваш баланс начислено 1 000 ${config.bot.currency}`
+        )
+    }
 
     const command = commandsList.find(cmd => cmd.pattern.test(message.text))
 

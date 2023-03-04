@@ -5,7 +5,7 @@ import * as routes from "./routes/index.js"
 import { logger } from "../src/logger/logger.js"
 import { onRequestMiddleware } from "./middlewares/index.js"
 
-const IS_DEV = !false
+const IS_DEV = false
 const PORT = IS_DEV ? 7234 : 443
 
 const fastify = new Fastify(!IS_DEV && {

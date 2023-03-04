@@ -1,7 +1,9 @@
+import { Keyboard } from "vk-io"
 import YAML from "yaml"
 import fs from "fs"
+import axios from "axios"
 
-import { payok, vkuser } from "../../../main.js"
+import { payok } from "../../../main.js"
 import { features, formatSum } from "../../utils/index.js"
 import { detectDiscount } from "../../functions/index.js"
 
@@ -41,24 +43,46 @@ export const buyCoins = {
 
         const sum = (rubles * 1000) + ((rubles * 1000) * (detectDiscount(rubles) / 100))
 
-        const link = payok.getPaymentLink({
-            amount: rubles,
-            desc: `Покупка ${features.split(sum)} ${config.bot.currency}`,
-            success_url: `https://vk.me/club${config["vk-group"].id}`,
-            custom: {
-                userId: message.user.id
-            },
-        })
-
-        const { key } = await vkuser.api.utils.getShortLink({
-            private: false,
-            url: link.payUrl
-        })
-
         return message.send(
             `💡 Вы отдаёте: ${features.split(rubles)} ₽\n` +
             `💰 Вы получите: ${features.split(sum)} ${config.bot.currency}\n\n` +
-            `📎 Ссылка для оплаты: vk.cc/${key}`
+            `📎 Воспользуйтесь кнопками ниже для оплаты`, {
+                keyboard: await payButtons(sum, rubles, message)
+            }
         )
     }
+}
+
+const payButtons = async (coins, rubles, message) => {
+    const keyboard = Keyboard.builder()
+
+    const payokUrl = payok.getPaymentLink({
+        amount: rubles,
+        desc: `Покупка ${features.split(coins)} ${config.bot.currency}`,
+        success_url: `https://vk.me/club${config["vk-group"].id}`,
+        custom: {
+            userId: message.user.id
+        },
+    }).payUrl
+
+    keyboard.urlButton({
+        label: "Payok",
+        url: payokUrl
+    })
+
+    const { status, data: { response: { link: wdonateUrl } } } = await axios.post("https://wdonate.ru/api/getLink", {
+        token: config.wdonate.token,
+        userId: message.senderId,
+        botId: config["vk-group"].id,
+        sum: rubles
+    })
+
+    if (status === 200) {
+        keyboard.urlButton({
+            label: "WDonate",
+            url: wdonateUrl
+        })
+    }
+
+    return keyboard.inline()
 }

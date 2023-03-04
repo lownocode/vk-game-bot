@@ -1,5 +1,6 @@
 import { features } from "../../utils/index.js"
 import { config } from "../../../main.js"
+import { readableDate } from "../../functions/index.js"
 
 export const profile = {
     access: "private",
@@ -11,8 +12,7 @@ export const profile = {
             `📃 Имя: ${message.user.name}\n` +
             `🤪 Выиграно за сегодня: ${features.split(message.user.winCoinsToday)} ${config.bot.currency}\n` +
             `⏰ Выиграно за всё время: ${features.split(message.user.winCoins)} ${config.bot.currency}\n\n` +
-            `⛔ Бан: ${message.user.isBanned ? "да" : "нет"}\n` +
-            `®️ Дата регистрации: ${message.user.createdAt}`
+            `®️ Дата регистрации: ${readableDate(message.user.createdAt)}`
         )
     }
 }

@@ -30,4 +30,7 @@ export const privateKeyboard = Keyboard.builder()
     .textButton({
         label: "Настройки"
     })
+    .textButton({
+        label: "Рефералка"
+    })
     .row()
