@@ -1,10 +1,38 @@
+import crypto from "crypto"
+
 import { User } from "../../db/models.js"
+import { config } from "../../main.js"
 
 const PATHS_WITHOUT_TOKEN = [
     "/internal/wdonateCallback"
 ]
 
 export const onRequestMiddleware = async (req, res) => {
+    let user = null
+
+    if (!req.headers["token"] && req.body["fromMiniApp"]) {
+        const validSign = crypto
+            .createHmac("sha256", config["mini-app"].secretKey)
+            .update(req.body.checkString)
+            .digest("base64")
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=$/g, "")
+
+        if (validSign !== req.body.sign) {
+            return res.send({
+                code: "INVALID_SIGN",
+                message: "baka, senpai"
+            })
+        }
+
+        const userVkId = req.body.checkString.split("user_id=")[1].split("&")[0]
+
+        user = await User.findOne({
+            where: { vkId: Number(userVkId) }
+        })
+    }
+
     if (!PATHS_WITHOUT_TOKEN.includes(req.url) && !req.url.startsWith("/api")) {
         return res.status(400).send({
             code: "INVALID_PATH",
@@ -12,7 +40,7 @@ export const onRequestMiddleware = async (req, res) => {
         })
     }
 
-    if (!PATHS_WITHOUT_TOKEN.includes(req.url) && !req.headers["token"]) {
+    if (!PATHS_WITHOUT_TOKEN.includes(req.url) && !req.headers["token"] && !req.body["fromMiniApp"]) {
         return res.status(400).send({
             code: "BAD_REQEUST",
             message: "каждый запрос должен содержать заголовок token с вашим токеном"
@@ -20,15 +48,17 @@ export const onRequestMiddleware = async (req, res) => {
     }
 
     if (req.headers["token"]) {
-        const user = await User.findOne({
+        user = await User.findOne({
             where: { "api.token": req.headers.token }
         })
+    }
 
-        if (!user) return res.status(400).send({
+    if (!user) {
+        return res.status(400).send({
             code: "INVALID_TOKEN",
             message: "ваш токен недействителен"
         })
-
-        req.user = user
     }
+
+    req.user = user
 }

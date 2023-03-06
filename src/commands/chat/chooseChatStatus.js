@@ -5,6 +5,7 @@ import { Chat } from "../../../db/models.js"
 import { config } from "../../../main.js"
 import { declOfNum, features, formatSum } from "../../utils/index.js"
 import { readableDate } from "../../functions/index.js"
+import Sequelize from "sequelize";
 
 export const chooseChatStatus = {
     command: "chooseChatStatus",
@@ -54,17 +55,17 @@ export const chooseChatStatus = {
         await Chat.update({
             status: status.percent,
             payer: message.senderId,
-            payedFor: chatPayedFor
+            payedFor: Sequelize.literal(`"payedFor"+ ${chatPayedFor}`)
         }, {
             where: {
                 peerId: message.peerId
             }
         })
 
-        message.send(
+        await message.send(
             `✨ Чат успешно оплачен. Теперь вы получаете ${status.percent}% со всех ставок в этой беседе.\n` +
             `Платный статус беседы заканчивается через ${days} ` +
-            `${declOfNum(days, ["день", "дня", "дней"])} - ${readableDate(chatPayedFor)}.\n\n` +
+            `${declOfNum(days, ["день", "дня", "дней"])} - ${readableDate(Number(message.chat.payedFor) + chatPayedFor)}.\n\n` +
             "Теперь выберите один из предложенных режимов", {
                 keyboard: modeKeyboard()
             }

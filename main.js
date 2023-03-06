@@ -13,7 +13,7 @@ import {
     onMessageMiddleware,
     onChatInviteMiddleware
 } from "./src/middlewares/index.js"
-import { clearDailyRating, createDailyRewardPost } from "./src/functions/index.js"
+import {checkChatOnExpire, clearDailyRating, createDailyRewardPost} from "./src/functions/index.js"
 import { features } from "./src/utils/index.js"
 import { logger } from "./src/logger/logger.js"
 import { gamesObserver } from "./src/games/index.js"
@@ -70,6 +70,7 @@ const setupIntervals = () => {
 
 setupIntervals()
 gamesObserver().then(() => logger.success("games observer has been started"))
+checkChatOnExpire().then(() => logger.success("chat expire observer has been started"))
 
 payok.createWebhook(7576, "/payok").then(() => logger.success("payok callback server was started"))
 vk.updates.start().then(() => logger.success("bot has been started"))

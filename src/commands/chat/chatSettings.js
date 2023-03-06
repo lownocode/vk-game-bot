@@ -31,7 +31,7 @@ export const chatSettings = {
                 const currentModeTime = message.chat.modeGameTime
 
                 const { text: time, payload } = await message.question(
-                    `Текущее время ондой игры: ${currentModeTime} сек.\n\n` +
+                    `Текущее время одной игры: ${currentModeTime} сек.\n\n` +
                     "Напишите новое время в секундах, если хотите изменить его:", {
                         keyboard: cancelButton
                     }

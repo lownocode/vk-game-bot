@@ -21,7 +21,6 @@ import {
     under7overImage,
     wheelImage
 } from "./imagesGenerator/index.js"
-import {chatMainKeyboard} from "../keyboards/index.js";
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
