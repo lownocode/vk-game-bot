@@ -19,7 +19,9 @@ export const dailyRating = {
             users.map((user, index) => {
                 return (
                     `${index + 1}. [id${user.vkId}|${user.name}] выиграл ${features.split(user.winCoinsToday)} ` +
-                    `${config.bot.currency} (Получит: ${features.split(config.dailyRatingRewards[index])} ${config.bot.currency})`
+                    `${config.bot.currency} ${config.dailyRatingRewards[index] 
+                        ? `(Получит: ${features.split(config.dailyRatingRewards[index])} ${config.bot.currency})` 
+                        : ""}`
                 )
             }).join("\n") +
             "\n\nПризы выдаются каждый день в 0:00 по МСК"

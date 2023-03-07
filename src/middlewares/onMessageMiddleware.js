@@ -39,7 +39,7 @@ export const onMessageMiddleware = async (message, next) => {
             peer_id: referrer.vkId,
             message: (
                 `[id${user.vkId}|${user.name}] присоединился по вашей реферальной ссылке\n` +
-                `+ 1 000 ${config.bot.currency}`
+                `+ 1 500 ${config.bot.currency}`
             )
         })
 

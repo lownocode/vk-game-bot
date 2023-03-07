@@ -1,6 +1,6 @@
 import { getCurrentGame } from "../../games/index.js"
 import { Rate } from "../../../db/models.js"
-import { features } from "../../utils/index.js"
+import {declOfNum, features} from "../../utils/index.js"
 import { config } from "../../../main.js"
 
 export const bank = {
@@ -123,6 +123,19 @@ const getGameRates = async (rates, mode) => {
                 return (
                     `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
                     `на ${betName}`
+                )
+            })
+        }
+        case "cups": {
+            return rates.map((rate) => {
+                const betText = {
+                    "5": "все полные",
+                    "0": "все пустые"
+                }[rate.data.filled] || `${rate.data.filled} ${declOfNum(rate.data.filled, ["полный", "полных", "полных"])}`
+
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на ${betText}`
                 )
             })
         }

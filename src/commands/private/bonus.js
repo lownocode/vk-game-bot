@@ -4,8 +4,8 @@ export const bonus = {
     access: "private",
     pattern: /^(бонус|получить бонус|дневной бонус)$/i,
     handler: async message => {
-        if (Number(message.user.bonusReceivedTime) >= Date.now() - 30 * 60 * 1000) {
-            return message.send("Бонус можно получить раз в 30 минут.")
+        if (Number(message.user.bonusReceivedTime) >= Date.now() - 1440 * 60 * 1000) {
+            return message.send("Бонус можно получить раз в сутки.")
         }
 
         const reward = features.random.integer(400, 600)

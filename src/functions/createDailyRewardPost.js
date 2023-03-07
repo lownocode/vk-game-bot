@@ -8,17 +8,11 @@ import { User } from "../../db/models.js"
 export const createDailyRewardPost = async () => {
     let postId = fs.readFileSync(`${process.cwd()}/data/bonusPostId`, "utf-8")
 
-    await vkuser.api.wall.delete({
-        owner_id: -config["vk-group"].id,
-        post_id: postId
-    })
-        .then(() => logger.success("last daily reward post has been deleted"))
-        .catch(() => logger.failure("failed to delete last daily reward post"))
-
     await vkuser.api.wall.post({
         owner_id: -config["vk-group"].id,
         from_group: 1,
-        attachment: config.repostBonus.picture
+        attachment: config.repostBonus.picture,
+        message: "Бонус доступен 24 часа с момента публикации"
     }).then(({ post_id }) => {
         postId = post_id
         fs.writeFileSync(`${process.cwd()}/data/bonusPostId`, post_id.toString(), "utf-8")

@@ -114,7 +114,7 @@ const gameResults = async (game, rates) => {
         keyboard: Keyboard.builder()
             .applicationButton({
                 label: "Проверка честности",
-                appId: 7433551,
+                appId: 8181984,
                 hash: game.salt
             }).inline()
     })

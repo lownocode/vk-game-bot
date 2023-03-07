@@ -10,7 +10,11 @@ const PATHS_WITHOUT_TOKEN = [
 export const onRequestMiddleware = async (req, res) => {
     let user = null
 
-    if (!req.headers["token"] && req.body["fromMiniApp"]) {
+    if (
+        !PATHS_WITHOUT_TOKEN.includes(req.url) &&
+        !req.headers["token"] &&
+        req.body?.fromMiniApp
+    ) {
         const validSign = crypto
             .createHmac("sha256", config["mini-app"].secretKey)
             .update(req.body.checkString)
@@ -40,20 +44,24 @@ export const onRequestMiddleware = async (req, res) => {
         })
     }
 
-    if (!PATHS_WITHOUT_TOKEN.includes(req.url) && !req.headers["token"] && !req.body["fromMiniApp"]) {
+    if (
+        !PATHS_WITHOUT_TOKEN.includes(req.url) &&
+        !req.headers.token &&
+        !req.body?.fromMiniApp
+    ) {
         return res.status(400).send({
             code: "BAD_REQEUST",
             message: "каждый запрос должен содержать заголовок token с вашим токеном"
         })
     }
 
-    if (req.headers["token"]) {
+    if (req.headers.token) {
         user = await User.findOne({
             where: { "api.token": req.headers.token }
         })
     }
 
-    if (!user) {
+    if (!user && !PATHS_WITHOUT_TOKEN.includes(req.url)) {
         return res.status(400).send({
             code: "INVALID_TOKEN",
             message: "ваш токен недействителен"

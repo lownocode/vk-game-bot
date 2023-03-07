@@ -20,15 +20,28 @@ export const wdonateCallback = async fastify => fastify.post("/internal/wdonateC
 
     if (isNaN(sum) || sum < 1) return
 
-    const coins = (sum * 1000) + ((sum * 1000) * (detectDiscount(sum) / 100))
-
-    await User.update({
-        balance: Sequelize.literal(`balance + ${coins}`)
-    }, {
+    const user = await User.findOne({
         where: {
             vkId: Number(req.body.payment.userId)
+        },
+        attributes: ["id", "vkId", "balance", "referrer"]
+    })
+
+    const coins = Math.trunc((sum * 1000) + ((sum * 1000) * (detectDiscount(sum) / 100)))
+    const referrerReward = Math.trunc(coins / 100 * 5)
+
+    user.balance = Number(user.balance) + coins
+
+    await User.update({
+        balance: Sequelize.literal(`balance + ${referrerReward}`),
+        referralsProfit: Sequelize.literal(`"referralsProfit" + ${referrerReward}`)
+    }, {
+        where: {
+            vkId: user.referrer
         }
     })
+
+    await user.save()
 
     await vk.api.messages.send({
         random_id: 0,

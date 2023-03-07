@@ -65,11 +65,6 @@ const payButtons = async (coins, rubles, message) => {
         },
     }).payUrl
 
-    keyboard.urlButton({
-        label: "Payok",
-        url: payokUrl
-    })
-
     const { status, data: { response: { link: wdonateUrl } } } = await axios.post("https://wdonate.ru/api/getLink", {
         token: config.wdonate.token,
         userId: message.senderId,
@@ -83,6 +78,11 @@ const payButtons = async (coins, rubles, message) => {
             url: wdonateUrl
         })
     }
+
+    keyboard.urlButton({
+        label: "Payok",
+        url: payokUrl
+    })
 
     return keyboard.inline()
 }
