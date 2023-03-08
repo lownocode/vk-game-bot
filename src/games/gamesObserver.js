@@ -21,6 +21,8 @@ import {
     under7overImage,
     wheelImage
 } from "./imagesGenerator/index.js"
+import chunk from "lodash.chunk";
+import {logger} from "../logger/logger.js";
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -90,7 +92,7 @@ const gameResults = async (game, rates) => {
         peer_id: game.peerId,
         random_id: 0,
         message: "Итак, итоги игры..."
-    })
+    }).catch((err) => logger.failure(`failed for send game results in chat: ${err}`))
 
     const image = await getGameImage(game.mode, game.data)
 
@@ -101,25 +103,32 @@ const gameResults = async (game, rates) => {
             }
         }) : null
 
-    await vk.api.messages.send({
-        random_id: 0,
-        message: (
-            `${getGameResultText(game)}\n\n` +
-            `${results.join("\n")}\n\n` +
-            `Хеш: ${game.hash}\n` +
-            `Проверка: ${game.salt}`
-        ),
-        peer_id: game.peerId,
-        [image && "attachment"]: attachment,
-        keyboard: Keyboard
-            .builder()
-            .applicationButton({
-                label: "Проверка честности",
-                appId: 8181984,
-                hash: game.salt
-            })
-            .inline()
-    })
+    const message = (
+        `${getGameResultText(game)}\n\n` +
+        `${results.join("\n")}\n\n` +
+        `Хеш: ${game.hash}\n` +
+        `Проверка: ${game.salt}`
+    ).match(/[^]{1,4000}/g)
+
+    for (const text of message) {
+        const index = message.indexOf(text)
+
+        await vk.api.messages.send({
+            random_id: 0,
+            message: text,
+            peer_id: game.peerId,
+            [(image && index + 1 === message.length) && "attachment"]: attachment,
+            [index + 1 === message.length && "keyboard"]: Keyboard
+                .builder()
+                .applicationButton({
+                    label: "Проверка честности",
+                    appId: 8181984,
+                    hash: game.salt
+                })
+                .inline()
+        }).catch((err) => logger.failure(`failed for send game results in chat: ${err}`))
+    }
+
     await game.destroy()
 }
 

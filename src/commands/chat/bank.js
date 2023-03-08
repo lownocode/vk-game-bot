@@ -25,13 +25,17 @@ export const bank = {
         const sortedRates = await getGameRates(rates, message.chat.mode)
         const totalBetsAmount = rates.reduce((acc, cur) => acc + Number(cur.betAmount), 0)
 
-        return message.send(
+        const messages = (
             `Ставки на текущую игру:\n\n` +
             `${sortedRates.join("\n")}\n\n` +
             `Общая сумма ставок: ${features.split(totalBetsAmount)} ${config.bot.currency}\n` +
             `До конца раунда: ${timeToEndRound} сек.\n` +
             `Хеш игры: ${currentGame.hash}`
-        )
+        ).match(/[^]{1,4000}/g)
+
+        for (const text of messages) {
+            message.send(text)
+        }
     }
 }
 
