@@ -6,10 +6,10 @@ postgres:
     password: lol4an
 
 vk-group:
-    id: 195663511
-    #id: 194426159
-    token: vk1.a.DV7py-wvLqO1VItwtrS_-Bm5hk5RbGYdeJOqR2w6jo_KHjBjdO7LozKgND-hyj3ugE4Rb9Umg5Je8oa_joSx__ovqKFKd3ofYJY1vMCYsmpscQtXPKMJq3PcB84i22HMhu8OjLUSNElBSMPpmF-VTmgzYaxrHCytjSH9fHRVP9s--JH-vxfOetN52ontvuP2HXRvTQ82-zLQHoVGRo-bYg
-    #token: vk1.a.H6uBbbw3xCzyzxGw9HNVErDcgRoMmYRLyGN4Zvvxee3acirsZF8U0J1pds_NwexRcD5V-UpPvK9vByyHCSDPEwXnau-7eIECJKhOy1-GY8Hq6VhrPH_Jqvb7OM_5I-O6NTURfI3EKJJ1yFqZ-JyRzpvnWQAqI_YFz6MqLuaJEi1jOU2zj5ZUAFMTlM79ZaPbXP9Q5an8jL_DELxm5pTc1Q
+#    id: 195663511
+    id: 194426159
+#    token: vk1.a.DV7py-wvLqO1VItwtrS_-Bm5hk5RbGYdeJOqR2w6jo_KHjBjdO7LozKgND-hyj3ugE4Rb9Umg5Je8oa_joSx__ovqKFKd3ofYJY1vMCYsmpscQtXPKMJq3PcB84i22HMhu8OjLUSNElBSMPpmF-VTmgzYaxrHCytjSH9fHRVP9s--JH-vxfOetN52ontvuP2HXRvTQ82-zLQHoVGRo-bYg
+    token: vk1.a.H6uBbbw3xCzyzxGw9HNVErDcgRoMmYRLyGN4Zvvxee3acirsZF8U0J1pds_NwexRcD5V-UpPvK9vByyHCSDPEwXnau-7eIECJKhOy1-GY8Hq6VhrPH_Jqvb7OM_5I-O6NTURfI3EKJJ1yFqZ-JyRzpvnWQAqI_YFz6MqLuaJEi1jOU2zj5ZUAFMTlM79ZaPbXP9Q5an8jL_DELxm5pTc1Q
 
 vk-user:
     token: vk1.a.nqTcgWPHEE0t2yCaI6K4SvJyALfVjMGuCqvBarFt4tnC0QYYAhUJi_ev6N5IA481ddxIER9NbmADMeNgcdvr4J0KcneoWkSLWGfZ219gkHkS2FNY-ck0nbbMMyD0N76jW-6bjFydsQHN6lgrcpfIZ0GD3jmAz2RpI59Op95dHFes3qH2hnw72sxZ-29QthZEk4G0xT5kwXApdpgC2J0bFw

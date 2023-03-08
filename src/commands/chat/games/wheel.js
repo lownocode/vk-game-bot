@@ -4,6 +4,7 @@ import { depositKeyboard } from "../../../keyboards/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { Rate } from "../../../../db/models.js"
+import {onMessageMiddleware} from "../../../middlewares/index.js";
 
 export const wheelBet = {
     command: "bet-wheel",

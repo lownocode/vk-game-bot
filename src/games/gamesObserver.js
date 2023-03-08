@@ -111,12 +111,14 @@ const gameResults = async (game, rates) => {
         ),
         peer_id: game.peerId,
         [image && "attachment"]: attachment,
-        keyboard: Keyboard.builder()
+        keyboard: Keyboard
+            .builder()
             .applicationButton({
                 label: "Проверка честности",
                 appId: 8181984,
                 hash: game.salt
-            }).inline()
+            })
+            .inline()
     })
     await game.destroy()
 }
