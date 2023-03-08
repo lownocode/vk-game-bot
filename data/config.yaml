@@ -50,7 +50,7 @@ games:
             - 30
         basketball:
             red: 2
-            black: 2
+            blue: 2
             nobody: 14
         wheel:
             number: 36

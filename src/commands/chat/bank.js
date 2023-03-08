@@ -77,7 +77,7 @@ const getGameRates = async (rates, mode) => {
             const teamWinName = {
                 red: "победу красных",
                 nobody: "ничью",
-                black: "победу чёрных"
+                blue: "победу синих"
             }
 
             return rates.map((rate) => {
