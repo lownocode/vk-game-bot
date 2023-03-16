@@ -6,14 +6,14 @@ export const changeNickname = {
     access: "private",
     pattern: /^(сменить ник(нейм)?|никнейм)$/i,
     handler: async message => {
-        if (Number(message.user.balance) < 5_000) {
+        if (Number(message.user.balance) < 1_000_000) {
             return message.send(
-                "Стоимость смены никнейма - 5 000. На вашем балансе не хватает " + config.bot.currency
+                "Стоимость смены никнейма - 1 000 000. На вашем балансе недостаточно средств"
             )
         }
 
         const { text: nickname } = await message.question(
-            `Стоимость смены никнейма - 5 000 ${config.bot.currency}, они будут списаны с вашего баланса.\n` +
+            `Стоимость смены никнейма - 1 000 000 ${config.bot.currency}, они будут списаны с вашего баланса.\n` +
             `Введите новый никнейм:`, {
                 targetUserId: message.senderId
             })
@@ -25,6 +25,7 @@ export const changeNickname = {
         }
 
         message.user.name = nickname
+        message.user.balance = Number(message.user.balance) - 1_000_000
         await message.user.save()
 
         await message.send(`Ты успешно установил никнейм «${nickname}»`)

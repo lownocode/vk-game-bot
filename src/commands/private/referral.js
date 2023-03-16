@@ -18,7 +18,7 @@ export const referral = {
         message.send(
             `Вы пригласили ${referrals.length} ${declOfNum(referrals.length, ["реферала", "реферала", "рефералов"])}\n` +
             `Рефералы принесли вам ${features.split(message.user.referralsProfit)} ${config.bot.currency}\n\n` +
-            `За каждого реферала вы и ваш реферал получите 1 500 ${config.bot.currency}, а также 0.15% со ставок и 5% с пополнений реферала\n` +
+            `За каждого реферала вы и ваш реферал получите 250K ${config.bot.currency}, а также 0.15% со ставок и 5% с пополнений реферала\n` +
             `Ваша реферальная ссылка: vk.cc/${link.key}`
         )
     }

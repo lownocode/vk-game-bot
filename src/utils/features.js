@@ -16,5 +16,17 @@ export const features = {
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
 
         return tomorrow - now;
+    },
+
+    getSecondsToNextMonday: () => {
+        const today = new Date()
+        const daysUntilMonday = 1 + 7 - today.getDay()
+        const nextMonday = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate() + daysUntilMonday
+        )
+
+        return nextMonday.getTime() - today.getTime()
     }
 }

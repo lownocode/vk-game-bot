@@ -3,6 +3,8 @@ export * from "./anyway/eval.js"
 export * from "./anyway/sendCoins.js"
 export * from "./anyway/dailyRating.js"
 export * from "./anyway/giveCoins.js"
+export * from "./anyway/balancesRating.js"
+export * from "./anyway/weeklyRating.js"
 
 export * from "./private/profile.js"
 export * from "./private/searchChat.js"

@@ -6,10 +6,12 @@ export const ratingsKeyboard = Keyboard.builder()
         color: Keyboard.SECONDARY_COLOR
     })
     .textButton({
-        label: "Постоянный топ",
+        label: "Недельный топ",
         color: Keyboard.SECONDARY_COLOR
     })
     .row()
     .textButton({
-        label: "Меню",
+        label: "Постоянный топ",
+        color: Keyboard.SECONDARY_COLOR
     })
+    .inline()

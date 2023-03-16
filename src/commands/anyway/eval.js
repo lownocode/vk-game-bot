@@ -1,4 +1,6 @@
+import Sequelize from "sequelize"
 import * as db from "../../../db/models.js"
+import { sequelize } from "../../../db/sequelize.js"
 
 export const evalCommand = {
     pattern: /^eval\s(.*)$/i,

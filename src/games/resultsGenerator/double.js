@@ -10,7 +10,7 @@ export const double = async (user, game, rate, results) => {
 
         results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${rate.data.multiplier} выиграла (+ ${features.split(winCoins)})`
+            `на x${rate.data.multiplier} выиграла (+ ${features.split(winCoins)})`
         )
     } else {
         results.push(

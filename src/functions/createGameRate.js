@@ -1,5 +1,7 @@
-import {ChatRate, Rate, User} from "../../db/models.js"
-import Sequelize from "sequelize";
+import Sequelize from "sequelize"
+
+import { ChatRate, Rate, User } from "../../db/models.js"
+import { getRateMultiplier } from "./getRateMultiplier.js"
 
 export const createGameRate = async ({ game, message, betAmount, data }) => {
     const similarRate = await Rate.findOne({
@@ -23,22 +25,24 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
 
     const percentOfBetAmount = Math.trunc(betAmount * Number(message.chat.status) / 100)
 
-    await ChatRate.create({
-        peerId: message.peerId,
-        userId: message.user.id,
-        betAmount: betAmount,
-        mode: message.chat.mode,
-        data: data,
-        percentOfBetAmount: percentOfBetAmount
-    })
-    await Rate.create({
+    const rate = await Rate.create({
         gameId: game.id,
         peerId: message.peerId,
         userVkId: message.user.vkId,
         username: message.user.name,
         betAmount: betAmount,
         mode: message.chat.mode,
-        data: data
+        data: data,
+    })
+    await ChatRate.create({
+        peerId: message.peerId,
+        userId: message.user.id,
+        betAmount: betAmount,
+        mode: message.chat.mode,
+        data: data,
+        percentOfBetAmount: percentOfBetAmount,
+        rateId: rate.id,
+        multiplier: Number(getRateMultiplier(message.chat.mode, data, game))
     })
 
     if (message.user.referrer) {

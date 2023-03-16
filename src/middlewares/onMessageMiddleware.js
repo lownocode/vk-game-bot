@@ -27,8 +27,8 @@ export const onMessageMiddleware = async (message, next) => {
             return message.send("Что-то пошло не так")
         }
 
-        referrer.balance = Number(referrer.balance) + 1500
-        user.balance = Number(user.balance) + 1500
+        referrer.balance = Number(referrer.balance) + 250_000
+        user.balance = Number(user.balance) + 250_000
         user.referrer = referrer.vkId
 
         await referrer.save()
@@ -39,13 +39,13 @@ export const onMessageMiddleware = async (message, next) => {
             peer_id: referrer.vkId,
             message: (
                 `[id${user.vkId}|${user.name}] присоединился по вашей реферальной ссылке\n` +
-                `+ 1 500 ${config.bot.currency}`
+                `+ 250K ${config.bot.currency}`
             )
         })
 
         return message.send(
             `Вы стали рефералом [id${referrer.vkId}|${referrer.name}]\n` +
-            `На ваш баланс начислено 1 000 ${config.bot.currency}`
+            `На ваш баланс начислено 250K ${config.bot.currency}`
         )
     }
 

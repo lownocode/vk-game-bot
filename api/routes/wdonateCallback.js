@@ -27,7 +27,7 @@ export const wdonateCallback = async fastify => fastify.post("/internal/wdonateC
         attributes: ["id", "vkId", "balance", "referrer"]
     })
 
-    const coins = Math.trunc((sum * 1000) + ((sum * 1000) * (detectDiscount(sum) / 100)))
+    const coins = Math.trunc((sum * 1_000_000  / config.shopPricePerMillion) + ((sum * 1_000_000) * (detectDiscount(sum) / 100)))
     const referrerReward = Math.trunc(coins / 100 * 5)
 
     user.balance = Number(user.balance) + coins

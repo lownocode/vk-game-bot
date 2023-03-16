@@ -3,7 +3,6 @@ import YAML from "yaml"
 import fs from "fs"
 import axios from "axios"
 
-import { payok } from "../../../main.js"
 import { features, formatSum } from "../../utils/index.js"
 import { detectDiscount } from "../../functions/index.js"
 
@@ -23,7 +22,7 @@ export const buyCoins = {
 
         const { text: _rubles } = await message.question(
             `🤑 Обратите внимание, у нас есть скидки:\n\n${discounts}\n\n` +
-            `Цена за 1 000 ${config.bot.currency} — ${config.shopPricePerThousand} ₽\n` +
+            `Цена за 1 000 000 ${config.bot.currency} — ${config.shopPricePerMillion} ₽\n` +
             `Введите сумму в рублях, на которую вы хотите приобрести ${config.bot.currency}:`
         )
 
@@ -41,7 +40,7 @@ export const buyCoins = {
             return message.send(`Максимальная сумма, на которую вы можете приобрести ${config.bot.currency} — 15 000 ₽`)
         }
 
-        const sum = (rubles * 1000) + ((rubles * 1000) * (detectDiscount(rubles) / 100))
+        const sum = (rubles * 1_000_000 / config.shopPricePerMillion) + ((rubles * 1_000_000) * (detectDiscount(rubles) / 100))
 
         return message.send(
             `💡 Вы отдаёте: ${features.split(rubles)} ₽\n` +
@@ -56,15 +55,6 @@ export const buyCoins = {
 const payButtons = async (coins, rubles, message) => {
     const keyboard = Keyboard.builder()
 
-    const payokUrl = payok.getPaymentLink({
-        amount: rubles,
-        desc: `Покупка ${features.split(coins)} ${config.bot.currency}`,
-        success_url: `https://vk.me/club${config["vk-group"].id}`,
-        custom: {
-            userId: message.user.id
-        },
-    }).payUrl
-
     const { status, data: { response: { link: wdonateUrl } } } = await axios.post("https://wdonate.ru/api/getLink", {
         token: config.wdonate.token,
         userId: message.senderId,
@@ -78,11 +68,6 @@ const payButtons = async (coins, rubles, message) => {
             url: wdonateUrl
         })
     }
-
-    keyboard.urlButton({
-        label: "Payok",
-        url: payokUrl
-    })
 
     return keyboard.inline()
 }

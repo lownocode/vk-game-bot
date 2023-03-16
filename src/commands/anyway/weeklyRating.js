@@ -1,10 +1,11 @@
-import { ChatRate, User } from "../../../db/models.js"
-import { config } from "../../../main.js"
-import { formatNumToKFormat } from "../../functions/index.js"
 import Sequelize, { Op } from "sequelize"
 
-export const dailyRating = {
-    pattern: /^(дневной топ|топ дня)$/i,
+import { ChatRate, User } from "../../../db/models.js"
+import { config } from "../../../main.js"
+import { formatNumToKFormat, getLastMondayDate } from "../../functions/index.js"
+
+export const weeklyRating = {
+    pattern: /^(топ недели|рейтинг недели|недельный топ)$/i,
     handler: async message => {
         const admins = await User.findAll({ attributes: ["id"], where: { isAdmin: true } })
         const ratingUsers = await ChatRate.findAll({
@@ -18,18 +19,14 @@ export const dailyRating = {
             ],
             where: {
                 updatedAt: {
-                    [Op.gt]: new Date(
-                        new Date().getFullYear(),
-                        new Date().getMonth(),
-                        new Date().getDate()
-                    )
+                    [Op.gt]: getLastMondayDate()
                 },
                 isWin: true,
                 userId: {
                     [Op.notIn]: admins.length ? admins.map(user => user.dataValues.id) : [0]
                 }
             },
-            limit: config.dailyRatingRewards.length,
+            limit: config.weeklyRatingRewards.length,
         })
 
         const users = await User.findAll({
@@ -41,18 +38,18 @@ export const dailyRating = {
         })
 
         const text =
-            `Топ ${config.dailyRatingRewards.length} игроков за весь день:\n\n` +
+            "Топ 10 игроков недели:\n\n" +
             ratingUsers.map((user, index) => {
                 const userData = users.find(_user => _user.id === user.userId)
 
                 return (
                     `${index + 1}. [id${userData.vkId}|${userData.name}] выиграл ${formatNumToKFormat(Number(user.dataValues.totalWin))} ` +
-                    `${config.bot.currency} ${config.dailyRatingRewards[index] 
-                        ? `(Получит: ${formatNumToKFormat(config.dailyRatingRewards[index])} ${config.bot.currency})` 
+                    `${config.bot.currency} ${config.weeklyRatingRewards[index]
+                        ? `(Получит: ${formatNumToKFormat(config.weeklyRatingRewards[index])} ${config.bot.currency})`
                         : ""}`
                 )
             }).join("\n") +
-            "\n\nПризы выдаются каждый день в 0:00 по МСК"
+            "\n\nПризы выдаются каждый понедельник в 0:00 по МСК"
 
         message.send(text, {
             disable_mentions: true

@@ -1,8 +1,6 @@
-import Sequelize from "sequelize"
+import { DataTypes } from "sequelize"
 
 import { sequelize } from "./sequelize.js"
-
-const { DataTypes } = Sequelize
 
 export const User = sequelize.define("users", {
     id: {
@@ -197,6 +195,16 @@ export const ChatRate = sequelize.define("chat_rates", {
     },
     percentOfBetAmount: {
         type: DataTypes.BIGINT,
+    },
+    isWin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    rateId: {
+        type: DataTypes.INTEGER,
+    },
+    multiplier: {
+        type: DataTypes.DOUBLE,
     }
 })
 

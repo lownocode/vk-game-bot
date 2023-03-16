@@ -1,7 +1,6 @@
 import { VK } from "vk-io"
 import { HearManager } from "@vk-io/hear"
 import { QuestionManager } from "vk-io-question"
-import { PAYOK } from "payok"
 import YAML from "yaml"
 import fs from "fs"
 
@@ -13,11 +12,11 @@ import {
     onMessageMiddleware,
     onChatInviteMiddleware
 } from "./src/middlewares/index.js"
-import {checkChatOnExpire, clearDailyRating, createDailyRewardPost} from "./src/functions/index.js"
+import { checkChatOnExpire, rewardDailyRating, createDailyRewardPost } from "./src/functions/index.js"
 import { features } from "./src/utils/index.js"
 import { logger } from "./src/logger/logger.js"
 import { gamesObserver } from "./src/games/index.js"
-import { handlePayokPayment } from "./src/handlers/index.js"
+import { rewardWeeklyRating } from "./src/functions/rewardWeeklyRating.js"
 
 export const config = YAML.parse(
     fs.readFileSync("./data/config.yaml", "utf-8")
@@ -28,14 +27,6 @@ const questionManager = new QuestionManager()
 
 export const vk = new VK({ token: config["vk-group"].token })
 export const vkuser = new VK({ token: config["vk-user"].token })
-export const payok = new PAYOK({
-    apiId: config.payok.apiId,
-    apiKey: config.payok.apiToken,
-    secretKey: config.payok.shopKey,
-    shop: config.payok.shopId
-})
-
-payok.events.on("payment", handlePayokPayment)
 
 vk.updates.on("message_new", questionManager.middleware)
 vk.updates.on("message_new", onMessageMiddleware)
@@ -48,12 +39,20 @@ export const commandsList = Object.values(commands)
 commandsList.forEach(({ pattern, handler }) => hearManager.hear(pattern, handler))
 
 const setupIntervals = () => {
-    const setupClearDailyRatingInterval = () => {
+    const setupRewardDailyRatingInterval = () => {
         setTimeout(() => {
-            clearDailyRating().then(() => setupClearDailyRatingInterval())
+            rewardDailyRating().then(() => setupRewardDailyRatingInterval())
         }, features.getSecondsToTomorrow())
 
-        logger.success(`ClearDailyRatingInterval was setup [${features.getSecondsToTomorrow()}]`)
+        logger.success(`RewardDailyRatingInterval was setup [${features.getSecondsToTomorrow()}]`)
+    }
+
+    const setupRewardWeeklyRatingInterval = () => {
+        setTimeout(() => {
+            rewardDailyRating().then(() => setupRewardWeeklyRatingInterval())
+        }, features.getSecondsToNextMonday())
+
+        logger.success(`RewardWeeklyRatingInterval was setup [${features.getSecondsToNextMonday()}]`)
     }
 
     const setupCreateDailyRewardPostInterval = () => {
@@ -64,7 +63,8 @@ const setupIntervals = () => {
         logger.success(`CreateDailyRewardPostInterval was setup [${features.getSecondsToTomorrow()}]`)
     }
 
-    setupClearDailyRatingInterval()
+    setupRewardDailyRatingInterval()
+    setupRewardWeeklyRatingInterval()
     setupCreateDailyRewardPostInterval()
 }
 
@@ -72,5 +72,4 @@ setupIntervals()
 gamesObserver().then(() => logger.success("games observer has been started"))
 checkChatOnExpire().then(() => logger.success("chat expire observer has been started"))
 
-payok.createWebhook(7576, "/payok").then(() => logger.success("payok callback server was started"))
 vk.updates.start().then(() => logger.success("bot has been started"))

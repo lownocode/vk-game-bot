@@ -1,7 +1,7 @@
 import { Keyboard } from "vk-io"
 import Sequelize, { Op } from "sequelize"
 
-import { Game, Rate, User, Chat } from "../../db/models.js"
+import { Game, Rate, User, Chat, ChatRate } from "../../db/models.js"
 import { sleep } from "../utils/index.js"
 import { config, vk } from "../../main.js"
 import {
@@ -21,8 +21,8 @@ import {
     under7overImage,
     wheelImage
 } from "./imagesGenerator/index.js"
-import chunk from "lodash.chunk";
-import {logger} from "../logger/logger.js";
+import { logger } from "../logger/logger.js"
+import { checkRateIsWin } from "../functions/index.js"
 
 export const gamesObserver = async () => {
     const endedGames = await Game.findAll({
@@ -84,6 +84,14 @@ const gameResults = async (game, rates) => {
             })
         }
 
+        await ChatRate.update({
+            isWin: checkRateIsWin(game, chat.mode, rate.data)
+        }, {
+            where: {
+                rateId: rate.id
+            }
+        })
+
         await rate.destroy()
         await chat.save()
     }
@@ -117,7 +125,7 @@ const gameResults = async (game, rates) => {
             random_id: 0,
             message: text,
             peer_id: game.peerId,
-            [(image && index + 1 === message.length) && "attachment"]: attachment,
+            [(image !== null && index + 1 === message.length) && "attachment"]: attachment,
             [index + 1 === message.length && "keyboard"]: Keyboard
                 .builder()
                 .applicationButton({
@@ -141,6 +149,7 @@ const getGameImage = async (mode, data) => {
         case "double": return await doubleImage(data)
         case "basketball": return await basketballImage(data)
         case "cups": return await  cupsImage(data)
+        default: return null
     }
 }
 

@@ -20,12 +20,8 @@ export const under7over = async (user, game, rate, results) => {
             `на ${betName} выиграла (+ ${features.split(winCoins)})`
         )
     }
-    else if (
-        rate.data.bet === "under" && game.data.number < 7 ||
-        rate.data.bet === "over" && game.data.number > 7
-    ) {
-
-        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over.underOver
+    else if (game.data.number === 7 && rate.data.bet === "7") {
+        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over["7"]
 
         await addCoinsToUser(user, winCoins)
 
@@ -34,8 +30,12 @@ export const under7over = async (user, game, rate, results) => {
             `на ${betName} выиграла (+ ${features.split(winCoins)})`
         )
     }
-    else if (rate.mode.bet === "7" && game.data.number === 7) {
-        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over["7"]
+    else if (
+        rate.data.bet === "under" && game.data.number < 7 ||
+        rate.data.bet === "over" && game.data.number > 7
+    ) {
+
+        const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over.underOver
 
         await addCoinsToUser(user, winCoins)
 
