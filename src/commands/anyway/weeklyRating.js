@@ -51,7 +51,7 @@ export const weeklyRating = {
             }).join("\n") +
             "\n\nПризы выдаются каждый понедельник в 0:00 по МСК"
 
-        message.send(text, {
+        message.send(!ratingUsers.length ? "Топ еще не сформирован" : text, {
             disable_mentions: true
         })
     }

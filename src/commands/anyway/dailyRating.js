@@ -54,7 +54,7 @@ export const dailyRating = {
             }).join("\n") +
             "\n\nПризы выдаются каждый день в 0:00 по МСК"
 
-        message.send(text, {
+        message.send(!ratingUsers.length ? "Топ еще не сформирован" : text, {
             disable_mentions: true
         })
     }
