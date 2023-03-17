@@ -65,7 +65,7 @@ export const sendCoins = {
                 amount: amount
             })
 
-            return message.send("Успешно переведено")
+            return message.reply("Успешно переведено")
         }
     }
 }

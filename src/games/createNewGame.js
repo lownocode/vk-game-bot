@@ -83,7 +83,7 @@ const generateGameInfo = (mode) => {
             }
         }
         case "wheel": {
-            const number = Math.ceil(features.random.integer(0, 360) / 10)
+            const number = features.random.integer(0, 36)
             const salt = `${number}@${secretString}`
 
             return {

@@ -23,7 +23,7 @@ export const balancesRating = {
                 )
             }).join("\n")
 
-        message.send(text, {
+        message.reply(text, {
             disable_mentions: true
         })
     }

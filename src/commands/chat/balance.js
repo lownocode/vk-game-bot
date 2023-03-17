@@ -22,8 +22,12 @@ export const balance = {
             return message.send("Пользователь не зарегистрирован")
         }
 
-        message.send(
-            `Баланс [id${user.vkId}|${user.name}]: ` +
+        message.reply(
+            (
+                toVkUserId === message.senderId
+                    ? `Ваш баланс: `
+                    : `Баланс [id${user.vkId}|${user.name}]: `
+            ) +
             `${features.split(user.balance)} ${config.bot.currency}\n`, {
                 disable_mentions: true
             }

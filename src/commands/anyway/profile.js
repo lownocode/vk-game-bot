@@ -6,8 +6,7 @@ import { convertChatMode, formatNumToKFormat, readableDate } from "../../functio
 import { ChatRate } from "../../../db/models.js"
 
 export const profile = {
-    access: "private",
-    pattern: /^(профиль|profile)$/i,
+    pattern: /^(проф|профиль|profile)$/i,
     handler: async message => {
         const dailyWin = (await ChatRate.findOne({
             attributes: [
@@ -38,7 +37,7 @@ export const profile = {
             }
         })).dataValues
 
-        const totalLoseBetsCount = await ChatRate.count("betAmount", {
+        const totalLoseBetsCount = await ChatRate.count({
             where: {
                 userId: message.user.id,
                 isWin: false,
@@ -52,27 +51,45 @@ export const profile = {
         })
 
         const biggestMultiplier = await ChatRate.findOne({
-            attributes: [
-                "mode",
-                [Sequelize.literal(`MAX(multiplier)`), "multiplier"]
+            attributes: ["multiplier", "mode"],
+            order: [
+                ["multiplier", "DESC"]
             ],
-            group: ["mode"],
             where: {
                 userId: message.user.id,
-            }
+            },
+            limit: 1
         })
 
         const lovestMode = (await ChatRate.findAll({
-            attributes: ['mode', [Sequelize.fn('COUNT', Sequelize.col('mode')), 'count']],
-            group: ['mode'],
-            order: [[Sequelize.literal('count'), 'DESC']],
+            attributes: ["mode", [Sequelize.fn("COUNT", Sequelize.col("mode")), "count"]],
+            group: ["mode"],
+            order: [
+                [Sequelize.literal("count"), "DESC"]
+            ],
             limit: 1,
             where: {
                 userId: message.user.id
             }
         }))[0].dataValues
 
-        message.send(
+        const biggestWin = (await ChatRate.findOne({
+            attributes: [
+                "mode",
+                "multiplier",
+                [Sequelize.literal(`multiplier * "betAmount"`), "win"]
+            ],
+            order: [
+                ["betAmount", "DESC"],
+                ["multiplier", "DESC"],
+            ],
+            where: {
+                userId: message.user.id,
+                isWin: true
+            }
+        })).dataValues
+
+        message.reply(
             "Ваш профиль:\n\n" +
             `💲 Баланс: ${features.split(message.user.balance)} ${config.bot.currency}\n` +
             `📃 Имя: ${message.user.name}\n` +
@@ -85,10 +102,11 @@ export const profile = {
 
             `🤑 Всего наиграно: ${formatNumToKFormat(Number(totalBetCoins))} ${config.bot.currency}\n` +
             `❌ Всего проигрышей: ${features.split(Number(totalLoseBetsCount))}\n` +
+            `😨 Наибольший выигрыш: ${formatNumToKFormat(biggestWin.win ?? 0)} ${config.bot.currency} (x${biggestWin.multiplier}, ${convertChatMode(biggestWin.mode, false)})\n` +
             (biggestMultiplier ? `💹 Наибольший множитель: x${biggestMultiplier.multiplier} (${convertChatMode(biggestMultiplier.mode, false)})\n` : "") +
-            (lovestMode ? `💗 Любимый режим: ${convertChatMode(lovestMode.mode, false)} (${features.split(Number(lovestMode.count))} ${declOfNum(Number(lovestMode.count), ["ставка", "ставки", "ставок"])})\n\n` : "") +
+            (lovestMode ? `💗 Любимый режим: ${convertChatMode(lovestMode.mode, false)} (${features.split(Number(lovestMode.count))} ${declOfNum(Number(lovestMode.count), ["ставка", "ставки", "ставок"])})` : "") +
 
-            `⏰️ Дата регистрации: ${readableDate(message.user.createdAt)}`
+            `\n\n⏰️ Дата регистрации: ${readableDate(message.user.createdAt)}`
         )
     }
 }

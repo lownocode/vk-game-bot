@@ -46,7 +46,7 @@ export const rating = {
                 )
             }).join("\n")
 
-        message.send(!ratingUsers.length ? "Топ еще не сформирован" : text, {
+        message.reply(!ratingUsers.length ? "Топ еще не сформирован" : text, {
             disable_mentions: true
         })
     }

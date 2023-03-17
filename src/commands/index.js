@@ -6,7 +6,7 @@ export * from "./anyway/giveCoins.js"
 export * from "./anyway/balancesRating.js"
 export * from "./anyway/weeklyRating.js"
 
-export * from "./private/profile.js"
+export * from "./anyway/profile.js"
 export * from "./private/searchChat.js"
 export * from "./private/bonuses.js"
 export * from "./private/bonus.js"
