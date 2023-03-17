@@ -4,7 +4,6 @@ import { depositKeyboard } from "../../../keyboards/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
 import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { Rate } from "../../../../db/models.js"
-import {onMessageMiddleware} from "../../../middlewares/index.js";
 
 export const wheelBet = {
     command: "bet-wheel",
@@ -179,7 +178,9 @@ export const wheelBet = {
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ` +
-            `${data === "number" ? `число ${number}` : betText()} принята!`
+            `${data === "number" ? `число ${number}` : betText()} принята!` + (
+                currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
+            )
         )
     }
 }

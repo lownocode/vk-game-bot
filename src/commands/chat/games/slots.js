@@ -56,7 +56,9 @@ export const slotsBet = {
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} x${multiplier} ${smile} принята!`
+            `${features.split(betAmount)} ${config.bot.currency} x${multiplier} ${smile} принята!` + (
+                currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
+            )
         )
     }
 }

@@ -120,7 +120,9 @@ export const under7overBet = {
         message.send(
             `✅ ${1 ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ` +
-            `${data === "number" ? `число ${number}` : betName} принята!`
+            `${data === "number" ? `число ${number}` : betName} принята!` + (
+                currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
+            )
         )
     }
 }

@@ -51,7 +51,9 @@ export const doubleBet = {
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} на x${multiplier} принята!`
+            `${features.split(betAmount)} ${config.bot.currency} на x${multiplier} принята!` + (
+                currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
+            )
         )
     }
 }

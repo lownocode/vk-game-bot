@@ -73,7 +73,9 @@ export const diceBet = {
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!`
+            `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!` + (
+                currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
+            )
         )
     }
 }
