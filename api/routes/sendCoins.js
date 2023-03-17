@@ -62,6 +62,15 @@ export const sendCoins = async (fastify) => fastify.post("/api/sendCoins", async
             })
     }
 
+    if (req.body.amount > 1_000_000_000) {
+        return res
+            .status(400)
+            .sender({
+                code: "AMOUNT_OUT_OF_RANGE",
+                message: "максимальная сумма перевода - 1 000 000 000 монет"
+            })
+    }
+
     await createTransaction({
         recipient: recipient.vkId,
         sender: req.user.vkId,

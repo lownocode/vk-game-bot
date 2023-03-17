@@ -5,8 +5,10 @@ export * from "./anyway/dailyRating.js"
 export * from "./anyway/giveCoins.js"
 export * from "./anyway/balancesRating.js"
 export * from "./anyway/weeklyRating.js"
-
 export * from "./anyway/profile.js"
+export * from "./anyway/promocode.js"
+
+export * from "./private/createPromocode.js"
 export * from "./private/searchChat.js"
 export * from "./private/bonuses.js"
 export * from "./private/bonus.js"

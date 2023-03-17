@@ -2,6 +2,8 @@ import Sequelize from "sequelize"
 
 import { ChatRate, Rate, User } from "../../db/models.js"
 import { getRateMultiplier } from "./getRateMultiplier.js"
+import { logger } from "../logger/logger.js"
+import { features } from "../utils/index.js"
 
 export const createGameRate = async ({ game, message, betAmount, data }) => {
     const similarRate = await Rate.findOne({
@@ -24,6 +26,13 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
     }
 
     const percentOfBetAmount = Math.trunc(betAmount * Number(message.chat.status) / 100)
+
+    logger.success(
+        `Создана новая ставка\n` +
+        `User: ${message.user.vkId}\n` +
+        `Amount: ${features.split(betAmount)}` +
+        "________________________"
+    )
 
     const rate = await Rate.create({
         gameId: game.id,

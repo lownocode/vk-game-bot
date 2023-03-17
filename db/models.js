@@ -226,3 +226,27 @@ export const Transaction = sequelize.define("transactions", {
         type: DataTypes.INTEGER
     }
 })
+
+export const Promocode = sequelize.define("promocodes", {
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        unique: true
+    },
+    code: {
+        type: DataTypes.STRING,
+        unique: true
+    },
+    reward: {
+        type: DataTypes.BIGINT
+    },
+    usages: {
+        type: DataTypes.INTEGER
+    },
+    activations: {
+        type: DataTypes.JSONB,
+        defaultValue: []
+    }
+})

@@ -38,6 +38,12 @@ export const sendCoins = {
             return message.send("Сумма введена некорректно")
         }
 
+        if (amount > 1_000_000_000) {
+            return message.reply(
+                `Максимальная сумма перевода - 1 000 000 000 ${config.bot.currency}`
+            )
+        }
+
         const { payload } = await message.question(
             `Вы уверены, что хотите перевести [id${user.vkId}|${user.name}] ` +
             `${features.split(amount)} ${config.bot.currency}?`, {
@@ -46,27 +52,23 @@ export const sendCoins = {
             }
         )
 
-        if (!payload?.confirm) return
-
-        if (payload.confirm === "no") {
+        if (!payload?.confirm || payload.confirm === "no") {
             return message.send(
                 `Вот и остался [id${user.vkId}|${user.name}] без ${features.split(amount)} ${config.bot.currency} :(`
             )
         }
 
-        if (payload.confirm === "yes") {
-            if (Number(message.user.balance) < amount) {
-                return message.send("У вас недостаточно средств для перевода")
-            }
-
-            await createTransaction({
-                recipient: user.vkId,
-                sender: message.user.vkId,
-                amount: amount
-            })
-
-            return message.reply("Успешно переведено")
+        if (Number(message.user.balance) < amount) {
+            return message.send("У вас недостаточно средств для перевода")
         }
+
+        await createTransaction({
+            recipient: user.vkId,
+            sender: message.user.vkId,
+            amount: amount
+        })
+
+        return message.reply("Успешно переведено")
     }
 }
 

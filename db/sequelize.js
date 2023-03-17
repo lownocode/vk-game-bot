@@ -16,7 +16,10 @@ export const sequelize = new Sequelize(
         dialect: "postgres",
         host: config.postgres.host,
         port: config.postgres.port,
-        logging: false
+        logging: false,
+        dialectOptions: {
+            supportBigNumbers: true,
+        },
     },
 )
 
