@@ -63,17 +63,10 @@ const getGameRates = async (rates, mode) => {
             })
         }
         case "double": {
-            const betNames = {
-                2: "Black x2",
-                3: "Red x3",
-                5: "Blue x5",
-                50: "Green x50",
-            }
-
             return rates.map((rate) => {
                 return (
                     `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-                    `на ${betNames[rate.data.multiplier]}`
+                    `на x${rate.data.multiplier}`
                 )
             })
         }
