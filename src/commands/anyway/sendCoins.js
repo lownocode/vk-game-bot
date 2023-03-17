@@ -29,10 +29,9 @@ export const sendCoins = {
             return message.send("Пользователь не зарегистрирован в боте")
         }
 
-        const amount = formatSum(message.$match[2].split(" ")[0])
+        const amount = formatSum(message.$match[2].split(" ")[0], message)
 
         if (
-            !message.$match[2].split(" ")[0] ||
             !amount ||
             isNaN(amount)
         ) {
@@ -50,7 +49,9 @@ export const sendCoins = {
         if (!payload?.confirm) return
 
         if (payload.confirm === "no") {
-            return message.send("А жаль")
+            return message.send(
+                `Вот и остался [id${user.vkId}|${user.name}] без ${features.split(amount)} ${config.bot.currency} :(`
+            )
         }
 
         if (payload.confirm === "yes") {
