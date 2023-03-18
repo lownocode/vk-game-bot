@@ -12,7 +12,7 @@ vk-group:
     token: vk1.a.H6uBbbw3xCzyzxGw9HNVErDcgRoMmYRLyGN4Zvvxee3acirsZF8U0J1pds_NwexRcD5V-UpPvK9vByyHCSDPEwXnau-7eIECJKhOy1-GY8Hq6VhrPH_Jqvb7OM_5I-O6NTURfI3EKJJ1yFqZ-JyRzpvnWQAqI_YFz6MqLuaJEi1jOU2zj5ZUAFMTlM79ZaPbXP9Q5an8jL_DELxm5pTc1Q
 
 vk-user:
-    token: vk1.a.nqTcgWPHEE0t2yCaI6K4SvJyALfVjMGuCqvBarFt4tnC0QYYAhUJi_ev6N5IA481ddxIER9NbmADMeNgcdvr4J0KcneoWkSLWGfZ219gkHkS2FNY-ck0nbbMMyD0N76jW-6bjFydsQHN6lgrcpfIZ0GD3jmAz2RpI59Op95dHFes3qH2hnw72sxZ-29QthZEk4G0xT5kwXApdpgC2J0bFw
+    token: vk1.a.drej3vrDwmmG8EpA934SpBqIvMM_4rzdJg_hKVuZ6I-oynASo2Cxh_Y2fSbNmaGlJHRb7Yndew9cNIwHEm8nyuUS4UZXzVBvlPLzXx-KneSeD0QamP6WOEhvLXLlsqY6ULDa6ARHJDqXrIj4NNBO7v1m2XlZfeu78JR4kWSztJfp7h2J6bwAIfHYwI5mj06TcUBtlil9H786XeqQqJyVtQ
 
 mini-app:
     secretKey: IiMms9M7Hoq4YdUZlCYL
@@ -126,6 +126,20 @@ games:
 repostBonus:
     reward: 3000
     picture: photo-194426159_457239679
+
+fortuneBonus:
+    picture: photo-194426159_457239727
+    rewards:
+        - coins: 500000
+          image: photo-194426159_457239732
+        - coins: 1000000
+          image: photo-194426159_457239728
+        - coins: 2500000
+          image: photo-194426159_457239729
+        - coins: 5000000
+          image: photo-194426159_457239730
+        - coins: 10000000
+          image: photo-194426159_457239731
 
 chats:
     Wheel: https://vk.me/join/_0N4QFb28w39v4gNccyeiFgwDje6o5ZRMl8=

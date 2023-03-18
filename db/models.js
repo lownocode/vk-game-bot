@@ -250,3 +250,31 @@ export const Promocode = sequelize.define("promocodes", {
         defaultValue: []
     }
 })
+
+export const Wall = sequelize.define("wall", {
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        unique: true
+    },
+    wallId: {
+        type: DataTypes.INTEGER,
+    },
+    type: {
+        type: DataTypes.STRING
+    },
+    activations: {
+        type: DataTypes.JSONB,
+        defaultValue: []
+    },
+    reposts: {
+        type: DataTypes.JSONB,
+        defaultValue: []
+    },
+    expireAt: {
+        type: DataTypes.BIGINT,
+        defaultValue: 0
+    }
+})
