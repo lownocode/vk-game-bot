@@ -36,7 +36,6 @@ export const dailyRating = {
             attributes: ["id", "vkId", "name"],
             where: {
                 id: ratingUsers.map(user => user.userId),
-                isAdmin: false
             }
         })
 

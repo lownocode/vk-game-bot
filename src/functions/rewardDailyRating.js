@@ -16,18 +16,25 @@ export const rewardDailyRating = async () => {
             ["totalWin", "DESC"]
         ],
         where: {
+            updatedAt: {
+                [Op.gt]: new Date(
+                    new Date().getFullYear(),
+                    new Date().getMonth(),
+                    new Date().getDate()
+                )
+            },
             isWin: true,
             userId: {
                 [Op.notIn]: admins.length ? admins.map(user => user.dataValues.id) : [0]
             }
         },
-        limit: 10
+        limit: config.dailyRatingRewards.length,
     })
 
     const users = await User.findAll({
         attributes: ["id", "vkId", "name", "balance"],
         where: {
-            id: ratingUsers.map(user => user.userId)
+            id: ratingUsers.map(user => user.userId),
         }
     })
 
