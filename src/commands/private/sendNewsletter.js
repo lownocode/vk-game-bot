@@ -51,24 +51,31 @@ export const sendNewsletter = {
         if (payload.confirm === "yes") {
             message.reply("Рассылка начата, ожидайте")
 
-            await process.nextTick(async () => {
-                const uids = users.map((user) => user.vkId)
+            const send = new Promise(async resolve => {
+                process.nextTick(async () => {
+                    const uids = users.map((user) => user.vkId)
 
-                for (const usersIds of chunkArray(uids, 50)) {
-                    try {
-                        await vk.api.messages.send({
-                            random_id: 0,
-                            user_ids: usersIds.join(","),
-                            [attachment && "attachment"]: attachment,
-                            [text && "message"]: text
-                        })
-                    } catch (err) {
-                        message.send("Ошибка при отправке сообщение из чанка с пользователями ", usersIds)
+                    for (const usersIds of chunkArray(uids, 50)) {
+                        try {
+                            await vk.api.messages.send({
+                                random_id: 0,
+                                user_ids: usersIds.join(","),
+                                [attachment && "attachment"]: attachment,
+                                [text && "message"]: text
+                            })
+                        } catch (err) {
+                            message.send("Ошибка при отправке сообщение из чанка с пользователями ", usersIds)
+                        }
                     }
-                }
+
+                    await resolve()
+                })
             })
 
-            await message.reply("Рассылка успешно завершена")
+
+            Promise.all([send]).finally(() => {
+                message.reply("Рассылка успешно завершена")
+            })
         }
     }
 }

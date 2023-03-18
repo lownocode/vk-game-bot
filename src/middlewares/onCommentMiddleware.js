@@ -33,6 +33,16 @@ export const onCommentMiddleware = async event => {
             })
         }
 
+        if (post.activations.filter(uid => uid === user.id).length >= 2) {
+            return await vkuser.api.wall.createComment({
+                owner_id: -config["vk-group"].id,
+                post_id: event.objectId,
+                from_group: config["vk-group"].id,
+                reply_to_comment: event.id,
+                message: `Вы исчерпали количество попыток, дождитесь следующей фортуны`
+            })
+        }
+
         if (
             post.activations.includes(user.id) &&
             !post.reposts.includes(user.id)
@@ -46,23 +56,12 @@ export const onCommentMiddleware = async event => {
             })
         }
 
-        if (post.activations.find(uid => uid === user.id)?.length === 2) {
-            return await vkuser.api.wall.createComment({
-                owner_id: -config["vk-group"].id,
-                post_id: event.objectId,
-                from_group: config["vk-group"].id,
-                reply_to_comment: event.id,
-                message: `Вы исчерпали количество попыток, дождитесь следующей фортуны`
-            })
-        }
-
         post.reposts = post.reposts.map(uid => (uid === user.id) ? null : uid).filter(uid => uid)
         post.activations = [...post.activations, user.id]
 
         await post.save()
 
-        const rewardId = features.random.integer(0, config.fortuneBonus.rewards.length - 1)
-        const reward = config.fortuneBonus.rewards[rewardId]
+        const reward = config.fortuneBonus.rewards[rewardsIds[features.random.integer(0, rewardsIds.length - 1)]]
 
         user.balance = Number(user.balance) + reward.coins
         await user.save()
@@ -77,3 +76,11 @@ export const onCommentMiddleware = async event => {
         })
     }
 }
+
+const rewardsIds = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3,
+    4, 4,
+]

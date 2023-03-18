@@ -71,7 +71,7 @@ export const profile = {
             where: {
                 userId: message.user.id
             }
-        }))[0].dataValues
+        }))[0]?.dataValues
 
         const biggestWin = (await ChatRate.findOne({
             attributes: [
@@ -87,7 +87,7 @@ export const profile = {
                 userId: message.user.id,
                 isWin: true
             }
-        })).dataValues
+        }))?.dataValues
 
         message.reply(
             "Ваш профиль:\n\n" +
@@ -102,7 +102,7 @@ export const profile = {
 
             `🤑 Всего наиграно: ${formatNumToKFormat(Number(totalBetCoins))} ${config.bot.currency}\n` +
             `❌ Всего проигрышей: ${features.split(Number(totalLoseBetsCount))}\n` +
-            `😨 Наибольший выигрыш: ${formatNumToKFormat(biggestWin.win ?? 0)} ${config.bot.currency} (x${biggestWin.multiplier}, ${convertChatMode(biggestWin.mode, false)})\n` +
+            (biggestWin ? `😨 Наибольший выигрыш: ${formatNumToKFormat(biggestWin.win ?? 0)} ${config.bot.currency} (x${biggestWin.multiplier}, ${convertChatMode(biggestWin.mode, false)})\n` : "") +
             (biggestMultiplier ? `💹 Наибольший множитель: x${biggestMultiplier.multiplier} (${convertChatMode(biggestMultiplier.mode, false)})\n` : "") +
             (lovestMode ? `💗 Любимый режим: ${convertChatMode(lovestMode.mode, false)} (${features.split(Number(lovestMode.count))} ${declOfNum(Number(lovestMode.count), ["ставка", "ставки", "ставок"])})` : "") +
 
