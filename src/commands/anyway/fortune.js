@@ -3,7 +3,6 @@ import { formatSum } from "../../utils/index.js"
 import { Wall } from "../../../db/models.js"
 
 export const fortune = {
-    access: "private",
     pattern: /^(\/fortune|\/фортуна)$/i,
     handler: async message => {
         if (!message.user.isAdmin) return

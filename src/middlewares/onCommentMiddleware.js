@@ -15,8 +15,7 @@ export const onCommentMiddleware = async event => {
     if (!post) return
 
     if (
-        post.type === "fortune" &&
-        /крутить/i.test(event.text)
+        post.type === "fortune" && /крутить/i.test(event.text)
     ) {
         const user = await User.findOne({
             where: {
