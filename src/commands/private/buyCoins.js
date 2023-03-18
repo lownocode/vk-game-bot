@@ -40,7 +40,7 @@ export const buyCoins = {
             return message.send(`Максимальная сумма, на которую вы можете приобрести ${config.bot.currency} — 15 000 ₽`)
         }
 
-        const sum = (rubles * 1_000_000 / config.shopPricePerMillion) + ((rubles * 1_000_000) * (detectDiscount(rubles) / 100))
+        const sum = (rubles * 1_000_000 / config.shopPricePerMillion) + ((rubles * 1_000_000 / config.shopPricePerMillion) * (detectDiscount(rubles) / 100))
 
         return message.send(
             `💡 Вы отдаёте: ${features.split(rubles)} ₽\n` +

@@ -6,7 +6,6 @@ import { confirmationKeyboard } from "../../keyboards/index.js"
 import { Promocode } from "../../../db/models.js"
 
 export const createPromocode = {
-    access: "private",
     pattern: /создать\sпромокод\s(.*)\s(.*)/i,
     handler: async message => {
         const usages = formatSum(message.$match[1])

@@ -14,4 +14,8 @@ export const ratingsKeyboard = Keyboard.builder()
         label: "Постоянный топ",
         color: Keyboard.SECONDARY_COLOR
     })
+    .textButton({
+        label: "Топ балансов",
+        color: Keyboard.SECONDARY_COLOR
+    })
     .inline()
