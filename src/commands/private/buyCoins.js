@@ -14,8 +14,6 @@ export const buyCoins = {
     access: "private",
     pattern: new RegExp(`^купить ${config.bot.currency}$`, "i"),
     handler: async message => {
-        return message.send("Временно недоступно")
-
         const discounts = Object.keys(config.shopDiscounts)
             .map((key, index) => {
                 return index > 0 ? `От ${features.split(key)} ₽ выгода ${config.shopDiscounts[key]}%` : null

@@ -4,7 +4,6 @@ import { confirmationKeyboard } from "../../keyboards/index.js"
 import { vk } from "../../../main.js"
 
 export const sendNewsletter = {
-    access: "private",
     pattern: /^\/рассылка$/i,
     handler: async message => {
         if (!message.user.isAdmin) return

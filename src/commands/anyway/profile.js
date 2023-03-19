@@ -33,7 +33,7 @@ export const profile = {
             ],
             where: {
                 userId: message.user.id,
-                isWin: true
+                isWin: true,
             }
         })).dataValues
 
@@ -57,8 +57,8 @@ export const profile = {
             ],
             where: {
                 userId: message.user.id,
+                isWin: true,
             },
-            limit: 1
         })
 
         const lovestMode = (await ChatRate.findAll({

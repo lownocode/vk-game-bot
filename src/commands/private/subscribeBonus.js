@@ -5,7 +5,7 @@ export const subscribeBonus = {
     pattern: /^(subscribe bonus|бонус за подписку)$/i,
     handler: async message => {
         if (message.user.isSubscribedOnGroup) {
-            return message.send('Ты уже получал бонус за подписку.')
+            return message.send("Вы уже получали бонус за подписку")
         }
 
         const isSubscribed = await vk.api.groups.isMember({
@@ -14,13 +14,13 @@ export const subscribeBonus = {
         })
 
         if (isSubscribed) {
-            message.user.balance = Number(message.user.balance) + 1000
+            message.user.balance = Number(message.user.balance) + 250_000
             message.user.isSubscribedOnGroup = true
             await message.user.save()
 
-            return await message.send('За подписку на группу вы получили 1 000 на свой баланс')
+            return await message.send("За подписку на группу вы получили 250 000 на свой баланс")
         }
 
-        message.send('Для получения бонуса за подписку нужно подписаться на группу.')
+        message.send("Для получения бонуса за подписку нужно подписаться на группу")
     }
 }

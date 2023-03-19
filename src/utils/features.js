@@ -1,9 +1,20 @@
+import crypto from "crypto"
+
 export const features = {
     random: {
         integer: (min, max) => {
-            return Math.round(
-                min - 0.5 + Math.random() * (max - min + 1)
-            );
+            const range = max - min + 1
+            const bytes_needed = Math.ceil(Math.log2(range) / 8)
+            const cutoff = Math.floor((256 ** bytes_needed) / range) * range
+            const bytes = new Uint8Array(bytes_needed)
+
+            let value
+            do {
+                crypto.getRandomValues(bytes)
+                value = bytes.reduce((acc, x, n) => acc + x * 256 ** n, 0)
+            } while (value >= cutoff)
+
+            return min + value % range
         }
     },
 
@@ -15,7 +26,7 @@ export const features = {
         const now = new Date()
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
 
-        return tomorrow - now;
+        return tomorrow - now
     },
 
     getSecondsToNextMonday: () => {
