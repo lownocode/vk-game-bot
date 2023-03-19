@@ -17,7 +17,7 @@ export const privateKeyboard = Keyboard.builder()
     })
     .row()
     .textButton({
-        label: "Бонусы"
+        label: "Бонус"
     })
     .textButton({
         label: `Купить ${config.bot.currency}`,

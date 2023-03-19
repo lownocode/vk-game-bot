@@ -9,7 +9,7 @@ export const bonus = {
             return message.send("Бонус можно получить раз в сутки")
         }
 
-        const reward = features.random.integer(400, 600)
+        const reward = features.random.integer(500_000, 2_000_000)
 
         message.user.balance = Number(message.user.balance) + reward
         message.user.bonusReceivedTime = Date.now()
