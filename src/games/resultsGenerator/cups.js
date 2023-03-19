@@ -1,6 +1,6 @@
-import {declOfNum, features} from "../../utils/index.js";
-import {config} from "../../../main.js";
-import {addCoinsToUser} from "../../functions/index.js";
+import { declOfNum, features } from "../../utils/index.js"
+import { config } from "../../../main.js"
+import { addCoinsToUser } from "../../functions/index.js"
 
 export const cups = async (user, game, rate, results) => {
     const cupsBetText = {

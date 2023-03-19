@@ -136,5 +136,13 @@ const getGameRates = async (rates, mode) => {
                 )
             })
         }
+        case "crash": {
+            return rates.map((rate) => {
+                return (
+                    `[id${rate.userVkId}|${rate.username}] - ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+                    `на x${rate.data.point}`
+                )
+            })
+        }
     }
 }

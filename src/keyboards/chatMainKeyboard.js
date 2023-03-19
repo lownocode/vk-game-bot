@@ -9,6 +9,13 @@ export const chatMainKeyboard = (mode) => {
             color: Keyboard.SECONDARY_COLOR
         })
         .textButton({
+            label: "Повтор",
+            color: Keyboard.PRIMARY_COLOR,
+            payload: {
+                command: "repeat"
+            }
+        })
+        .textButton({
             label: "Баланс",
             color: Keyboard.SECONDARY_COLOR
         })
@@ -374,6 +381,49 @@ export const chatMainKeyboard = (mode) => {
                     label: "4",
                     payload: {
                         command: "bet-cups/4"
+                    },
+                })
+
+            break
+        }
+        case "crash": {
+            keyboard
+                .textButton({
+                    label: "Сделать ставку",
+                    payload: {
+                        command: "bet-crash/bet"
+                    },
+                    color: Keyboard.PRIMARY_COLOR
+                })
+                .row()
+                .textButton({
+                    label: "x1.5",
+                    payload: {
+                        command: "bet-crash/point_1.5"
+                    },
+                })
+                .textButton({
+                    label: "x2",
+                    payload: {
+                        command: "bet-crash/point_2"
+                    },
+                })
+                .textButton({
+                    label: "x5",
+                    payload: {
+                        command: "bet-crash/point_5"
+                    },
+                })
+                .textButton({
+                    label: "x10",
+                    payload: {
+                        command: "bet-crash/point_10"
+                    },
+                })
+                .textButton({
+                    label: "x15",
+                    payload: {
+                        command: "bet-crash/point_15"
                     },
                 })
         }

@@ -5,7 +5,7 @@ import { Game, Rate, User, Chat, ChatRate } from "../../db/models.js"
 import { sleep } from "../utils/index.js"
 import { config, vk } from "../../main.js"
 import {
-    basketball,
+    basketball, crash,
     cups,
     dice,
     double,
@@ -14,7 +14,7 @@ import {
     wheel
 } from "./resultsGenerator/index.js"
 import {
-    basketballImage, cupsImage,
+    basketballImage, crashImage, cupsImage,
     diceImage,
     doubleImage,
     slotsImage,
@@ -68,6 +68,7 @@ const gameResults = async (game, rates) => {
             case "wheel"     : await wheel(...params);      break
             case "under7over": await under7over(...params); break
             case "cups"      : await cups(...params); break
+            case "crash"      : await crash(...params); break
         }
 
         if (user.vkId !== chat.payer) {
@@ -149,6 +150,7 @@ const getGameImage = async (mode, data) => {
         case "double": return await doubleImage(data)
         case "basketball": return await basketballImage(data)
         case "cups": return await  cupsImage(data)
+        case "crash": return await  crashImage(data)
         default: return null
     }
 }
@@ -176,5 +178,6 @@ const getGameResultText = (game) => {
         case "double": return `Выпало x${game.data.multiplier}!`
         case "dice": return `Выпало число ${game.data.number}!`
         case "cups": return `Выпало ${game.data.filled}!`
+        case "crash": return `Выпал коэффициент ${game.data.point}!`
     }
 }

@@ -30,7 +30,7 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
     logger.success(
         `Создана новая ставка\n` +
         `User: ${message.user.vkId}\n` +
-        `Amount: ${features.split(betAmount)}` +
+        `Amount: ${features.split(betAmount)}\n` +
         "________________________"
     )
 
@@ -51,7 +51,8 @@ export const createGameRate = async ({ game, message, betAmount, data }) => {
         data: data,
         percentOfBetAmount: percentOfBetAmount,
         rateId: rate.id,
-        multiplier: Number(getRateMultiplier(message.chat.mode, data, game))
+        multiplier: Number(getRateMultiplier(message.chat.mode, data, game)),
+        gameId: game.id,
     })
 
     if (message.user.referrer) {

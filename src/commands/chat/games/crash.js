@@ -1,39 +1,47 @@
-import { config } from "../../../../main.js"
 import { features } from "../../../utils/index.js"
 import { depositKeyboard } from "../../../keyboards/index.js"
-import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
 import { createGameRate, gameBetAmountChecking } from "../../../functions/index.js"
-import { Rate } from "../../../../db/models.js"
+import { getCurrentGame, getOrCreateGame } from "../../../games/index.js"
+import { config } from "../../../../main.js"
 
-export const diceBet = {
-    command: "bet-dice",
+export const crashBet = {
+    command: "bet-crash",
     pattern: /^$/,
     handler: async (message, data) => {
+        if (Number(message.user.balance) < config.bot.minimumBet) {
+            return message.send(
+                `Для ставки на вашем балансе должно быть как минимум ` +
+                `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
+            )
+        }
+
         message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
-        const rates = (await Rate.findAll({
-            where: {
-                peerId: message.peerId,
-                userVkId: message.senderId,
-                mode: "dice"
-            },
-            attributes: ["data"]
-        })).map((item) => item.data)
+        let point = -1
 
-        if (
-            data === "even" && rates.find(r => r.bet === "noteven") ||
-            data === "noteven" && rates.find(r => r.bet === "even")
-        ) {
-            return message.send("Вы уже поставили на противоположное значение")
+        if (data.includes("point_")) {
+            point = parseFloat(data.split("point_")[1])
         }
 
-        const betTypes = {
-            noteven: `нечётное (x${config.games.multipliers.dice.parity})`,
-            even: `чётное (x${config.games.multipliers.dice.parity})`
+        if (point === -1) {
+            const { text: _coef } = await message.question(
+                "Введите коэффициент, на который вы хотите поставить (например: 1.23):"
+            )
+
+            const coef = parseFloat(_coef)
+
+            if (!coef || isNaN(Number(coef)) || coef < 1.05 || coef > 1000) {
+                return message.reply(
+                    "Минимальный коэффициент: 1.05\n" +
+                    "Максимальный коэффициент: 1000"
+                )
+            }
+
+            point = coef
         }
-        const betType = /[1-6]/.test(data) ? `число ${data} (x${config.games.multipliers.dice.number})` : betTypes[data]
+
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betType}`, {
+            `[id${message.user.vkId}|${message.user.name}], Введите ставку на x${point}`, {
                 targetUserId: message.senderId,
                 keyboard: depositKeyboard(message.user)
             })
@@ -60,13 +68,13 @@ export const diceBet = {
             message: message,
             betAmount: betAmount,
             data: {
-                bet: data,
+                point: point,
             }
         })
 
         message.send(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
-            `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!` + (
+            `${features.split(betAmount)} ${config.bot.currency} на x${point} принята!` + (
                 currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""
             )
         )

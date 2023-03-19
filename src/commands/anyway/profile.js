@@ -10,7 +10,7 @@ export const profile = {
     handler: async message => {
         const dailyWin = (await ChatRate.findOne({
             attributes: [
-                [Sequelize.literal(`SUM("betAmount")`), "amount"],
+                [Sequelize.literal(`SUM("betAmount" * multiplier)`), "amount"],
                 [Sequelize.literal(`COUNT("betAmount")`), "count"],
             ],
             where: {
@@ -28,7 +28,7 @@ export const profile = {
 
         const totalWin = (await ChatRate.findOne({
             attributes: [
-                [Sequelize.literal(`SUM("betAmount")`), "amount"],
+                [Sequelize.literal(`SUM("betAmount" * multiplier)`), "amount"],
                 [Sequelize.literal(`COUNT("betAmount")`), "count"],
             ],
             where: {

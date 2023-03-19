@@ -54,6 +54,11 @@ export const getRateMultiplier = (mode, data, game) => {
                 data.bet === "under" && game.data.number < 7 ||
                 data.bet === "over" && game.data.number > 7
             ) return multipliers.under7over.underOver
+
+            break
+        }
+        case "crash": {
+            return game.data.point
         }
     }
 }

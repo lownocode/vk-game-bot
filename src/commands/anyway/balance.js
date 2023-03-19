@@ -4,7 +4,6 @@ import { resolveResource } from "vk-io"
 import { User } from "../../../db/models.js"
 
 export const balance = {
-    access: "chat",
     pattern: /^(balance|баланс|бал)(\s(.*))?$/i,
     handler: async message => {
         const toVkUserId = await getUserVkId(message)
@@ -44,10 +43,10 @@ const getUserVkId = async (message) => {
         return message.forwards[0].senderId
     }
 
-    if (message.$match[1]?.split(" ")[1]) {
+    if (message.$match[0]?.split(" ")[1]) {
         const res = await resolveResource({
             api: vk.api,
-            resource: message.$match[1]?.split(" ")[1]
+            resource: message.$match[0].split(" ")[1]
         })
 
         if (res.type === "group") return -res.id

@@ -205,6 +205,9 @@ export const ChatRate = sequelize.define("chat_rates", {
     },
     multiplier: {
         type: DataTypes.DOUBLE,
+    },
+    gameId: {
+        type: DataTypes.INTEGER
     }
 })
 

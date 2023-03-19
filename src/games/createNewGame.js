@@ -129,5 +129,27 @@ const generateGameInfo = (mode) => {
                 hash: md5(salt)
             }
         }
+        case "crash": {
+            const point = getCrashPoint()
+            const salt = `${point}@${secretString}`
+
+            return {
+                salt: salt,
+                secretString: secretString,
+                data: {
+                    point: point
+                },
+                hash: md5(salt)
+            }
+        }
     }
+}
+
+function getCrashPoint() {
+    const e = 2 ** 32
+    const h = crypto.getRandomValues(new Uint32Array(1))[0]
+
+    if (h % 50 === 0) return 1.00
+
+    return Math.floor((100 * e - h) / (e - h)) / 100
 }
