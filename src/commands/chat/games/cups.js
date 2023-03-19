@@ -9,7 +9,7 @@ export const cupsBet = {
     pattern: /^$/,
     handler: async (message, data) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
-            return message.send(
+            return message.reply(
                 `Для ставки на вашем балансе должно быть как минимум ` +
                 `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
             )
@@ -23,9 +23,13 @@ export const cupsBet = {
         }[data] || `${data} ${declOfNum(data, ["полный", "полных", "полных"])}`
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
-            `${betText} (x${config.games.multipliers.cups[data]})`, {
-                keyboard: depositKeyboard(message.user)
+            `Введите ставку на ${betText} (x${config.games.multipliers.cups[data]})`, {
+                keyboard: depositKeyboard(message.user),
+                forward: JSON.stringify({
+                    is_reply: true,
+                    peer_id: message.peerId,
+                    conversation_message_ids: [message.conversationMessageId]
+                })
             }
         )
 
@@ -36,11 +40,11 @@ export const cupsBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
-            return message.send("Игра уже кончается, ставки закрыты")
+            return message.reply("Игра уже кончается, ставки закрыты")
         }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игра, на которую вы ставили закончилась")
+            return message.reply("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount
@@ -55,7 +59,7 @@ export const cupsBet = {
             }
         })
 
-        message.send(
+        message.reply(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ${betText} принята!` + (
                 currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""

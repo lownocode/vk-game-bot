@@ -9,6 +9,13 @@ export const diceBet = {
     command: "bet-dice",
     pattern: /^$/,
     handler: async (message, data) => {
+        if (Number(message.user.balance) < config.bot.minimumBet) {
+            return message.reply(
+                `Для ставки на вашем балансе должно быть как минимум ` +
+                `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
+            )
+        }
+
         message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
         const rates = (await Rate.findAll({
@@ -33,9 +40,14 @@ export const diceBet = {
         }
         const betType = /[1-6]/.test(data) ? `число ${data} (x${config.games.multipliers.dice.number})` : betTypes[data]
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ${betType}`, {
+            `Введите ставку на ${betType}`, {
                 targetUserId: message.senderId,
-                keyboard: depositKeyboard(message.user)
+                keyboard: depositKeyboard(message.user),
+                forward: JSON.stringify({
+                    is_reply: true,
+                    peer_id: message.peerId,
+                    conversation_message_ids: [message.conversationMessageId]
+                })
             })
 
         const betAmount = await gameBetAmountChecking(_betAmount, message)
@@ -45,11 +57,11 @@ export const diceBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
-            return message.send("Игра уже кончается, ставки закрыты")
+            return message.reply("Игра уже кончается, ставки закрыты")
         }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игра, на которую вы ставили закончилась")
+            return message.reply("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount
@@ -64,7 +76,7 @@ export const diceBet = {
             }
         })
 
-        message.send(
+        message.reply(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ${betType} принята!` + (
                 currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""

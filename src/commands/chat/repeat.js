@@ -38,10 +38,6 @@ export const repeat = {
         const betAmount = lastBets.reduce((a, b) => a + Number(b.betAmount), 0)
 
         if (["½", "1", "2", "3"].includes(repeats)) {
-            if (Number(betAmount) > Number(message.user.balance)) {
-                return message.reply("Сумма прошлых ставок больше вашего баланса")
-            }
-
             if (Number(betAmount) < config.bot.minimumBet) {
                 return message.reply(
                     `Сумма ставки должна быть как минимум ${features.split(config.bot.minimumBet)} ${config.bot.currency}`
@@ -49,8 +45,16 @@ export const repeat = {
             }
 
             const multiplierCoins = repeats === "½" ? 0.5 : parseFloat(repeats)
+            const betCoins = Math.ceil(Number(betAmount) * multiplierCoins)
 
-            message.user.balance = Number(message.user.balance) - Math.ceil(Number(betAmount) * multiplierCoins)
+            if (
+                Number(betAmount) > Number(message.user.balance) ||
+                betCoins > Number(message.user.balance)
+            ) {
+                return message.reply("Сумма прошлых ставок больше вашего баланса")
+            }
+
+            message.user.balance = Number(message.user.balance) - betCoins
             await message.user.save()
 
             const game = await getOrCreateGame(message.peerId)
@@ -244,7 +248,7 @@ export const repeat = {
             }
         }).join("\n")
 
-        message.send(
+        message.reply(
             `В прошлой игре вы сделали ${lastBets.length} ${declOfNum(lastBets.length, ["ставку", "ставки", "ставок"])} ` +
             `на общую сумму ${features.split(betAmount)} ${config.bot.currency}:\n\n${betsText}`, {
                 keyboard: repeatKeyboard

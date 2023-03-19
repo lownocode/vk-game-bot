@@ -7,7 +7,7 @@ import { confirmationKeyboard } from "../../keyboards/index.js"
 import { createTransaction } from "../../functions/index.js"
 
 export const sendCoins = {
-    pattern: /^(перевод|передать|перевести)\s(.*)(\s(.*))?$/i,
+    pattern: /^(перевод|передать|перевести|лови аптечку)\s(.*)(\s(.*))?$/i,
     handler: async message => {
         const toVkUserId = await getUserVkId(message)
 
@@ -68,7 +68,12 @@ export const sendCoins = {
             amount: amount
         })
 
-        return message.reply("Успешно переведено")
+        return message.reply(
+            "🚀 Перевод успешно выполнен!\n\n" +
+            `👾 Отправитель: [id${message.senderId}|${message.user.name}]\n` +
+            `🎁 Получатель [id${user.vkId}|${user.name}]\n` +
+            `💸 Сумма: ${features.split(amount)} ${config.bot.currency}`
+        )
     }
 }
 

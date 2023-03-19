@@ -4,9 +4,9 @@ export const features = {
     random: {
         integer: (min, max) => {
             const range = max - min + 1
-            const bytes_needed = Math.ceil(Math.log2(range) / 8)
-            const cutoff = Math.floor((256 ** bytes_needed) / range) * range
-            const bytes = new Uint8Array(bytes_needed)
+            const bytesNeeded = Math.ceil(Math.log2(range) / 8)
+            const cutoff = Math.floor((256 ** bytesNeeded) / range) * range
+            const bytes = new Uint8Array(bytesNeeded)
 
             let value
             do {

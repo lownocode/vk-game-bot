@@ -12,7 +12,7 @@ export const slotsBet = {
         const smile = config.games.slotsSmiles[data.split("_")[1] - 1]
 
         if (Number(message.user.balance) < config.bot.minimumBet) {
-            return message.send(
+            return message.reply(
                 `Для ставки на вашем балансе должно быть как минимум ` +
                 `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
             )
@@ -21,11 +21,15 @@ export const slotsBet = {
         message.state.gameId = (await getCurrentGame(message.peerId))?.id ?? "none"
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
-            `x${multiplier} ${smile} (x${config.games.multipliers.slots[multiplier - 1]})`, {
-            targetUserId: message.senderId,
-            keyboard: depositKeyboard(message.user)
-        })
+            `Введите ставку на x${multiplier} ${smile} (x${config.games.multipliers.slots[multiplier - 1]})`, {
+                targetUserId: message.senderId,
+                keyboard: depositKeyboard(message.user),
+                forward: JSON.stringify({
+                    is_reply: true,
+                    peer_id: message.peerId,
+                    conversation_message_ids: [message.conversationMessageId]
+                })
+            })
 
         const betAmount = await gameBetAmountChecking(_betAmount, message)
 
@@ -34,11 +38,11 @@ export const slotsBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
-            return message.send("Игра уже кончается, ставки закрыты")
+            return message.reply("Игра уже кончается, ставки закрыты")
         }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игра, на которую вы ставили закончилась")
+            return message.reply("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount
@@ -54,7 +58,7 @@ export const slotsBet = {
             }
         })
 
-        message.send(
+        message.reply(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} x${multiplier} ${smile} принята!` + (
                 currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""

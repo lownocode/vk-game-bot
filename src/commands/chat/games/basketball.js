@@ -10,7 +10,7 @@ export const basketballBet = {
     pattern: /^$/,
     handler: async (message, team) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
-            return message.send(
+            return message.reply(
                 `Для ставки на вашем балансе должно быть как минимум ` +
                 `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
             )
@@ -34,7 +34,7 @@ export const basketballBet = {
         }
 
         if (rates.find(r => oppositeTeams[team].includes(r.team))) {
-            return message.send("Вы уже поставили на противоположное значение")
+            return message.reply("Вы уже поставили на противоположное значение")
         }
 
         const betTeam = {
@@ -44,10 +44,13 @@ export const basketballBet = {
         }[team]
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку ` +
-            `на ${betTeam} (x${config.games.multipliers.basketball[team]})`, {
-                targetUserId: message.senderId,
-                keyboard: depositKeyboard(message.user)
+            `Введите ставку на ${betTeam} (x${config.games.multipliers.basketball[team]})`, {
+                keyboard: depositKeyboard(message.user),
+                forward: JSON.stringify({
+                    is_reply: true,
+                    peer_id: message.peerId,
+                    conversation_message_ids: [message.conversationMessageId]
+                })
             })
 
         const betAmount = await gameBetAmountChecking(_betAmount, message)
@@ -57,11 +60,11 @@ export const basketballBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
-            return message.send("Игра уже кончается, ставки закрыты")
+            return message.reply("Игра уже кончается, ставки закрыты")
         }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игра, на которую вы ставили закончилась")
+            return message.reply("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount
@@ -76,7 +79,7 @@ export const basketballBet = {
             }
         })
 
-        message.send(
+        message.reply(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ${betTeam} принята!` + (
                 currentGame.isNewGame ? `\nХеш текущей игры: ${currentGame.hash}` : ""

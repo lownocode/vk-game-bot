@@ -10,7 +10,7 @@ export const wheelBet = {
     pattern: /^$/,
     handler: async (message, data) => {
         if (Number(message.user.balance) < config.bot.minimumBet) {
-            return message.send(
+            return message.reply(
                 `Для ставки на вашем балансе должно быть как минимум ` +
                 `${features.split(config.bot.minimumBet)} ${config.bot.currency}`
             )
@@ -40,7 +40,7 @@ export const wheelBet = {
         }
 
         if (rates.find(r => limitations[data]?.includes(r.bet))) {
-            return message.send("Вы уже поставили на противоположное значение")
+            return message.reply("Вы уже поставили на противоположное значение")
         }
 
         let number = -1
@@ -72,8 +72,12 @@ export const wheelBet = {
 
         if (data === "number") {
             const { text: _number } = await message.question(
-                `[id${message.user.vkId}|${message.user.name}], Введите число, на которое хотите поставить`, {
-                    targetUserId: message.senderId,
+                `Введите число, на которое хотите поставить`, {
+                    forward: JSON.stringify({
+                        is_reply: true,
+                        peer_id: message.peerId,
+                        conversation_message_ids: [message.conversationMessageId]
+                    })
                 })
 
             if (
@@ -88,14 +92,18 @@ export const wheelBet = {
                 const { text: _betAmount } = await message.question(
                     `[id${message.user.vkId}|${message.user.name}], Введите ставку на каждое из чисел: ` +
                     `${number.join(", ")}`, {
-                        targetUserId: message.senderId,
-                        keyboard: depositKeyboard(message.user, number.length)
+                        keyboard: depositKeyboard(message.user, number.length),
+                        forward: JSON.stringify({
+                            is_reply: true,
+                            peer_id: message.peerId,
+                            conversation_message_ids: [message.conversationMessageId]
+                        })
                     })
 
                 const betAmount = formatSum(_betAmount)
 
                 if (betAmount * number.length > message.user.balance) {
-                    return message.send("У вас недостаточно средств на балансе")
+                    return message.reply("У вас недостаточно средств на балансе")
                 }
 
                 const __betAmount = await gameBetAmountChecking(betAmount.toString(), message)
@@ -105,7 +113,7 @@ export const wheelBet = {
                 const currentGame = await getOrCreateGame(message.peerId)
 
                 if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-                    return message.send("Игра, на которую вы ставили закончилась")
+                    return message.reply("Игра, на которую вы ставили закончилась")
                 }
 
                 message.user.balance = Number(message.user.balance) - betAmount * number.length
@@ -123,7 +131,7 @@ export const wheelBet = {
                     })
                 }
 
-                return await message.send(
+                return await message.reply(
                     `Успешная ставка ${features.split(betAmount * number.length)} ${config.bot.currency} на ` +
                     `${number.join(", ")}`
                 )
@@ -142,10 +150,14 @@ export const wheelBet = {
         }
 
         const { text: _betAmount } = await message.question(
-            `[id${message.user.vkId}|${message.user.name}], Введите ставку на ` +
+            `Введите ставку на ` +
             `${data === "number" ? `число ${number} (x${config.games.multipliers.wheel.number})` : betText()}`, {
-                targetUserId: message.senderId,
-                keyboard: depositKeyboard(message.user)
+                keyboard: depositKeyboard(message.user),
+                forward: JSON.stringify({
+                    is_reply: true,
+                    peer_id: message.peerId,
+                    conversation_message_ids: [message.conversationMessageId]
+                })
             })
 
         const betAmount = await gameBetAmountChecking(_betAmount, message)
@@ -155,11 +167,11 @@ export const wheelBet = {
         const currentGame = await getOrCreateGame(message.peerId)
 
         if ((Number(currentGame.endedAt) - Date.now()) <= 0) {
-            return message.send("Игра уже кончается, ставки закрыты")
+            return message.reply("Игра уже кончается, ставки закрыты")
         }
 
         if (message.state.gameId !== "none" && currentGame.id !== message.state.gameId) {
-            return message.send("Игра, на которую вы ставили закончилась")
+            return message.reply("Игра, на которую вы ставили закончилась")
         }
 
         message.user.balance = Number(message.user.balance) - betAmount
@@ -175,7 +187,7 @@ export const wheelBet = {
             }
         })
 
-        message.send(
+        message.reply(
             `✅ ${currentGame.isNewGame ? "Первая ставка" : "Ставка"} ` +
             `${features.split(betAmount)} ${config.bot.currency} на ` +
             `${data === "number" ? `число ${number}` : betText()} принята!` + (

@@ -10,7 +10,8 @@ import * as commands from "./src/commands/index.js"
 import {
     onRepostMiddleware,
     onMessageMiddleware,
-    onChatInviteMiddleware, onCommentMiddleware
+    onChatInviteMiddleware,
+    onCommentMiddleware
 } from "./src/middlewares/index.js"
 import { checkChatOnExpire, rewardDailyRating, rewardWeeklyRating } from "./src/functions/index.js"
 import { features } from "./src/utils/index.js"
