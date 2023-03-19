@@ -16,25 +16,25 @@ export const cups = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${cupsBetText} выиграла (+ ${features.split(winCoins)})`
         )
     }
 
-    else if (game.data.filled === rate.data.filled) {
+    if (game.data.filled === rate.data.filled) {
         const winCoins = Number(rate.betAmount) * config.games.multipliers.cups[rate.data.filled]
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${cupsBetText} выиграла (+ ${features.split(winCoins)})`
         )
-    } else {
-        results.push(
-            `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${cupsBetText} проиграла`
-        )
     }
+
+    results.push(
+        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+        `на ${cupsBetText} проиграла`
+    )
 }

@@ -14,24 +14,24 @@ export const basketball = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
         )
     }
-    else if (rate.data.team === game.data.winners) {
+    if (rate.data.team === game.data.winners) {
         const winCoins = Number(rate.betAmount) * config.games.multipliers.basketball.red // or balck
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${teamWinName} выиграла! (+ ${features.split(winCoins)})`
         )
-    } else {
-        results.push(
-            `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${teamWinName} проиграла`
-        )
     }
+
+    results.push(
+        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+        `на ${teamWinName} проиграла`
+    )
 }

@@ -16,25 +16,25 @@ export const dice = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${betTypes[rate.data.bet]} выиграла (+ ${features.split(winCoins)})`
         )
     }
 
-    else if (game.data.number === Number(rate.data.bet)) {
+    if (game.data.number === Number(rate.data.bet)) {
         const winCoins = Number(rate.betAmount) * config.games.multipliers.dice.number
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на число ${rate.data.bet} выиграла (+ ${features.split(winCoins)})`
         )
-    } else {
-        results.push(
-            `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]} проиграла`
-        )
     }
+
+    results.push(
+        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+        `на ${/[1-6]/.test(rate.data.bet) ? `число ${rate.data.bet}` : betTypes[rate.data.bet]} проиграла`
+    )
 }

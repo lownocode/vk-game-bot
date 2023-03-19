@@ -10,15 +10,15 @@ export const slots = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} выиграла ` +
             `(+ ${features.split(winCoins)})`
         )
-    } else {
-        results.push(
-            `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла`
-        )
     }
+
+    results.push(
+        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+        `на x${rate.data.multiplier} ${config.games.slotsSmiles[rate.data.smile]} проиграла`
+    )
 }

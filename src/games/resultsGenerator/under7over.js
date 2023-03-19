@@ -15,22 +15,24 @@ export const under7over = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${betName} выиграла (+ ${features.split(winCoins)})`
         )
     }
-    else if (game.data.number === 7 && rate.data.bet === "7") {
+
+    if (game.data.number === 7 && rate.data.bet === "7") {
         const winCoins = Number(rate.betAmount) * config.games.multipliers.under7over["7"]
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${betName} выиграла (+ ${features.split(winCoins)})`
         )
     }
-    else if (
+
+    if (
         rate.data.bet === "under" && game.data.number < 7 ||
         rate.data.bet === "over" && game.data.number > 7
     ) {
@@ -39,14 +41,14 @@ export const under7over = async (user, game, rate, results) => {
 
         await addCoinsToUser(user, winCoins)
 
-        results.push(
+        return results.push(
             `✅ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
             `на ${betName} выиграла (+ ${features.split(winCoins)})`
         )
-    } else {
-        results.push(
-            `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
-            `на ${betName} проиграла`
-        )
     }
+
+    results.push(
+        `❌ [id${rate.userVkId}|${rate.username}] ставка ${features.split(rate.betAmount)} ${config.bot.currency} ` +
+        `на ${betName} проиграла`
+    )
 }
