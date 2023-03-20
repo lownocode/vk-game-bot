@@ -1,3 +1,4 @@
+import Sequelize from "sequelize"
 import { Keyboard } from "vk-io"
 
 import { modeKeyboard } from "../../keyboards/index.js"
@@ -5,7 +6,6 @@ import { Chat } from "../../../db/models.js"
 import { config } from "../../../main.js"
 import { declOfNum, features, formatSum } from "../../utils/index.js"
 import { readableDate } from "../../functions/index.js"
-import Sequelize from "sequelize";
 
 export const chooseChatStatus = {
     command: "chooseChatStatus",
@@ -47,7 +47,7 @@ export const chooseChatStatus = {
             )
         }
 
-        const chatPayedFor = Date.now() + (86_400_000 * days)
+        const chatPayedFor = Number(message.chat.payedFor || 0) + Date.now() + (86_400_000 * days)
 
         message.user.balance = Number(message.user.balance) - cost
 
@@ -55,7 +55,7 @@ export const chooseChatStatus = {
         await Chat.update({
             status: status.percent,
             payer: message.senderId,
-            payedFor: Sequelize.literal(`"payedFor"+ ${chatPayedFor}`)
+            payedFor: chatPayedFor
         }, {
             where: {
                 peerId: message.peerId

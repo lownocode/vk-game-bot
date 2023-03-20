@@ -63,8 +63,13 @@ export const onMessageMiddleware = async (message, next) => {
             }
 
             if (
-                (!chat.status || chat.status === "expired") &&
-                !["chooseChatStatus"].includes(command?.command || message.messagePayload?.command?.split("/")[0])
+                (
+                    !chat.payedFor ||
+                    !chat.status ||
+                    chat.status === "expired" ||
+                    Number(chat.payedFor) < Date.now()
+                ) &&
+                !["chooseChatStatus", "chooseChatMode"].includes(command?.command || message.messagePayload?.command?.split("/")[0])
             ) {
                 return message.send(
                     "Команды станут доступны только после оплаты статуса беседы", {

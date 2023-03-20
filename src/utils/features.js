@@ -31,7 +31,7 @@ export const features = {
 
     getSecondsToNextMonday: () => {
         const today = new Date()
-        const daysUntilMonday = (1 + 7 - today.getDay()) % 7
+        const daysUntilMonday = today.getDate() + (((1 + 7 - today.getDay()) % 7)) || 7
         const nextMonday = new Date(
             today.getFullYear(),
             today.getMonth(),
